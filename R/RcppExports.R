@@ -9,7 +9,3 @@ MvMAPITCpp <- function(X, y1, y2, Z = NULL, C = NULL, variantIndices = NULL, tes
     .Call('_mvMAPIT_MvMAPITCpp', PACKAGE = 'mvMAPIT', X, y1, y2, Z, C, variantIndices, testMethod, cores, GeneticSimilarityMatrix)
 }
 
-MAPITCpp <- function(X, y, Z = NULL, C = NULL, variantIndices = NULL, testMethod = "normal", cores = 1L, GeneticSimilarityMatrix = NULL) {
-    .Call('_mvMAPIT_MAPITCpp', PACKAGE = 'mvMAPIT', X, y, Z, C, variantIndices, testMethod, cores, GeneticSimilarityMatrix)
-}
-

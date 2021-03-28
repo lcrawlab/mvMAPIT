@@ -375,37 +375,3 @@ Rcpp::List MvMAPITCpp(arma::mat X,
         return Rcpp::List::create(Rcpp::Named("Est") = sigma_est, Rcpp::Named("SE") = sigma_se, Rcpp::Named("pvalues") = sigma_pval, Rcpp::Named("PVE") = pve);
     }
 }
-
-
-////////////////////////////////////////////////////////////////////////////
-
-//Below are functions for MAPIT using two hypothesis testing strategies:
-//(1) MAPIT using the Normal or Z-Test
-//(2) MAPIT using the Davies Method
-
-//Considered are the following submodels:
-//(1) Standard Model ---> y = m+g+e
-//(2) Standard + Covariate Model ---> y = Wa+m+g+e
-//(3) Standard + Common Environment Model ---> y = m+g+c+e
-//(4) Standard + Covariate + Common Environment Model ---> y = Wa+m+g+c+e
-
-//NOTE: delta = {delta(0),delta(1),delta(2)} = {sigma^2,omega^2,tau^2} for models (1) and (2)
-//NOTE: delta = {delta(0),delta(1),delta(2),delta(3)} = {sigma^2,omega^2,nu^2,tau^2} for models (3) and (4)
-
-////////////////////////////////////////////////////////////////////////////
-
-// Generalized MAPIT -- should handle all models
-
-// [[Rcpp::export]]
-Rcpp::List MAPITCpp(arma::mat X, arma::vec y, Rcpp::Nullable<Rcpp::NumericMatrix> Z = R_NilValue,
-                 Rcpp::Nullable<Rcpp::NumericMatrix> C = R_NilValue,
-                 Rcpp::Nullable<Rcpp::NumericVector> variantIndices = R_NilValue,
-                 std::string testMethod = "normal", int cores = 1,
-                 Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix = R_NilValue)
-{
-    return MvMAPITCpp(X, y, y, Z, C, variantIndices, testMethod, cores, GeneticSimilarityMatrix);
-}
-
-
-
-
