@@ -37,7 +37,7 @@
 #' @param cores is a parameter detailing the number of cores to parallelize over. It is important to note that this value only matters when the user has implemented OPENMP on their operating system. If OPENMP is not installed, then please leave cores = 1 and use the standard version of this code and software.
 
 #' @return A list of P values and PVEs
-#' @useDynLib MAPIT
+#' @useDynLib mvMAPIT
 #' @export
 #' @import CompQuadForm
 MvMAPIT <- function(X, y1, y2, W = NULL, C = NULL, hybrid = TRUE, threshold = 0.05, test = "normal", cores = 1) {
@@ -139,7 +139,7 @@ davies_exact <- function(vc.mod, X) {
 #' @param cores is a parameter detailing the number of cores to parallelize over. It is important to note that this value only matters when the user has implemented OPENMP on their operating system. If OPENMP is not installed, then please leave cores = 1 and use the standard version of this code and software.
 
 #' @return A list of P values and PVEs
-#' @useDynLib MAPIT
+#' @useDynLib mvMAPIT
 #' @export
 #' @import CompQuadForm
 MAPIT <- function(X, y, W = NULL, C = NULL, hybrid = TRUE, threshold = 0.05, test = "normal", cores = 1) {

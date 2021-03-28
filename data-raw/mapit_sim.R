@@ -72,7 +72,7 @@ cores = detectCores()
 
 source('../R/MAPIT.R')
 sourceCpp('../src/MAPIT.cpp')
-#library(MAPIT)
+#library(mvMAPIT)
 
 ptm <- proc.time() #Start clock
 #mapit = MAPIT(t(X),y,hybrid=FALSE,cores=cores)

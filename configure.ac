@@ -1,4 +1,4 @@
-AC_INIT([MAPIT],[0.1.0])
+AC_INIT([mvMAPIT],[0.0.0])
 
 # Find the compiler and compiler flags used by R.
 : ${R_HOME=`R RHOME`}
