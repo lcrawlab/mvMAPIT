@@ -1,4 +1,4 @@
-# The multivariate MArginal ePIstasis Test (MAPIT)
+# The multivariate MArginal ePIstasis Test (MAPIT) [![R-CMD-check](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml)
 
 **WORK IN PROGRESS - DO NOT USE**
 
