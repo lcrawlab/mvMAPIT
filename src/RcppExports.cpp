@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // MAPIT_CisTrans
 Rcpp::List MAPIT_CisTrans(arma::mat X, arma::vec y, Rcpp::List regions, bool useCis, int cores);
-RcppExport SEXP _MAPIT_MAPIT_CisTrans(SEXP XSEXP, SEXP ySEXP, SEXP regionsSEXP, SEXP useCisSEXP, SEXP coresSEXP) {
+RcppExport SEXP _mvMAPIT_MAPIT_CisTrans(SEXP XSEXP, SEXP ySEXP, SEXP regionsSEXP, SEXP useCisSEXP, SEXP coresSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -23,7 +23,7 @@ END_RCPP
 }
 // MvMAPITCpp
 Rcpp::List MvMAPITCpp(arma::mat X, arma::vec y1, arma::vec y2, Rcpp::Nullable<Rcpp::NumericMatrix> Z, Rcpp::Nullable<Rcpp::NumericMatrix> C, Rcpp::Nullable<Rcpp::NumericVector> variantIndices, std::string testMethod, int cores, Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix);
-RcppExport SEXP _MAPIT_MvMAPITCpp(SEXP XSEXP, SEXP y1SEXP, SEXP y2SEXP, SEXP ZSEXP, SEXP CSEXP, SEXP variantIndicesSEXP, SEXP testMethodSEXP, SEXP coresSEXP, SEXP GeneticSimilarityMatrixSEXP) {
+RcppExport SEXP _mvMAPIT_MvMAPITCpp(SEXP XSEXP, SEXP y1SEXP, SEXP y2SEXP, SEXP ZSEXP, SEXP CSEXP, SEXP variantIndicesSEXP, SEXP testMethodSEXP, SEXP coresSEXP, SEXP GeneticSimilarityMatrixSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -42,7 +42,7 @@ END_RCPP
 }
 // MAPITCpp
 Rcpp::List MAPITCpp(arma::mat X, arma::vec y, Rcpp::Nullable<Rcpp::NumericMatrix> Z, Rcpp::Nullable<Rcpp::NumericMatrix> C, Rcpp::Nullable<Rcpp::NumericVector> variantIndices, std::string testMethod, int cores, Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix);
-RcppExport SEXP _MAPIT_MAPITCpp(SEXP XSEXP, SEXP ySEXP, SEXP ZSEXP, SEXP CSEXP, SEXP variantIndicesSEXP, SEXP testMethodSEXP, SEXP coresSEXP, SEXP GeneticSimilarityMatrixSEXP) {
+RcppExport SEXP _mvMAPIT_MAPITCpp(SEXP XSEXP, SEXP ySEXP, SEXP ZSEXP, SEXP CSEXP, SEXP variantIndicesSEXP, SEXP testMethodSEXP, SEXP coresSEXP, SEXP GeneticSimilarityMatrixSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -62,14 +62,14 @@ END_RCPP
 RcppExport SEXP run_testthat_tests();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_MAPIT_MAPIT_CisTrans", (DL_FUNC) &_MAPIT_MAPIT_CisTrans, 5},
-    {"_MAPIT_MvMAPITCpp", (DL_FUNC) &_MAPIT_MvMAPITCpp, 9},
-    {"_MAPIT_MAPITCpp", (DL_FUNC) &_MAPIT_MAPITCpp, 8},
+    {"_mvMAPIT_MAPIT_CisTrans", (DL_FUNC) &_mvMAPIT_MAPIT_CisTrans, 5},
+    {"_mvMAPIT_MvMAPITCpp", (DL_FUNC) &_mvMAPIT_MvMAPITCpp, 9},
+    {"_mvMAPIT_MAPITCpp", (DL_FUNC) &_mvMAPIT_MAPITCpp, 8},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_MAPIT(DllInfo *dll) {
+RcppExport void R_init_mvMAPIT(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

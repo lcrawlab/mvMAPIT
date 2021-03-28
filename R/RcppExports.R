@@ -2,14 +2,14 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 MAPIT_CisTrans <- function(X, y, regions, useCis, cores = 1L) {
-    .Call('_MAPIT_MAPIT_CisTrans', PACKAGE = 'MAPIT', X, y, regions, useCis, cores)
+    .Call('_mvMAPIT_MAPIT_CisTrans', PACKAGE = 'mvMAPIT', X, y, regions, useCis, cores)
 }
 
 MvMAPITCpp <- function(X, y1, y2, Z = NULL, C = NULL, variantIndices = NULL, testMethod = "normal", cores = 1L, GeneticSimilarityMatrix = NULL) {
-    .Call('_MAPIT_MvMAPITCpp', PACKAGE = 'MAPIT', X, y1, y2, Z, C, variantIndices, testMethod, cores, GeneticSimilarityMatrix)
+    .Call('_mvMAPIT_MvMAPITCpp', PACKAGE = 'mvMAPIT', X, y1, y2, Z, C, variantIndices, testMethod, cores, GeneticSimilarityMatrix)
 }
 
 MAPITCpp <- function(X, y, Z = NULL, C = NULL, variantIndices = NULL, testMethod = "normal", cores = 1L, GeneticSimilarityMatrix = NULL) {
-    .Call('_MAPIT_MAPITCpp', PACKAGE = 'MAPIT', X, y, Z, C, variantIndices, testMethod, cores, GeneticSimilarityMatrix)
+    .Call('_mvMAPIT_MAPITCpp', PACKAGE = 'mvMAPIT', X, y, Z, C, variantIndices, testMethod, cores, GeneticSimilarityMatrix)
 }
 

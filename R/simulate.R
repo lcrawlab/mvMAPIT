@@ -36,7 +36,7 @@
 #' @param data Data frame from which to draw SNPs. Default random_genotype_matrix.
 #' @param outfile is the filename for the output file.
 #' @return A list of P values and PVEs
-#' @useDynLib MAPIT
+#' @useDynLib mvMAPIT
 #' @export
 #' @import CompQuadForm
 #' @import doParallel

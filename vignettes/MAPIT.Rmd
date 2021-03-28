@@ -60,7 +60,7 @@ NOTE: This code assumes that the basic C++ functions are set up on the computer 
 
 Load MAPIT
 ```{r load_mapit}
-library(MAPIT)
+library(mvMAPIT)
 ```
 
 ## Simulating Data
