@@ -1,0 +1,5 @@
+^data-raw$
+^MAPIT.Rproj$
+^LICENSE\.md$
+^.*\.Rproj$
+^\.Rproj\.user$

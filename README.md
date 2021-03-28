@@ -1,4 +1,8 @@
-# The MArginal ePIstasis Test (MAPIT)
+# The multivariate MArginal ePIstasis Test (MAPIT)
+
+**WORK IN PROGRESS - DO NOT USE**
+
+:warning: Please go to the [MAPIT implementation](https://github.com/lorinanthony/MAPIT) by [Crawford et al. (2017)](http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869) for working code.
 
 ## Introduction
 Epistasis, commonly defined as the interaction between multiple genes, is an important genetic component underlying phenotypic variation. Many statistical methods have been developed to model and identify epistatic interactions between genetic variants.
