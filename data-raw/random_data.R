@@ -9,8 +9,8 @@ snp_names <- seq_len(n_snp) %>% sprintf(fmt = "snp%04d")
 
 random_genotype_data <- sample(0:2, n_samples * n_snp, replace = TRUE)
 random_genotype_matrix <- matrix(random_genotype_data,
-nrow = n_snp,
-ncol = n_samples,
+  nrow = n_snp,
+  ncol = n_samples,
 )
 
 rownames(random_genotype_matrix) <- snp_names
