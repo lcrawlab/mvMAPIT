@@ -52,7 +52,6 @@ MvMAPIT <- function(X, y1, y2, W = NULL, C = NULL, hybrid = TRUE, threshold = 0.
   }
 
   if (hybrid == TRUE) {
-
     vc.mod <- MvMAPITCpp(X, y1, y2, W, C, NULL, "normal", cores = cores, NULL) # Normal Z-Test
     pvals <- vc.mod$pvalues
     names(pvals) <- rownames(X)
@@ -64,17 +63,13 @@ MvMAPIT <- function(X, y1, y2, W = NULL, C = NULL, hybrid = TRUE, threshold = 0.
     vc.mod <- MvMAPITCpp(X, y1, y2, W, C, ind, "davies", cores = cores, NULL)
     davies.pvals <- davies_exact(vc.mod, X)
     pvals[ind] <- davies.pvals[ind]
-
   } else if (test == "normal") {
-
     vc.mod <- MvMAPITCpp(X, y1, y2, W, C, NULL, "normal", cores = cores, NULL)
     pvals <- vc.mod$pvalues
     names(pvals) <- rownames(X)
     pves <- vc.mod$PVE
     names(pves) <- rownames(X)
-
   } else {
-
     ind <- 1:nrow(X)
     vc.mod <- MvMAPITCpp(X, y1, y2, W, C, ind, "davies", cores = cores, NULL)
     davies.pvals <- davies_exact(vc.mod, X)
