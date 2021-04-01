@@ -5,6 +5,7 @@ library(RcppArmadillo)
 library(RcppParallel)
 library(CompQuadForm)
 
+library(mvMAPIT) # install mvMAPIT prior to running this file
 load('data/simulated_epistasis_data.rda')
 
 X <- simulated_epistasis_data$genotype
@@ -30,8 +31,8 @@ mapit_normal <- MAPIT(
 )
 proc.time() - ptm # Stop clock
 
-normal.pvals1 <- mapit_normal$pvalues
-names(normal.pvals1) <- colnames(X)
+normal.pvals <- mapit_normal$pvalues
+names(normal.pvals) <- colnames(X)
 
 ptm <- proc.time() # Start clock
 mapit_davies <- MAPIT(
@@ -60,3 +61,17 @@ if (length(significant_snps) > 1) {
     pairs <- c(pairs, p_value)
   }
 }
+
+# export data
+mapit_analysis_data <- list(
+  davies_pvalues = davies.pvals,
+  hybrid_pvalues = hybrid.pvals,
+  normal_pvalues = normal.pvals,
+  exhaustive_search = list(
+    p_value = thresh,
+    significant_snps = significant_snps,
+    interaction_pairs = pairs
+  )
+)
+
+usethis::use_data(mapit_analysis_data, overwrite = TRUE)

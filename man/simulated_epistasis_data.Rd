@@ -13,7 +13,7 @@ A list with simulated data and simulation parameters:
   \item{pve}{Phenotypic variance explained/broad-sense heritability (H^2).}
   \item{rho}{Portion of H^2 that is contributed to by the marginal (additive) effects.}
   \item{phenotype}{The simulated phenotype. Vector size (number_samples) x 1.}
-  \item{genotype}{The simulated genotype. Matrix size (number_samples) x (number_snps).}
+  \item{genotype}{The simulated genotype; scaled and centered. Matrix size (number_samples) x (number_snps).}
   \item{linear_effects}{Simulated linear effect sizes. Vector size (number_causal_snp) x 1.}
   \item{interaction_effects}{Simulated epistatic effect sizes. Vector size (length(epistatic_snps)) x 1.}
   \item{epistatic_snps}{Matrix entries take values 0,1,2. 0 for homozygous in major allele, 1 for heterozygous, 2 for homozygous in minor allele.}

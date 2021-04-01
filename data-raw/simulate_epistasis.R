@@ -41,7 +41,6 @@ X_mean <- apply(genotype_matrix, 2, mean) # mean over SNPs
 X_sd <- apply(genotype_matrix, 2, sd)
 X <- t((t(genotype_matrix) - X_mean) / X_sd) # X: centered and scaled genotype matrix
 
-n_snp
 snp.ids <- 1:n_snp
 # select causal SNPs
 id_causal_1 <- sample(snp.ids, n_causal_1, replace = F)
