@@ -21,6 +21,9 @@
 .Rproj.user/
 *.Rproj
 
+# PyCharm files
+.idea/
+
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
