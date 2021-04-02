@@ -68,10 +68,12 @@ mapit_analysis_data <- list(
   hybrid_pvalues = hybrid.pvals,
   normal_pvalues = normal.pvals,
   exhaustive_search = list(
-    p_value = thresh,
+    significance_value = thresh,
     significant_snps = significant_snps,
     interaction_pairs = pairs
-  )
+  ),
+  epistatic_snps = simulated_epistasis_data$epistatic_snps,
+  additive_snps = simulated_epistasis_data$additive_snps
 )
 
 usethis::use_data(mapit_analysis_data, overwrite = TRUE)
