@@ -8,16 +8,17 @@ Description: Epistasis, commonly defined as the interaction between multiple gen
 License: GPL (>= 3)
 Imports:
     checkmate,
+    CompQuadForm,
     doParallel,
+    LaplacesDemon,
+    Matrix,
+    mvtnorm,
+    PHENIX,
     Rcpp,
     RcppAlgos,
     RcppParallel,
     RcppArmadillo,
-    CompQuadForm,
-    LaplacesDemon,
-    Matrix,
-    PHENIX,
-    mvtnorm
+    testthat
 LinkingTo: Rcpp, RcppArmadillo, testthat
 Encoding: UTF-8
 LazyData: true
