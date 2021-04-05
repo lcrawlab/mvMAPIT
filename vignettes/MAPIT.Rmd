@@ -220,7 +220,7 @@ cores <- detectCores()
 MAPIT can be run in multiple modes. By defautl it runs in a hybrid mode, performing tests both wtih a normal Z-test as well as the Davies method. In order to run only Z-test or Davies, set `hybrid = FALSE` and the test key word agument to the desired test.
 ```{r run_mapit_hybrid, eval = FALSE}
 ptm <- proc.time() # Start clock
-mapit <- MAPIT(
+mapit <- MvMAPIT(
         t(X),
         y,
         hybrid = TRUE,
