@@ -9,14 +9,14 @@ arma::mat GetLinearKernel(arma::mat X){
     return X.t()*X/p;
 }
 
-arma::mat ComputePCs(arma::mat X,int top = 10){
+arma::mat ComputePCs(arma::mat X, int top = 10){
     arma::mat U;
     arma::vec s;
     arma::mat V;
     svd(U,s,V,X);
 
     arma::mat PCs = U*diagmat(s);
-    return PCs.cols(0,top-1);
+    return PCs.cols(0, top-1);
 }
 
 arma::mat ComputeProjectionMatrix(int n, arma::mat b)
@@ -25,7 +25,6 @@ arma::mat ComputeProjectionMatrix(int n, arma::mat b)
     arma::mat identity = arma::eye<arma::mat>(n,n);
     return identity - b * arma::inv(b.t() * b) * b.t();
 }
-
 
 // Computes Tr(ab)
 double ProductTrace(arma::mat a, arma::mat b)
@@ -134,7 +133,7 @@ arma::vec RemoveFirstElement(arma::vec vector)
 ////////////////////////////////////////////////////////////////////////////////
 
 // [[Rcpp::export]]
-Rcpp::List  MAPIT_CisTrans(arma::mat X, arma::vec y, Rcpp::List  regions, bool useCis, int cores = 1){
+Rcpp::List  MAPIT_CisTrans(arma::mat X, arma::vec y, Rcpp::List regions, bool useCis, int cores = 1){
     int i;
     const int n = X.n_cols;
     const int nsnp = X.n_rows;
@@ -219,7 +218,7 @@ Rcpp::List MvMAPITCpp(arma::mat X,
     const int p = X.n_rows;
     int q = 0;
 
-    // aTODO: what does this code do?
+    // TODO: what does this code do?
     if (Z.isNotNull())
     {
         // TODO benchmark this conversion, as we'll do it again below

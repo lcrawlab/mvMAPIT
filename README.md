@@ -1,4 +1,4 @@
-# The multivariate MArginal ePIstasis Test (MAPIT) [![R-CMD-check](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml)
+# The multivariate MArginal ePIstasis Test (mvMAPIT) [![R-CMD-check](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml)
 
 **WORK IN PROGRESS - DO NOT USE**
 
@@ -10,7 +10,7 @@ However, because of the large combinatorial search space of interactions, most e
 Our method examines one variant at a time, and estimates and tests its "marginal epistatic effects" --- the combined pairwise interaction effects between a given variant and all other variants. By avoiding explicitly searching for interactions, our method avoids the large combinatorial search space and improves power.
 Our method is novel and relies on a recently developed variance component estimation method for efficient and robust parameter inference and p-value computation.
 
-MAPIT is implemented as a set of R and C++ routines, which can be carried out within an R environment.
+mvMAPIT is implemented as a set of R and C++ routines, which can be carried out within an R environment.
 
 
 ## The R Environment
@@ -22,7 +22,7 @@ For specific details on how to compile, install, and manage R and R-packages, re
 In its current construction, we recommend against running MAPIT while using R Studio.
 
 
-## R Packages Required for MAPIT
+## R Packages Required for mvMAPIT
 MAPIT requires the installation of the following R libraries:
 
 [doParallel](https://cran.r-project.org/web/packages/doParallel/index.html)

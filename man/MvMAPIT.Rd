@@ -2,7 +2,7 @@
 % Please edit documentation in R/MAPIT.R
 \name{MvMAPIT}
 \alias{MvMAPIT}
-\title{Multivariate MArginal ePIstasis Test (MAPIT)}
+\title{Multivariate MArginal ePIstasis Test (mvMAPIT)}
 \usage{
 MvMAPIT(
   X,
@@ -42,7 +42,7 @@ A list of P values and PVEs
 \code{MvMAPIT} will run a version of the MArginal ePIstasis Test (MAPIT) under the following model variations:
 }
 \details{
-This function will run a version of the MArginal ePIstasis Test (MAPIT).
+This function will run a multivariate version of the MArginal ePIstasis Test (mvMAPIT).
 
 (1) Standard Model: y = m+g+e where m ~ MVN(0,omega^2K), g ~ MVN(0,sigma^2G), e ~ MVN(0,tau^2M).
 Recall from Crawford et al. (2017) that m is the combined additive effects from all other variants,

@@ -15,14 +15,14 @@ y <- simulated_epistasis_data$phenotype
 cores <- detectCores()
 
 ptm <- proc.time() # Start clock
-mapit_hybrid <- MAPIT(t(X), y, cores = cores)
+mapit_hybrid <- MvMAPIT(t(X), y, cores = cores)
 proc.time() - ptm # Stop clock
 
 hybrid.pvals <- mapit_hybrid$pvalues
 names(hybrid.pvals) <- colnames(X)
 
 ptm <- proc.time() # Start clock
-mapit_normal <- MAPIT(
+mapit_normal <- MvMAPIT(
   t(X),
   y,
   hybrid = FALSE,
@@ -35,7 +35,7 @@ normal.pvals <- mapit_normal$pvalues
 names(normal.pvals) <- colnames(X)
 
 ptm <- proc.time() # Start clock
-mapit_davies <- MAPIT(
+mapit_davies <- MvMAPIT(
   t(X),
   y,
   hybrid = FALSE,

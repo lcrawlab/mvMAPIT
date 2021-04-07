@@ -1,6 +1,6 @@
 Package: mvMAPIT
 Type: Package
-Title: Implements multivariate MAPIT (the MArginal ePIstasis Test) from Crawford et al. 2017
+Title: Implements the multivariate MArginal ePIstasis Test (mvMAPIT) from Crawford et al. 2017
 Version: 0.0.0
 Author: lcrawlab
 Maintainer: Lorin Crawford <lorin_crawfordf@brown.du>

@@ -14,7 +14,7 @@
 using namespace Rcpp;
 
 arma::mat GetLinearKernel(arma::mat X);
-arma::mat ComputePCs(arma::mat X,int top);
+arma::mat ComputePCs(arma::mat X, int top);
 //TODO: tests
 arma::mat ComputeProjectionMatrix(int n, arma::mat b);
 double ProductTrace(arma::mat a, arma::mat b);
