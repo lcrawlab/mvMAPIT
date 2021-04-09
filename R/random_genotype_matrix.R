@@ -1,6 +1,6 @@
 #' Random Genotype Matrix.
 #'
-#' A dataset containing 5747 samples with 2938 SNPs.
+#' A dataset containing 2938 samples with 5747 SNPs.
 #'
 #' @format A data frame with 5747 rows and 2938 variables:
 #' \describe{
