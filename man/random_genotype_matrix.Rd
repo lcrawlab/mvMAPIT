@@ -18,6 +18,6 @@ data-raw/random_data.R
 random_genotype_matrix
 }
 \description{
-A dataset containing 5747 samples with 2938 SNPs.
+A dataset containing 2938 samples with 5747 SNPs.
 }
 \keyword{datasets}
