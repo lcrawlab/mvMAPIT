@@ -1,5 +1,7 @@
 #include "MAPIT.h"
 
+#include <Rcpp.h>
+
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::plugins(openmp)]]
@@ -132,7 +134,7 @@ arma::vec RemoveFirstElement(arma::vec vector)
 
 // [[Rcpp::export]]
 Rcpp::List MAPITCpp(arma::mat X,
-                 arma::vec y,
+                 arma::mat Y,
                  Rcpp::Nullable<Rcpp::NumericMatrix> Z = R_NilValue,
                  Rcpp::Nullable<Rcpp::NumericMatrix> C = R_NilValue,
                  Rcpp::Nullable<Rcpp::NumericVector> variantIndices = R_NilValue,
@@ -143,7 +145,15 @@ Rcpp::List MAPITCpp(arma::mat X,
     int i;
     const int n = X.n_cols;
     const int p = X.n_rows;
+    const int d = Y.n_rows;
     int q = 0;
+
+
+    Rcout << "genotype matrix " << std::endl;
+    Rcout << "number of samples:  " << n << std::endl;
+    Rcout << "number of SNPs:  " << p << std::endl;
+    Rcout << "number of phenotypes:  " << d << std::endl << std::endl;
+
 
     if (Z.isNotNull())
     {
@@ -154,7 +164,7 @@ Rcpp::List MAPITCpp(arma::mat X,
     Rcpp::NumericVector sigma_est(p);
     Rcpp::NumericVector sigma_se(p);
     Rcpp::NumericVector pve(p);
-    arma::mat Lambda(n, p);
+    arma::mat Lambda(n * d, p);
 
     arma::mat GSM;
     if (GeneticSimilarityMatrix.isNull())
@@ -171,6 +181,12 @@ Rcpp::List MAPITCpp(arma::mat X,
     {
         ind = Rcpp::as<arma::vec>(variantIndices.get());
     }
+
+    // between phenotype variance
+    arma::vec ones_d = arma::ones<arma::vec>(d);
+    arma::mat V_K = ones_d * ones_d.t(); // effect of a variant equal across phenotypes
+    arma::mat V_G = V_K; // effect of a variant equal across phenotypes
+    arma::mat V_M(d, d); V_M.eye(); // effect of a variant equal across phenotypes
 
 #ifdef _OPENMP
     omp_set_num_threads(cores);
@@ -195,23 +211,31 @@ Rcpp::List MAPITCpp(arma::mat X,
         G.each_col() %= arma::trans(X.row(i));
 
         //Transform K and G using projection M
-        arma::mat b = arma::zeros(n, q+2);
+        arma::mat b = arma::zeros(n, q + 2);
         b.col(0) = arma::ones<arma::vec>(n);
         if (q > 0)
         {
-            b.cols(1,q) = Rcpp::as<arma::mat>(Z.get()).t();
+            b.cols(1, q) = Rcpp::as<arma::mat>(Z.get()).t();
         }
-        b.col(q+1) = arma::trans(X.row(i));
+        b.col(q + 1) = arma::trans(X.row(i));
         arma::mat btb_inv = arma::inv(b.t() * b);
         arma::mat M = ComputeProjectionMatrix(n, b);
-        arma::mat Kc = M*K*M;
-        arma::mat Gc = M*G*M;
+        arma::mat Kc = M * K * M;
+        arma::mat Gc = M * G * M;
         arma::mat Cc;
         if (C.isNotNull())
         {
             Cc = M * Rcpp::as<arma::mat>(C.get()) * M; // M*C*M, but C is converted to an arma::mat first
         }
-        arma::vec yc = M * y;
+        arma::mat Yc = Y * M;
+        arma::vec yc = vectorise(Yc); // vectorise the multi-phenotype matrix
+
+        // kronecker products
+        Kc = kron(V_K, Kc);
+        Gc = kron(V_G, Gc);
+        M = kron(V_M, M);
+        Rcout << "kronecker dimensions:  " << M.n_rows << " x " << M.n_cols << std::endl;
+
 
         //Compute the quantities q and S
         std::vector<arma::mat> matrices;

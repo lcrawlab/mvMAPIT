@@ -36,12 +36,13 @@
 #' @param threshold is a parameter detailing the value at which to recalibrate the Z test p values. If nothing is defined by the user, the default value will be 0.05 as recommended by the Crawford et al. (2017).
 #' @param test is a parameter defining what hypothesis test should be implemented. Takes on values 'normal' or 'davies'. This parameter only matters when hybrid = FALSE. If test is not defined when hybrid = FALSE, the function will automatically use test = 'normal'.
 #' @param cores is a parameter detailing the number of cores to parallelize over. It is important to note that this value only matters when the user has implemented OPENMP on their operating system. If OPENMP is not installed, then please leave cores = 1 and use the standard version of this code and software.
-#' 
+#' @param variantIndex is a vector containing indices of variants to be included in the computation.
+#'
 #' @return A list of P values and PVEs
 #' @useDynLib mvMAPIT
 #' @export
 #' @import CompQuadForm
-MvMAPIT <- function(X, y, W = NULL, C = NULL, hybrid = TRUE, threshold = 0.05, test = "normal", cores = 1) {
+MvMAPIT <- function(X, y, W = NULL, C = NULL, hybrid = TRUE, threshold = 0.05, test = "normal", cores = 1, variantIndex = NULL) {
 
   if (cores > 1) {
     if (cores > detectCores()) {
@@ -51,7 +52,7 @@ MvMAPIT <- function(X, y, W = NULL, C = NULL, hybrid = TRUE, threshold = 0.05, t
   }
 
   if (hybrid == TRUE) {
-    vc.mod <- MAPITCpp(X, y, W, C, NULL, "normal", cores = cores, NULL) # Normal Z-Test
+    vc.mod <- MAPITCpp(X, y, W, C, variantIndex, "normal", cores = cores, NULL) # Normal Z-Test
     pvals <- vc.mod$pvalues
     names(pvals) <- rownames(X)
     pves <- vc.mod$PVE
@@ -63,13 +64,13 @@ MvMAPIT <- function(X, y, W = NULL, C = NULL, hybrid = TRUE, threshold = 0.05, t
     davies.pvals <- davies_exact(vc.mod, X)
     pvals[ind] <- davies.pvals[ind]
   } else if (test == "normal") {
-    vc.mod <- MAPITCpp(X, y, W, C, NULL, "normal", cores = cores, NULL)
+    vc.mod <- MAPITCpp(X, y, W, C, variantIndex, "normal", cores = cores, NULL)
     pvals <- vc.mod$pvalues
     names(pvals) <- rownames(X)
     pves <- vc.mod$PVE
     names(pves) <- rownames(X)
   } else {
-    ind <- 1:nrow(X)
+    ind <- ifelse(variantIndex, variantIndex, 1:nrow(X))
     vc.mod <- MAPITCpp(X, y, W, C, ind, "davies", cores = cores, NULL)
     davies.pvals <- davies_exact(vc.mod, X)
     pvals <- davies.pvals
