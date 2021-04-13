@@ -183,10 +183,9 @@ Rcpp::List MAPITCpp(arma::mat X,
     }
 
     // between phenotype variance
-    arma::vec ones_d = arma::ones<arma::vec>(d);
-    arma::mat V_K = ones_d * ones_d.t(); // effect of a variant equal across phenotypes
-    arma::mat V_G = V_K; // effect of a variant equal across phenotypes
     arma::mat V_M(d, d); V_M.eye(); // effect of a variant equal across phenotypes
+    arma::mat V_K = V_M; // effect of a variant uncorrelated across phenotypes
+    arma::mat V_G = V_M; // effect of a variant uncorrelated across phenotypes
 
 #ifdef _OPENMP
     omp_set_num_threads(cores);
