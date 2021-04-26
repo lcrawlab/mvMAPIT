@@ -4,10 +4,7 @@ library('MASS')
 file_name <- 'data/random_genotype_matrix.rda'
 load(file_name)
 
-X <- random_genotype_matrix
-X_mean <- apply(X, 1, mean)
-X_sd <- apply(X, 1, sd)
-X <- ((X - X_mean) / X_sd)
+X <- scale(random_genotype_matrix)
 
 n_samples <- nrow(X) # number of genotype samples
 n_snp <- ncol(X) # number of SNPs
@@ -18,25 +15,27 @@ marginal_correlation <- 0.3
 epistatic_correlation <- 0.3
 
 n_causal <- 20 # number of SNPs to be causal in every phenotype
-n_causal_epi <- 3 # number of epistatic causal SNPs slected per group and phenotype
-n_causal_pleio_epi <- 5 # number of SNPs to be involved in epistatic interactions in every phenotype
+n_causal_epi <- 3 # number of epistatic causal SNPs slected per interaction group and phenotype
+n_causal_pleio <- 5 # number of SNPs to be involved in pleiotropic effects in every phenotype
+
 snp.ids <- 1:n_snp
 
 Y_marginal <- c()
 Y_epistatic <- c()
 Y_error <- c()
 causal_snps <- list()
-pleiotropic_set <- sample(snp.ids, n_causal_pleio_epi, replace = F)
+pleiotropic_set <- sample(snp.ids, n_causal_pleio, replace = F) # declare peleiotropic SNPs before since they have to be present in every phenotype
 
 for (j in 1:d) {
   ## select causal SNPs
   causal_snps_j <- sample(snp.ids[-pleiotropic_set], n_causal, replace = F)
   epistatic_set_j_1 <- sample(causal_snps_j, n_causal_epi, replace = F)
   epistatic_set_j_2 <- sample(causal_snps_j[! causal_snps_j %in% epistatic_set_j_1], n_causal_epi, replace = F)
-  epistatic_set_j_1 <- c(epistatic_set_j_1, pleiotropic_set)
+
+  epistatic_set_j_1 <- c(epistatic_set_j_1, pleiotropic_set) # the epistatic pleiotropic effects are included in epistatic interaction group 1
 
   # create epistatic interaction matrix
-  X_causal_j <- X[, causal_snps_j]
+  X_causal_j <- X[, c(causal_snps_j, pleiotropic_set)] # all SNPs have additive effects
   X_epistatic_j_1 <- X[, epistatic_set_j_1]
   X_epistatic_j_2 <- X[, epistatic_set_j_2]
   X_epi <- c()
