@@ -3,7 +3,7 @@ test_that("MvMapit executes without error when hybrid = TRUE.", {
   p <- 10
   n <- 5
   d <- 3
-  X <- matrix(runif(p * n), n, p)
+  X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
   # when
   mapit <- MvMAPIT(t(X), t(Y), cores = 1, variantIndex = c(1))
@@ -16,7 +16,7 @@ test_that("MvMapit executes without error when hybrid = FALSE.", {
   p <- 10
   n <- 5
   d <- 3
-  X <- matrix(runif(p * n), n, p)
+  X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
   # when
   mapit <- MvMAPIT(t(X), t(Y), hybrid = FALSE, cores = 1, variantIndex = c(1))
@@ -29,7 +29,7 @@ test_that("MvMapit executes without error when hybrid = FALSE and test = davies.
   p <- 10
   n <- 5
   d <- 3
-  X <- matrix(runif(p * n), n, p)
+  X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
   # when
   mapit <- MvMAPIT(t(X), t(Y), hybrid = FALSE, test = 'davies', cores = 1, variantIndex = c(1))
