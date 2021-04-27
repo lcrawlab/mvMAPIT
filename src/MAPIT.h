@@ -8,7 +8,6 @@
 #define ARMA_64BIT_WORD 1
 #include <vector>
 #include <string>
-#include <iostream>
 
 #define SPDLOG_DISABLE_DEFAULT_LOGGER 1
 #include <RcppSpdlog>

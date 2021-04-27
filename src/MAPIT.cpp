@@ -1,5 +1,4 @@
 #include "MAPIT.h"
-#include <Rcpp.h>
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins(cpp11)]]
@@ -145,7 +144,6 @@ Rcpp::List MAPITCpp(arma::mat X,
     std::string logname = "mvMAPIT";
     auto logger = spdlog::get(logname);                         // retrieve existing one
     if (logger == nullptr) logger = spdlog::r_sink_mt(logname);     // or create new one if needed
-    spdlog::set_default_logger(logger);                         // and set as default
 
     spdlog::stopwatch sw;                                   // instantiate a stop watch
 
@@ -195,15 +193,15 @@ Rcpp::List MAPITCpp(arma::mat X,
     arma::mat V_K(d, d);
     arma::mat V_G(d, d);
     if (phenotypeCovariance.compare("covariance") == 0) { // string.compare() returns '0' if equal
-        spdlog::info("Covariance of effects proportional to phenotype covariance.");
+        logger->info("Covariance of effects proportional to phenotype covariance.");
         V_K = cov(Y.t());
         V_G = V_K;
     } else if (phenotypeCovariance.compare("homogeneous") == 0) {
-        spdlog::info("Effect of a variant homogeneous across phenotypes.");
+        logger->info("Effect of a variant homogeneous across phenotypes.");
         V_K.ones();
         V_G.ones();
     } else {
-        spdlog::info("Effect of a variant uncorrelated across phenotypes.");
+        logger->info("Effect of a variant uncorrelated across phenotypes.");
         V_K.eye();
         V_G.eye();
     }
@@ -254,7 +252,7 @@ Rcpp::List MAPITCpp(arma::mat X,
         Kc = kron(V_K, Kc);
         Gc = kron(V_G, Gc);
         M = kron(V_M, M);
-        spdlog::debug("Kronecker product dimensions: {} x {}", M.n_rows, M.n_cols);
+        logger->debug("Kronecker product dimensions: {} x {}", M.n_rows, M.n_cols);
 
 
         //Compute the quantities q and S
