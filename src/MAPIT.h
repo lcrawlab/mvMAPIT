@@ -10,6 +10,9 @@
 #include <string>
 #include <iostream>
 
+#define SPDLOG_DISABLE_DEFAULT_LOGGER 1
+#include <RcppSpdlog>
+#include <spdlog/stopwatch.h>           // also support stopwatch feature
 #include <Rcpp.h>
 using namespace Rcpp;
 

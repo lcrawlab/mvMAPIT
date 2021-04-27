@@ -1,5 +1,4 @@
 #include "MAPIT.h"
-
 #include <Rcpp.h>
 
 // [[Rcpp::depends(RcppArmadillo)]]
@@ -140,8 +139,16 @@ Rcpp::List MAPITCpp(arma::mat X,
                  Rcpp::Nullable<Rcpp::NumericVector> variantIndices = R_NilValue,
                  std::string testMethod = "normal",
                  int cores = 1,
-                 Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix = R_NilValue)
+                 Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix = R_NilValue,
+                 std::string phenotypeCovariance = "identity")
 {
+    std::string logname = "mvMAPIT";
+    auto logger = spdlog::get(logname);                         // retrieve existing one
+    if (logger == nullptr) logger = spdlog::r_sink_mt(logname);     // or create new one if needed
+    spdlog::set_default_logger(logger);                         // and set as default
+
+    spdlog::stopwatch sw;                                   // instantiate a stop watch
+
     int i;
     const int n = X.n_cols;
     const int p = X.n_rows;
@@ -149,10 +156,11 @@ Rcpp::List MAPITCpp(arma::mat X,
     int q = 0;
 
 
-    Rcout << "genotype matrix " << std::endl;
-    Rcout << "number of samples:  " << n << std::endl;
-    Rcout << "number of SNPs:  " << p << std::endl;
-    Rcout << "number of phenotypes:  " << d << std::endl << std::endl;
+    logger->info("Number of samples: {}", n);
+    logger->info("Number of SNPs: {}", p);
+    logger->info("Number of phenotypes: {}", d);
+    logger->info("Test method: {}", testMethod);
+    logger->info("Phenotype covariance model: {}", phenotypeCovariance);
 
 
     if (Z.isNotNull())
@@ -183,9 +191,22 @@ Rcpp::List MAPITCpp(arma::mat X,
     }
 
     // between phenotype variance
-    arma::mat V_M(d, d); V_M.eye(); // effect of a variant equal across phenotypes
-    arma::mat V_K = V_M; // effect of a variant uncorrelated across phenotypes
-    arma::mat V_G = V_M; // effect of a variant uncorrelated across phenotypes
+    arma::mat V_M(d, d); V_M.eye(); // effect of error uncorrelated
+    arma::mat V_K(d, d);
+    arma::mat V_G(d, d);
+    if (phenotypeCovariance.compare("covariance") == 0) { // string.compare() returns '0' if equal
+        spdlog::info("Covariance of effects proportional to phenotype covariance.");
+        V_K = cov(Y.t());
+        V_G = V_K;
+    } else if (phenotypeCovariance.compare("homogeneous") == 0) {
+        spdlog::info("Effect of a variant homogeneous across phenotypes.");
+        V_K.ones();
+        V_G.ones();
+    } else {
+        spdlog::info("Effect of a variant uncorrelated across phenotypes.");
+        V_K.eye();
+        V_G.eye();
+    }
 
 #ifdef _OPENMP
     omp_set_num_threads(cores);
@@ -233,7 +254,7 @@ Rcpp::List MAPITCpp(arma::mat X,
         Kc = kron(V_K, Kc);
         Gc = kron(V_G, Gc);
         M = kron(V_M, M);
-        Rcout << "kronecker dimensions:  " << M.n_rows << " x " << M.n_cols << std::endl;
+        spdlog::debug("Kronecker product dimensions: {} x {}", M.n_rows, M.n_cols);
 
 
         //Compute the quantities q and S
@@ -289,6 +310,7 @@ Rcpp::List MAPITCpp(arma::mat X,
         pve(i) = delta(0) / arma::accu(delta);
     }
 
+    logger->info("Elapsed time: {}", sw);
     //Return a Rcpp::List  of the arguments
     if (testMethod == "davies")
     {
