@@ -19,7 +19,7 @@ test_that("MvMapit executes without error when hybrid = FALSE.", {
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
   # when
-  mapit <- MvMAPIT(t(X), t(Y), hybrid = FALSE, cores = 1, variantIndex = c(1))
+  mapit <- MvMAPIT(t(X), t(Y), hybrid = FALSE, cores = 1, variantIndex = c(1), logLevel = "DEBUG", logFile = 'test.log')
   # then
   expect_equal(length(mapit$pvalues), p)
 })

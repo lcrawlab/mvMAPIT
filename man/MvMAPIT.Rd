@@ -14,7 +14,9 @@ MvMAPIT(
   test = "normal",
   cores = 1,
   variantIndex = NULL,
-  phenotypeCovariance = "identity"
+  phenotypeCovariance = "identity",
+  logLevel = "WARN",
+  logFile = NULL
 )
 }
 \arguments{
@@ -37,6 +39,10 @@ MvMAPIT(
 \item{variantIndex}{is a vector containing indices of variants to be included in the computation.}
 
 \item{phenotypeCovariance}{is a string parameter defining how to model the covariance between phenotypes of effects. Possible values: 'identity', 'covariance', 'homogeneous'.}
+
+\item{logLevel}{is a string parameter defining the log level for the logging package.}
+
+\item{logFile}{is a string parameter defining the name of the log file for the logging output.}
 }
 \value{
 A list of P values and PVEs

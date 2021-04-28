@@ -19,7 +19,8 @@ Imports:
     RcppParallel,
     RcppArmadillo,
     testthat,
-    RcppSpdlog
+    RcppSpdlog,
+    logging
 LinkingTo: Rcpp, RcppArmadillo, testthat, RcppSpdlog
 Encoding: UTF-8
 LazyData: true
