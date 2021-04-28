@@ -45,7 +45,18 @@
 #' @useDynLib mvMAPIT
 #' @export
 #' @import CompQuadForm
-MvMAPIT <- function(X, Y, W = NULL, C = NULL, hybrid = TRUE, threshold = 0.05, test = "normal", cores = 1, variantIndex = NULL, phenotypeCovariance = 'identity', logLevel = 'WARN', logFile = NULL) {
+MvMAPIT <- function(X, 
+                    Y, 
+                    W = NULL, 
+                    C = NULL, 
+                    hybrid = TRUE, 
+                    threshold = 0.05, 
+                    test = "normal", 
+                    cores = 1, 
+                    variantIndex = NULL, 
+                    phenotypeCovariance = 'identity', 
+                    logLevel = 'WARN', 
+                    logFile = NULL) {
 
   if (cores > 1) {
     if (cores > detectCores()) {

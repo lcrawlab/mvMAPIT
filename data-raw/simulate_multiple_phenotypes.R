@@ -1,7 +1,16 @@
+#!/usr/bin/env Rscript
 set.seed(982348)
 library('MASS')
 
-file_name <- 'data/random_genotype_matrix.rda'
+args = commandArgs(trailingOnly=TRUE)
+
+if (length(args)==0) {
+  file_name <- 'data/random_genotype_matrix.rda'
+} else {
+  file_name <- args[1]
+}
+
+
 load(file_name)
 
 X <- scale(random_genotype_matrix)

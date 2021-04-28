@@ -2,6 +2,7 @@
 
 export(MvMAPIT)
 export(simulate)
+export(simulate_phenotypes)
 import(CompQuadForm)
 import(Matrix)
 import(PHENIX)
