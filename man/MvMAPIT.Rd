@@ -6,22 +6,21 @@
 \usage{
 MvMAPIT(
   X,
-  y1,
-  y2,
+  Y,
   W = NULL,
   C = NULL,
   hybrid = TRUE,
   threshold = 0.05,
   test = "normal",
-  cores = 1
+  cores = 1,
+  variantIndex = NULL,
+  phenotypeCovariance = "identity"
 )
 }
 \arguments{
-\item{X}{is the pxn genotype matrix where p is the number of variants and n is the number of samples. Must be a matrix and not a data.frame.}
+\item{X}{is the p x n genotype matrix where p is the number of variants and n is the number of samples. Must be a matrix and not a data.frame.}
 
-\item{y1}{is the nx1 vector of quantitative or continuous traits.}
-
-\item{y2}{is the nx1 vector of quantitative or continuous traits.}
+\item{Y}{is the d x n matrix of d quantitative or continuous traits for n samples.}
 
 \item{W}{is the matrix qxn matrix of covariates. Must be a matrix and not a data.frame.}
 
@@ -34,6 +33,10 @@ MvMAPIT(
 \item{test}{is a parameter defining what hypothesis test should be implemented. Takes on values 'normal' or 'davies'. This parameter only matters when hybrid = FALSE. If test is not defined when hybrid = FALSE, the function will automatically use test = 'normal'.}
 
 \item{cores}{is a parameter detailing the number of cores to parallelize over. It is important to note that this value only matters when the user has implemented OPENMP on their operating system. If OPENMP is not installed, then please leave cores = 1 and use the standard version of this code and software.}
+
+\item{variantIndex}{is a vector containing indices of variants to be included in the computation.}
+
+\item{phenotypeCovariance}{is a string parameter defining how to model the covariance between phenotypes of effects. Possible values: 'identity', 'covariance', 'homogeneous'.}
 }
 \value{
 A list of P values and PVEs

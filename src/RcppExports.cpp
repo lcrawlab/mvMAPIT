@@ -6,6 +6,25 @@
 
 using namespace Rcpp;
 
+// MAPITCpp
+Rcpp::List MAPITCpp(arma::mat X, arma::mat Y, Rcpp::Nullable<Rcpp::NumericMatrix> Z, Rcpp::Nullable<Rcpp::NumericMatrix> C, Rcpp::Nullable<Rcpp::NumericVector> variantIndices, std::string testMethod, int cores, Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix, std::string phenotypeCovariance);
+RcppExport SEXP _mvMAPIT_MAPITCpp(SEXP XSEXP, SEXP YSEXP, SEXP ZSEXP, SEXP CSEXP, SEXP variantIndicesSEXP, SEXP testMethodSEXP, SEXP coresSEXP, SEXP GeneticSimilarityMatrixSEXP, SEXP phenotypeCovarianceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type C(CSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type variantIndices(variantIndicesSEXP);
+    Rcpp::traits::input_parameter< std::string >::type testMethod(testMethodSEXP);
+    Rcpp::traits::input_parameter< int >::type cores(coresSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type GeneticSimilarityMatrix(GeneticSimilarityMatrixSEXP);
+    Rcpp::traits::input_parameter< std::string >::type phenotypeCovariance(phenotypeCovarianceSEXP);
+    rcpp_result_gen = Rcpp::wrap(MAPITCpp(X, Y, Z, C, variantIndices, testMethod, cores, GeneticSimilarityMatrix, phenotypeCovariance));
+    return rcpp_result_gen;
+END_RCPP
+}
 // MAPIT_CisTrans
 Rcpp::List MAPIT_CisTrans(arma::mat X, arma::vec y, Rcpp::List regions, bool useCis, int cores);
 RcppExport SEXP _mvMAPIT_MAPIT_CisTrans(SEXP XSEXP, SEXP ySEXP, SEXP regionsSEXP, SEXP useCisSEXP, SEXP coresSEXP) {
@@ -21,31 +40,12 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// MvMAPITCpp
-Rcpp::List MvMAPITCpp(arma::mat X, arma::vec y1, arma::vec y2, Rcpp::Nullable<Rcpp::NumericMatrix> Z, Rcpp::Nullable<Rcpp::NumericMatrix> C, Rcpp::Nullable<Rcpp::NumericVector> variantIndices, std::string testMethod, int cores, Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix);
-RcppExport SEXP _mvMAPIT_MvMAPITCpp(SEXP XSEXP, SEXP y1SEXP, SEXP y2SEXP, SEXP ZSEXP, SEXP CSEXP, SEXP variantIndicesSEXP, SEXP testMethodSEXP, SEXP coresSEXP, SEXP GeneticSimilarityMatrixSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type y1(y1SEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type y2(y2SEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type Z(ZSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type C(CSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type variantIndices(variantIndicesSEXP);
-    Rcpp::traits::input_parameter< std::string >::type testMethod(testMethodSEXP);
-    Rcpp::traits::input_parameter< int >::type cores(coresSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type GeneticSimilarityMatrix(GeneticSimilarityMatrixSEXP);
-    rcpp_result_gen = Rcpp::wrap(MvMAPITCpp(X, y1, y2, Z, C, variantIndices, testMethod, cores, GeneticSimilarityMatrix));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 RcppExport SEXP run_testthat_tests();
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_mvMAPIT_MAPITCpp", (DL_FUNC) &_mvMAPIT_MAPITCpp, 9},
     {"_mvMAPIT_MAPIT_CisTrans", (DL_FUNC) &_mvMAPIT_MAPIT_CisTrans, 5},
-    {"_mvMAPIT_MvMAPITCpp", (DL_FUNC) &_mvMAPIT_MvMAPITCpp, 9},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},
     {NULL, NULL, 0}
 };

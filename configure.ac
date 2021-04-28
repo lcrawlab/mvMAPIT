@@ -7,6 +7,7 @@ if test -z "${R_HOME}"; then
   exit 1
 fi
 CXX=`"${R_HOME}/bin/R" CMD config CXX`
+CXX11=`"${R_HOME}/bin/R" CMD config CXX11`
 BLAS_LIBS=`"${R_HOME}/bin/R" CMD config BLAS_LIBS`
 FLIBS=`"${R_HOME}/bin/R" CMD config FLIBS`
 LAPACK_LIBS=`"${R_HOME}/bin/R" CMD config LAPACK_LIBS`
@@ -29,6 +30,7 @@ AC_SUBST([LAPACK_LIBS], ["${LAPACK_LIBS}"])
 AC_SUBST([PKG_CXX11STD], ["${PKG_CXX11STD}"])
 AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS}"])
 AC_SUBST([PKG_LIBS], ["${LIBS} ${PKG_LIBS} ${ac_cv_search_deflate}"])
+AC_SUBST([CXX11], ["${CXX11}"])
 AC_CONFIG_FILES([src/Makevars])
 AC_OUTPUT
 
