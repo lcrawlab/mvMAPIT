@@ -21,6 +21,8 @@
 #' @param marginal_correlation Correlation between the additive effects of the phenotype.
 #' @param epistatic_correlation Correlation between the epistatic effects of the phenotype.
 #' @param seed Random seed for simulation.
+#' @param logLevel is a string parameter defining the log level for the logging package. 
+#' @param logFile is a string parameter defining the name of the log file for the logging output.
 #' @return A list object containing the phenotype data, the genotype data, as well as the causal SNPs and summary statistics.
 #' @useDynLib mvMAPIT
 #' @export
@@ -28,15 +30,28 @@ simulate_phenotypes <- function(genotype_matrix,
                      causal_fraction = 0.2,
                      epistatic_fraction = 0.5,
                      pleiotropic_fraction = 0.5,
-                     H2 = 0.6, # pve: phenotypic variance explained/broad-sense heritability (H^2)
-                     d = 2, # number of phenotypes
-                     rho = 0.8, # rho: measures the portion of H^2 that is contributed by the marginal (additive) effects
+                     H2 = 0.6,
+                     d = 2,
+                     rho = 0.8,
                      marginal_correlation = 0.3,
                      epistatic_correlation = 0.3,
-                     seed = 67132) {
+                     seed = 67132,
+                     logLevel = 'INFO',
+                     logFile = NULL) {
   set.seed(seed)
   
+  logging::logReset()
+  logging::basicConfig(level = logLevel)
+  log <- logging::getLogger('simulate_phenotypes')
+  if(!is.null(logFile)) {
+    filePath <- file.path(getwd(),logFile)
+    log$debug('Logging to file: %s', filePath)
+    log$addHandler(logging::writeToFile, file=filePath)
+  }
+  
   X <- scale(genotype_matrix)
+  
+  log$debug('Genotype matrix: %d x %d', nrow(X), ncol(X))
   
   n_samples <- nrow(X) # number of genotype samples
   n_snp <- ncol(X) # number of SNPs
@@ -44,6 +59,10 @@ simulate_phenotypes <- function(genotype_matrix,
   n_causal <- ceiling(n_snp * causal_fraction) # number of SNPs to be causal in every phenotype
   n_causal_epi <- ceiling(n_causal * epistatic_fraction) # number of epistatic causal SNPs slected per interaction group and phenotype
   n_causal_pleio <- ceiling(n_causal * pleiotropic_fraction) # number of SNPs to be involved in pleiotropic effects in every phenotype
+  log$debug('Number of causal SNPs: %d', n_causal)
+  log$debug('Number of epistatic SNPs: %d', n_causal_epi)
+  log$debug('Number of pleiotropic SNPs: %d', n_causal_pleio)
+  
   
   snp.ids <- 1:n_snp
   
@@ -55,11 +74,16 @@ simulate_phenotypes <- function(genotype_matrix,
   
   for (j in 1:d) {
     ## select causal SNPs
+    log$debug('Simulating phenotype %d', j)
     causal_snps_j <- sample(snp.ids[-pleiotropic_set], n_causal, replace = F)
     epistatic_set_j_1 <- sample(causal_snps_j, n_causal_epi, replace = F)
     epistatic_set_j_2 <- sample(causal_snps_j[! causal_snps_j %in% epistatic_set_j_1], n_causal_epi, replace = F)
     
     epistatic_set_j_1 <- c(epistatic_set_j_1, pleiotropic_set) # the epistatic pleiotropic effects are included in epistatic interaction group 1
+    
+    log$debug('Causal SNPs: %s', causal_snps_j)
+    log$debug('Epistatic SNPs group 1: %s', epistatic_set_j_1)
+    log$debug('Epistatic SNPs group 2: %s', epistatic_set_j_2)
     
     # create epistatic interaction matrix
     X_causal_j <- X[, c(causal_snps_j, pleiotropic_set)] # all SNPs have additive effects
@@ -69,7 +93,7 @@ simulate_phenotypes <- function(genotype_matrix,
     for (i in 1:length(epistatic_set_j_1)) {
       X_epi <- cbind(X_epi, X_epistatic_j_1[, i] * X_epistatic_j_2)
     }
-    dim(X_epi)
+    log$debug('Dimension of interaction matrix X_epi: %d x %d', nrow(X_epi), ncol(X_epi))
     
     # marginal effects
     X_marginal <- X_causal_j
@@ -120,7 +144,8 @@ simulate_phenotypes <- function(genotype_matrix,
   colnames(X) <- seq_len(ncol(X)) %>% sprintf(fmt = "snp_%05d") # column names names for SNPs
   colnames(Y) <- seq_len(ncol(Y)) %>% sprintf(fmt = "p_%02d") # column names names for phenotypes
   
-  # export data
+  log$debug('Phenotype data: %s', head(Y, 2))
+  # return data
   simulated_pleiotropic_epistasis_data <- list(
     number_snp = n_snp,
     number_samples = n_samples,

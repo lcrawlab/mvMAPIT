@@ -14,7 +14,9 @@ simulate_phenotypes(
   rho = 0.8,
   marginal_correlation = 0.3,
   epistatic_correlation = 0.3,
-  seed = 67132
+  seed = 67132,
+  logLevel = "INFO",
+  logFile = NULL
 )
 }
 \arguments{
@@ -37,6 +39,10 @@ simulate_phenotypes(
 \item{epistatic_correlation}{Correlation between the epistatic effects of the phenotype.}
 
 \item{seed}{Random seed for simulation.}
+
+\item{logLevel}{is a string parameter defining the log level for the logging package.}
+
+\item{logFile}{is a string parameter defining the name of the log file for the logging output.}
 }
 \value{
 A list object containing the phenotype data, the genotype data, as well as the causal SNPs and summary statistics.
