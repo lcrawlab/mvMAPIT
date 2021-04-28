@@ -38,12 +38,14 @@
 #' @param cores is a parameter detailing the number of cores to parallelize over. It is important to note that this value only matters when the user has implemented OPENMP on their operating system. If OPENMP is not installed, then please leave cores = 1 and use the standard version of this code and software.
 #' @param variantIndex is a vector containing indices of variants to be included in the computation.
 #' @param phenotypeCovariance is a string parameter defining how to model the covariance between phenotypes of effects. Possible values: 'identity', 'covariance', 'homogeneous'.
+#' @param logLevel is a string parameter defining the log level for the logging package. 
+#' @param logFile is a string parameter defining the name of the log file for the logging output.
 #'
 #' @return A list of P values and PVEs
 #' @useDynLib mvMAPIT
 #' @export
 #' @import CompQuadForm
-MvMAPIT <- function(X, Y, W = NULL, C = NULL, hybrid = TRUE, threshold = 0.05, test = "normal", cores = 1, variantIndex = NULL, phenotypeCovariance = 'identity') {
+MvMAPIT <- function(X, Y, W = NULL, C = NULL, hybrid = TRUE, threshold = 0.05, test = "normal", cores = 1, variantIndex = NULL, phenotypeCovariance = 'identity', logLevel = 'WARN', logFile = NULL) {
 
   if (cores > 1) {
     if (cores > detectCores()) {
@@ -51,7 +53,20 @@ MvMAPIT <- function(X, Y, W = NULL, C = NULL, hybrid = TRUE, threshold = 0.05, t
       cores <- detectCores()
     }
   }
-
+  
+  logging::logReset()
+  logging::basicConfig(level = logLevel)
+  log <- logging::getLogger('MvMAPIT')
+  if(!is.null(logFile)) {
+    filePath <- file.path(getwd(),logFile)
+    log$debug('Logging to file: %s', filePath)
+    log$addHandler(logging::writeToFile, file=filePath)
+  }
+  
+  log$debug('Genotype matrix: %d x %d', nrow(X), ncol(X))
+  log$debug('Phenotype matrix: %d x %d', nrow(Y), ncol(Y))
+  
+  
   if (hybrid == TRUE) {
     vc.mod <- MAPITCpp(X, Y, W, C, variantIndex, "normal", cores = cores, NULL, phenotypeCovariance) # Normal Z-Test
     pvals <- vc.mod$pvalues
