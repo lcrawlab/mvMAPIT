@@ -140,25 +140,27 @@ Rcpp::List MAPITCpp(arma::mat X,
                  int cores = 1,
                  Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix = R_NilValue,
                  std::string phenotypeCovariance = "identity")
-{
-    std::string logname = "mvMAPIT";
-    auto logger = spdlog::get(logname);                         // retrieve existing one
-    if (logger == nullptr) logger = spdlog::r_sink_mt(logname);     // or create new one if needed
-
-    spdlog::stopwatch sw;                                   // instantiate a stop watch
-
+{   
+    
     int i;
     const int n = X.n_cols;
     const int p = X.n_rows;
     const int d = Y.n_rows;
     int q = 0;
 
-
+#ifdef WITH_LOGGER
+    std::string logname = "MAPITcpp";
+    auto logger = spdlog::get(logname);                         // retrieve existing one
+    if (logger == nullptr) logger = spdlog::r_sink_mt(logname);     // or create new one if needed
+    
+    spdlog::stopwatch sw;                                   // instantiate a stop watch
+    
     logger->info("Number of samples: {}", n);
     logger->info("Number of SNPs: {}", p);
     logger->info("Number of phenotypes: {}", d);
     logger->info("Test method: {}", testMethod);
     logger->info("Phenotype covariance model: {}", phenotypeCovariance);
+#endif
 
 
     if (Z.isNotNull())
@@ -193,15 +195,21 @@ Rcpp::List MAPITCpp(arma::mat X,
     arma::mat V_K(d, d);
     arma::mat V_G(d, d);
     if (phenotypeCovariance.compare("covariance") == 0) { // string.compare() returns '0' if equal
+#ifdef WITH_LOGGER
         logger->info("Covariance of effects proportional to phenotype covariance.");
+#endif
         V_K = cov(Y.t());
         V_G = V_K;
     } else if (phenotypeCovariance.compare("homogeneous") == 0) {
+#ifdef WITH_LOGGER
         logger->info("Effect of a variant homogeneous across phenotypes.");
+#endif
         V_K.ones();
         V_G.ones();
     } else {
+#ifdef WITH_LOGGER
         logger->info("Effect of a variant uncorrelated across phenotypes.");
+#endif
         V_K.eye();
         V_G.eye();
     }
@@ -252,7 +260,9 @@ Rcpp::List MAPITCpp(arma::mat X,
         Kc = kron(V_K, Kc);
         Gc = kron(V_G, Gc);
         M = kron(V_M, M);
+#ifdef WITH_LOGGER
         logger->debug("Kronecker product dimensions: {} x {}", M.n_rows, M.n_cols);
+#endif
 
 
         //Compute the quantities q and S
@@ -307,8 +317,9 @@ Rcpp::List MAPITCpp(arma::mat X,
         //Compute the PVE
         pve(i) = delta(0) / arma::accu(delta);
     }
-
+#ifdef WITH_LOGGER
     logger->info("Elapsed time: {}", sw);
+#endif
     //Return a Rcpp::List  of the arguments
     if (testMethod == "davies")
     {
@@ -400,7 +411,7 @@ Rcpp::List  MAPIT_CisTrans(arma::mat X, arma::vec y, Rcpp::List  regions, bool u
         //Compute the PVE
         pve(i) = delta(0) / arma::accu(delta);
     }
-
+    
     //Return a Rcpp::List  of the arguments
     return Rcpp::List ::create(Rcpp::Named("Est") = sigma_est, Rcpp::Named("Eigenvalues") = Lambda,Rcpp::Named("PVE") = pve);
 }

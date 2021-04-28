@@ -6,7 +6,7 @@
 \usage{
 MvMAPIT(
   X,
-  y,
+  Y,
   W = NULL,
   C = NULL,
   hybrid = TRUE,
@@ -20,7 +20,7 @@ MvMAPIT(
 \arguments{
 \item{X}{is the p x n genotype matrix where p is the number of variants and n is the number of samples. Must be a matrix and not a data.frame.}
 
-\item{y}{is the n x d matrix of quantitative or continuous traits.}
+\item{Y}{is the d x n matrix of d quantitative or continuous traits for n samples.}
 
 \item{W}{is the matrix qxn matrix of covariates. Must be a matrix and not a data.frame.}
 
