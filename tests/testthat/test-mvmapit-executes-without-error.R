@@ -2,11 +2,16 @@ test_that("MvMapit executes without error when hybrid = TRUE.", {
   # given
   p <- 10
   n <- 5
-  d <- 3
+  d <- 1
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
   # when
-  mapit <- MvMAPIT(t(X), t(Y), cores = 1, variantIndex = c(1))
+  mapit <- MvMAPIT(t(X), 
+                   t(Y), 
+                   cores = 1, 
+                   #variantIndex = c(1),
+                   phenotypeCovariance = 'covariance',
+                   logLevel = "DEBUG")
   # then
   expect_equal(length(mapit$pvalues), p)
 })
@@ -19,7 +24,14 @@ test_that("MvMapit executes without error when hybrid = FALSE.", {
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
   # when
-  mapit <- MvMAPIT(t(X), t(Y), hybrid = FALSE, cores = 1, variantIndex = c(1), logLevel = "DEBUG", logFile = 'test.log')
+  mapit <- MvMAPIT(t(X), 
+                   t(Y), 
+                   hybrid = FALSE, 
+                   cores = 1, 
+                   variantIndex = c(1),
+                   phenotypeCovariance = 'covariance', 
+                   logLevel = "DEBUG", 
+                   logFile = 'test.log')
   # then
   expect_equal(length(mapit$pvalues), p)
 })
@@ -32,7 +44,14 @@ test_that("MvMapit executes without error when hybrid = FALSE and test = davies.
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
   # when
-  mapit <- MvMAPIT(t(X), t(Y), hybrid = FALSE, test = 'davies', cores = 1, variantIndex = c(1))
+  mapit <- MvMAPIT(t(X), 
+                   t(Y), 
+                   hybrid = FALSE, 
+                   test = 'davies', 
+                   cores = 1, 
+                   variantIndex = c(1),
+                   phenotypeCovariance = 'covariance',
+                   logLevel = "DEBUG")
   # then
   expect_equal(length(mapit$pvalues), p)
 })

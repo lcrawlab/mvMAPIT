@@ -76,6 +76,8 @@ MvMAPIT <- function(X,
   
   log$debug('Genotype matrix: %d x %d', nrow(X), ncol(X))
   log$debug('Phenotype matrix: %d x %d', nrow(Y), ncol(Y))
+  log$debug('Genotype matrix determinant: %f', det((X) %*% t(X)))
+  
   
   
   if (hybrid == TRUE) {

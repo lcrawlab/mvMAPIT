@@ -91,7 +91,7 @@ simulate_phenotypes <- function(genotype_matrix,
   for (j in 1:d) {
     ## select causal SNPs
     log$debug('Simulating phenotype %d', j)
-    causal_snps_j <- sample(snp.ids[-pleiotropic_set], n_causal, replace = F)
+    causal_snps_j <- sample(snp.ids[-pleiotropic_set], n_causal - n_causal_pleio, replace = F)
     epistatic_set_j_1 <- sample(causal_snps_j, n_causal_epi, replace = F)
     epistatic_set_j_2 <- sample(causal_snps_j[! causal_snps_j %in% epistatic_set_j_1], n_causal_epi, replace = F)
     
