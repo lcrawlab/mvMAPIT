@@ -22,14 +22,16 @@
 #' @param epistatic_correlation Correlation between the epistatic effects of the phenotype.
 #' @param seed Random seed for simulation.
 #' @param logLevel is a string parameter defining the log level for the logging package. 
-#' @param logFile is a string parameter defining the name of the log file for the logging output.
+#' @param logFile is a string parameter defining the name of the log file for the logging output. 
 #' @return A list object containing the phenotype data, the genotype data, as well as the causal SNPs and summary statistics.
 #' @useDynLib mvMAPIT
 #' @export
+#' @import foreach
+#' @import parallel
 simulate_phenotypes <- function(genotype_matrix,
                      causal_fraction = 0.2,
-                     epistatic_fraction = 0.5,
-                     pleiotropic_fraction = 0.5,
+                     epistatic_fraction = 0.1,
+                     pleiotropic_fraction = 0.1,
                      H2 = 0.6,
                      d = 2,
                      rho = 0.8,
@@ -39,7 +41,7 @@ simulate_phenotypes <- function(genotype_matrix,
                      logLevel = 'INFO',
                      logFile = NULL) {
   set.seed(seed)
-  
+
   logging::logReset()
   logging::basicConfig(level = logLevel)
   log <- logging::getLogger('simulate_phenotypes')
@@ -49,12 +51,24 @@ simulate_phenotypes <- function(genotype_matrix,
     log$addHandler(logging::writeToFile, file=filePath)
   }
   
-  X <- scale(genotype_matrix)
   
-  log$debug('Genotype matrix: %d x %d', nrow(X), ncol(X))
+  if(epistatic_fraction > 0.3) {
+    log$debug("Epistatic fraction too large.")
+    epistatic_fraction <- 0.3
+  }
+  if(pleiotropic_fraction > 0.3) {
+    log$debug("Pleitropic fraction too large.")
+    pleiotropic_fraction <- 0.3
+  }
+  
+  X <- scale(genotype_matrix) # produces NaN when the columns have zero variance
+  X <- X[, complete.cases(t(X))] # drop SNPs with NaN
+  
   
   n_samples <- nrow(X) # number of genotype samples
   n_snp <- ncol(X) # number of SNPs
+  log$debug('Scaled genotype matrix: %d x %d', n_samples, n_snp)
+  log$debug('Dropped %d columns due to zero variance.', ncol(genotype_matrix) - n_snp)
   
   n_causal <- ceiling(n_snp * causal_fraction) # number of SNPs to be causal in every phenotype
   n_causal_epi <- ceiling(n_causal * epistatic_fraction) # number of epistatic causal SNPs slected per interaction group and phenotype
@@ -62,6 +76,8 @@ simulate_phenotypes <- function(genotype_matrix,
   log$debug('Number of causal SNPs: %d', n_causal)
   log$debug('Number of epistatic SNPs: %d', n_causal_epi)
   log$debug('Number of pleiotropic SNPs: %d', n_causal_pleio)
+  log$debug('NA in raw genotype matrix: %d', sum(is.na(genotype_matrix)))
+  log$debug('NA in scaled genotype matrix: %d', sum(is.na(X)))
   
   
   snp.ids <- 1:n_snp
@@ -81,18 +97,22 @@ simulate_phenotypes <- function(genotype_matrix,
     
     epistatic_set_j_1 <- c(epistatic_set_j_1, pleiotropic_set) # the epistatic pleiotropic effects are included in epistatic interaction group 1
     
-    log$debug('Causal SNPs: %s', causal_snps_j)
-    log$debug('Epistatic SNPs group 1: %s', epistatic_set_j_1)
-    log$debug('Epistatic SNPs group 2: %s', epistatic_set_j_2)
+    log$debug('Head of causal SNPs: %s', head(c(causal_snps_j, pleiotropic_set)))
+    log$debug('Head of epistatic SNPs group 1: %s', head(epistatic_set_j_1))
+    log$debug('Head of epistatic SNPs group 2: %s', head(epistatic_set_j_2))
     
     # create epistatic interaction matrix
     X_causal_j <- X[, c(causal_snps_j, pleiotropic_set)] # all SNPs have additive effects
     X_epistatic_j_1 <- X[, epistatic_set_j_1]
     X_epistatic_j_2 <- X[, epistatic_set_j_2]
-    X_epi <- c()
-    for (i in 1:length(epistatic_set_j_1)) {
-      X_epi <- cbind(X_epi, X_epistatic_j_1[, i] * X_epistatic_j_2)
+
+    start_interactions <- proc.time()
+    log$debug('Computing interactions. This may take a while.')
+    X_epi <- foreach(i=seq_len(length(epistatic_set_j_1)), .combine=cbind) %do% {
+      X_epistatic_j_1[, i] * X_epistatic_j_2
     }
+    time_interactions <- proc.time() - start_interactions
+    log$debug('Interactions X_epi computed in %f', time_interactions[3])
     log$debug('Dimension of interaction matrix X_epi: %d x %d', nrow(X_epi), ncol(X_epi))
     
     # marginal effects
@@ -116,7 +136,7 @@ simulate_phenotypes <- function(genotype_matrix,
     Y_epistatic <- cbind(Y_epistatic, y_epi)
     Y_error <- cbind(Y_error, y_err)
     causal_snps[[paste0('phenotype_', j)]] <- list(
-      'causal_snps' = causal_snps_j,
+      'causal_snps' = c(causal_snps_j, pleiotropic_set),
       'epistatic_1' = epistatic_set_j_1,
       'epistatic_2' = epistatic_set_j_2,
       'alpha' = alpha,
@@ -144,7 +164,7 @@ simulate_phenotypes <- function(genotype_matrix,
   colnames(X) <- seq_len(ncol(X)) %>% sprintf(fmt = "snp_%05d") # column names names for SNPs
   colnames(Y) <- seq_len(ncol(Y)) %>% sprintf(fmt = "p_%02d") # column names names for phenotypes
   
-  log$debug('Phenotype data: %s', head(Y, 2))
+  log$debug('Phenotype data: %s', head(Y))
   # return data
   simulated_pleiotropic_epistasis_data <- list(
     number_snp = n_snp,

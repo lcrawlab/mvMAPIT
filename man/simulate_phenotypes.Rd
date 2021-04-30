@@ -7,8 +7,8 @@
 simulate_phenotypes(
   genotype_matrix,
   causal_fraction = 0.2,
-  epistatic_fraction = 0.5,
-  pleiotropic_fraction = 0.5,
+  epistatic_fraction = 0.1,
+  pleiotropic_fraction = 0.1,
   H2 = 0.6,
   d = 2,
   rho = 0.8,
