@@ -1,12 +1,14 @@
 test_that("Simulate multiple phenotypes returns apropriate phenotype object", {
   # given
   p <- 10
+  f <- 0.4
+  g <- 0.1
   n <- 5
   d <- 3
   X <- matrix(runif(p * n), ncol = p)
   
   # when
-  data <- simulate_phenotypes(X, d = d, logLevel = 'DEBUG')
+  data <- simulate_phenotypes(X, causal_fraction = f, pleiotropic_fraction = g, d = d, logLevel = 'DEBUG')
   
   # then
   expect_equal(nrow(data$phenotype), n)

@@ -38,6 +38,11 @@ double ProductTrace(arma::mat a, arma::mat b)
 
 arma::mat ComputeSMatrix(std::vector<arma::mat> matrices)
 {
+#ifdef WITH_LOGGER
+    std::string logname = "MAPITcpp::ComputeSMatrix";
+    auto logger = spdlog::get(logname);                         // retrieve existing one
+    if (logger == nullptr) logger = spdlog::r_sink_mt(logname);     // or create new one if needed
+#endif
     int num_variance_components = matrices.size();
     arma::mat S = arma::zeros(num_variance_components, num_variance_components); //Create kxk-matrix S to save
 
@@ -49,6 +54,12 @@ arma::mat ComputeSMatrix(std::vector<arma::mat> matrices)
             {
                 S(i,j) = ProductTrace(matrices[i], matrices[j]);
                 S(j,i) = S(i,j);
+#ifdef WITH_LOGGER
+                logger->info("S({},{}) = {}", i, j, S(i,j));
+                if (S(i,j) < 0) {
+                    logger->warn("S({},{}) negative", i, j);
+                }
+#endif
             }
         }
     }
@@ -57,12 +68,23 @@ arma::mat ComputeSMatrix(std::vector<arma::mat> matrices)
 
 arma::vec ComputeqVector(arma::vec yc, std::vector<arma::mat> matrices)
 {
+#ifdef WITH_LOGGER
+    std::string logname = "MAPITcpp::ComputeqVector";
+    auto logger = spdlog::get(logname);                         // retrieve existing one
+    if (logger == nullptr) logger = spdlog::r_sink_mt(logname);     // or create new one if needed
+#endif
     int num_variance_components = matrices.size();
     arma::vec q = arma::zeros(num_variance_components);
 
     for (int i = 0; i < num_variance_components; i++)
     {
         q(i) = arma::as_scalar(yc.t()*matrices[i]*yc);
+#ifdef WITH_LOGGER
+        logger->info("q({}) = {}", i, q(i));
+        if (q(i) < 0) {
+            logger->warn("q({}) negative", i);
+        }
+#endif
     }
     return q;
 }
@@ -70,6 +92,12 @@ arma::vec ComputeqVector(arma::vec yc, std::vector<arma::mat> matrices)
 // TODO ComputeHMatrix and ComputeVMatrix can probably be merged
 arma::mat ComputeHMatrix(arma::mat Sinv, std::vector<arma::mat> matrices)
 {
+#ifdef WITH_LOGGER
+    std::string logname = "MAPITcpp::ComputeHMatrix";
+    auto logger = spdlog::get(logname);                         // retrieve existing one
+    if (logger == nullptr) logger = spdlog::r_sink_mt(logname);     // or create new one if needed
+    logger->info("Computing H matrix");
+#endif
     arma::mat H = arma::zeros(arma::size(matrices[0]));
     for (int i = 0; i < matrices.size(); i++)
     {
@@ -80,6 +108,12 @@ arma::mat ComputeHMatrix(arma::mat Sinv, std::vector<arma::mat> matrices)
 
 arma::mat ComputeVMatrix(arma::vec delta, std::vector<arma::mat> matrices)
 {
+#ifdef WITH_LOGGER
+    std::string logname = "MAPITcpp::ComputeVMatrix";
+    auto logger = spdlog::get(logname);                         // retrieve existing one
+    if (logger == nullptr) logger = spdlog::r_sink_mt(logname);     // or create new one if needed
+    logger->info("Computing V matrix");
+#endif
     arma::mat V = arma::zeros(arma::size(matrices[0]));
     for (int i = 0; i < matrices.size(); i++)
     {
@@ -91,6 +125,12 @@ arma::mat ComputeVMatrix(arma::vec delta, std::vector<arma::mat> matrices)
 // TODO should this be called ComputeVarianceDelta?
 double ComputeVarianceSigma(arma::vec yc, arma::mat H, arma::mat V)
 {
+#ifdef WITH_LOGGER
+    std::string logname = "MAPITcpp::ComputeVarianceSigma";
+    auto logger = spdlog::get(logname);                         // retrieve existing one
+    if (logger == nullptr) logger = spdlog::r_sink_mt(logname);     // or create new one if needed
+    logger->info("Computing variance of variance component.");
+#endif
     return arma::as_scalar(2 * yc.t() * H.t() * V * H * yc);
 }
 
@@ -98,6 +138,21 @@ double ComputeVarianceSigma(arma::vec yc, arma::mat Sinv, arma::vec delta, std::
 {
     arma::mat H = ComputeHMatrix(Sinv, matrices);
     arma::mat V = ComputeVMatrix(delta, matrices);
+#ifdef WITH_LOGGER
+    std::string logname = "MAPITcpp::ComputeVarianceSigma";
+    auto logger = spdlog::get(logname);                         // retrieve existing one
+    if (logger == nullptr) logger = spdlog::r_sink_mt(logname);     // or create new one if needed
+    const float det_H = arma::det(H);
+    if (det_H == 0) 
+    {   
+        logger->warn("The determinant of the H matrix is {}.", det_H);
+    }
+    const float det_V = arma::det(V);
+    if (det_V == 0) 
+    {   
+        logger->warn("The determinant of the V matrix is {}.", det_V);
+    }
+#endif
     return ComputeVarianceSigma(yc, H, V);
 }
 
@@ -219,6 +274,9 @@ Rcpp::List MAPITCpp(arma::mat X,
 #endif
 #pragma omp parallel for schedule(dynamic)
     for(i=0; i<p; i++){
+#ifdef WITH_LOGGER
+        logger->info("Variant {}/{}.", i + 1, p);
+#endif
 
         if (variantIndices.isNotNull()) // check if we are provided variants of interest
         {
@@ -226,6 +284,9 @@ Rcpp::List MAPITCpp(arma::mat X,
             // if there is no match find == ind.end()
             if (std::find(ind.begin(), ind.end(), i+1) == ind.end())
             {
+#ifdef WITH_LOGGER
+                logger->info("Variant not of interest. Skip to next.");
+#endif
                 continue; // skip to next variant if you don't find a match
             }
         }
@@ -235,6 +296,21 @@ Rcpp::List MAPITCpp(arma::mat X,
         arma::mat G = K;
         G.each_row() %= X.row(i);
         G.each_col() %= arma::trans(X.row(i));
+#ifdef WITH_LOGGER
+        const int k1 = K.n_cols;
+        const int k2 = K.n_rows;
+        logger->info("Dimensions of polygenic background: {} x {}.", k1, k2);
+        const float det_K = arma::det(K);
+        if (det_K == 0) 
+        {
+            logger->warn("The determinant of the K matrix is {}.", det_K);
+        }
+        const float det_G = arma::det(G);
+        if (det_G == 0) 
+        {
+            logger->warn("The determinant of the G matrix is {}.", det_G);
+        }
+#endif
 
         //Transform K and G using projection M
         arma::mat b = arma::zeros(n, q + 2);
@@ -249,6 +325,23 @@ Rcpp::List MAPITCpp(arma::mat X,
         arma::mat Kc = M * K * M;
         arma::mat Gc = M * G * M;
         arma::mat Cc;
+#ifdef WITH_LOGGER
+        const float det_Kproj = arma::det(Kc);
+        if (det_Kproj == 0) 
+        {
+            logger->warn("The determinant of the M * K * M matrix is {}.", det_Kproj);
+        }
+        const float det_Gproj = arma::det(Gc);
+        if (det_Gproj == 0) 
+        {
+            logger->warn("The determinant of the M * G * M matrix is {}.", det_Gproj);
+        }
+        const float det_Mproj = arma::det(M);
+        if (det_Mproj == 0) 
+        {
+            logger->warn("The determinant of the M matrix is {}.", det_Mproj);
+        }
+#endif
         if (C.isNotNull())
         {
             Cc = M * Rcpp::as<arma::mat>(C.get()) * M; // M*C*M, but C is converted to an arma::mat first
@@ -262,6 +355,21 @@ Rcpp::List MAPITCpp(arma::mat X,
         M = kron(V_M, M);
 #ifdef WITH_LOGGER
         logger->debug("Kronecker product dimensions: {} x {}", M.n_rows, M.n_cols);
+        const float det_Kc = arma::det(Kc);
+        if (det_Kc == 0) 
+        {
+            logger->warn("The determinant of the kron(V_K, Kc) matrix is {}.", det_Kc);
+        }
+        const float det_Gc = arma::det(Gc);
+        if (det_Gc == 0) 
+        {
+            logger->warn("The determinant of the kron(V_G, Gc) matrix is {}.", det_Gc);
+        }
+        const float det_M = arma::det(M);
+        if (det_M == 0) 
+        {
+            logger->warn("The determinant of the kron(V_M, M) matrix is {}.", det_M);
+        }
 #endif
 
 
@@ -279,18 +387,43 @@ Rcpp::List MAPITCpp(arma::mat X,
         arma::mat S = ComputeSMatrix(matrices);
 
         //Compute delta and Sinv
+#ifdef WITH_LOGGER
+        const float det_S = arma::det(S);
+        if (det_S == 0) 
+        {   
+            logger->warn("The determinant of the S matrix is {}.", det_S);
+        }
+#endif
         arma::mat Sinv = arma::inv(S);
         arma::vec delta = Sinv * q;
+        
+#ifdef WITH_LOGGER
+        const float len_delta = delta.n_elem;
+        for(int l=0; l<len_delta; l++){ 
+            logger->info("Variance component delta({}) = {}.", l, delta(l));
+            if (delta(l) < 0) 
+            {   
+                logger->warn("delta({}) negative.", l);
+            }
+        }
+#endif
 
         // TODO these blocks should probably be extracted into methods
         if (testMethod == "normal")
         {
             //Compute var(delta(0))
             double V_sigma = ComputeVarianceSigma(yc, Sinv, delta, matrices);
-
+            
             //Save point estimates and SE of the epistasis component
             sigma_est(i) = delta(0);
             sigma_se(i) = sqrt(V_sigma);
+#ifdef WITH_LOGGER
+            logger->info("The normal method standard error of the epistatic variance component is {}.", sigma_se(i));
+            if (V_sigma < 0) 
+            {   
+                logger->warn("V_sigma({}) negative.", i);
+            }
+#endif
         }
         else if (testMethod == "davies")
         {
@@ -316,6 +449,13 @@ Rcpp::List MAPITCpp(arma::mat X,
 
         //Compute the PVE
         pve(i) = delta(0) / arma::accu(delta);
+#ifdef WITH_LOGGER
+        logger->info("PVE({}) = {}.", i, pve(i));
+        if (pve(i) < 0 || pve(i) > 1) 
+        {   
+            logger->warn("Total variance estimate is {}.", arma::accu(delta));
+        }
+#endif
     }
 #ifdef WITH_LOGGER
     logger->info("Elapsed time: {}", sw);
