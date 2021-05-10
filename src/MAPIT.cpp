@@ -78,7 +78,7 @@ arma::vec ComputeqVector(arma::vec yc, std::vector<arma::mat> matrices)
 
     for (int i = 0; i < num_variance_components; i++)
     {
-        q(i) = arma::as_scalar(yc.t()*matrices[i]*yc);
+        q(i) = arma::as_scalar(yc.t() * matrices[i] * yc);
 #ifdef WITH_LOGGER
         logger->info("q({}) = {}", i, q(i));
         if (q(i) < 0) {
@@ -196,7 +196,7 @@ Rcpp::List MAPITCpp(arma::mat X,
                  Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix = R_NilValue,
                  std::string phenotypeCovariance = "identity")
 {   
-    
+
     int i;
     const int n = X.n_cols;
     const int p = X.n_rows;
@@ -227,7 +227,7 @@ Rcpp::List MAPITCpp(arma::mat X,
     Rcpp::NumericVector sigma_est(p);
     Rcpp::NumericVector sigma_se(p);
     Rcpp::NumericVector pve(p);
-    arma::mat Lambda(n * d, p);
+    arma::mat Lambda(n, p);
 
     arma::mat GSM;
     if (GeneticSimilarityMatrix.isNull())
@@ -296,20 +296,9 @@ Rcpp::List MAPITCpp(arma::mat X,
         arma::mat G = K;
         G.each_row() %= X.row(i);
         G.each_col() %= arma::trans(X.row(i));
+
 #ifdef WITH_LOGGER
-        const int k1 = K.n_cols;
-        const int k2 = K.n_rows;
-        logger->info("Dimensions of polygenic background: {} x {}.", k1, k2);
-        const float det_K = arma::det(K);
-        if (det_K == 0) 
-        {
-            logger->warn("The determinant of the K matrix is {}.", det_K);
-        }
-        const float det_G = arma::det(G);
-        if (det_G == 0) 
-        {
-            logger->warn("The determinant of the G matrix is {}.", det_G);
-        }
+        logger->info("Dimensions of polygenic background: {} x {}.", K.n_cols, K.n_rows);
 #endif
 
         //Transform K and G using projection M
@@ -325,23 +314,7 @@ Rcpp::List MAPITCpp(arma::mat X,
         arma::mat Kc = M * K * M;
         arma::mat Gc = M * G * M;
         arma::mat Cc;
-#ifdef WITH_LOGGER
-        const float det_Kproj = arma::det(Kc);
-        if (det_Kproj == 0) 
-        {
-            logger->warn("The determinant of the M * K * M matrix is {}.", det_Kproj);
-        }
-        const float det_Gproj = arma::det(Gc);
-        if (det_Gproj == 0) 
-        {
-            logger->warn("The determinant of the M * G * M matrix is {}.", det_Gproj);
-        }
-        const float det_Mproj = arma::det(M);
-        if (det_Mproj == 0) 
-        {
-            logger->warn("The determinant of the M matrix is {}.", det_Mproj);
-        }
-#endif
+
         if (C.isNotNull())
         {
             Cc = M * Rcpp::as<arma::mat>(C.get()) * M; // M*C*M, but C is converted to an arma::mat first
@@ -350,38 +323,19 @@ Rcpp::List MAPITCpp(arma::mat X,
         arma::vec yc = vectorise(Yc); // vectorise the multi-phenotype matrix
 
         // kronecker products
-        Kc = kron(V_K, Kc);
-        Gc = kron(V_G, Gc);
-        M = kron(V_M, M);
-#ifdef WITH_LOGGER
-        logger->debug("Kronecker product dimensions: {} x {}", M.n_rows, M.n_cols);
-        const float det_Kc = arma::det(Kc);
-        if (det_Kc == 0) 
-        {
-            logger->warn("The determinant of the kron(V_K, Kc) matrix is {}.", det_Kc);
-        }
-        const float det_Gc = arma::det(Gc);
-        if (det_Gc == 0) 
-        {
-            logger->warn("The determinant of the kron(V_G, Gc) matrix is {}.", det_Gc);
-        }
-        const float det_M = arma::det(M);
-        if (det_M == 0) 
-        {
-            logger->warn("The determinant of the kron(V_M, M) matrix is {}.", det_M);
-        }
-#endif
-
+        arma::mat Kc_kron = kron(V_K, Kc);
+        arma::mat Gc_kron = kron(V_G, Gc);
+        arma::mat M_kron = kron(V_M, M);
 
         //Compute the quantities q and S
         std::vector<arma::mat> matrices;
         if (C.isNotNull())
         {
-            matrices = { Gc, Kc, Cc, M };
+            matrices = { Gc_kron, Kc_kron, Cc, M_kron }; //TODO: MM-19 Cc not included in multivariate version yet
         }
         else
         {
-            matrices = { Gc, Kc, M };
+            matrices = { Gc_kron, Kc_kron, M_kron };
         }
         arma::vec q = ComputeqVector(yc, matrices);
         arma::mat S = ComputeSMatrix(matrices);
@@ -396,6 +350,8 @@ Rcpp::List MAPITCpp(arma::mat X,
 #endif
         arma::mat Sinv = arma::inv(S);
         arma::vec delta = Sinv * q;
+
+        sigma_est(i) = delta(0); // Save point estimates of the epistasis component
         
 #ifdef WITH_LOGGER
         const float len_delta = delta.n_elem;
@@ -411,18 +367,16 @@ Rcpp::List MAPITCpp(arma::mat X,
         // TODO these blocks should probably be extracted into methods
         if (testMethod == "normal")
         {
-            //Compute var(delta(0))
+            // Compute var(delta(0))
             double V_sigma = ComputeVarianceSigma(yc, Sinv, delta, matrices);
             
-            //Save point estimates and SE of the epistasis component
-            sigma_est(i) = delta(0);
+            // Save SE of the epistasis component
             sigma_se(i) = sqrt(V_sigma);
 #ifdef WITH_LOGGER
+            double pval_i = 2 * R::pnorm(abs(sigma_est(i) / sigma_se(i)), 0.0, 1.0, 0, 0);
             logger->info("The normal method standard error of the epistatic variance component is {}.", sigma_se(i));
-            if (V_sigma < 0) 
-            {   
-                logger->warn("V_sigma({}) negative.", i);
-            }
+            logger->info("p-value({}) = {}.", i + 1, pval_i);
+            logger->info("ratio({}) = {}.", i + 1, abs(sigma_est(i) / sigma_se(i)));
 #endif
         }
         else if (testMethod == "davies")
@@ -434,7 +388,33 @@ Rcpp::List MAPITCpp(arma::mat X,
             arma::mat eigvec;
             if (C.isNull())
             {
-                evals = arma::eig_sym((Sinv(0, 0) * Gc + Sinv(0, 1) * M) * q(1) / S(1, 1));
+                //august: ok, my guess is that we ended up with missing values because things needed to be filled out further
+                //can move the below into a function if helpful
+                arma::vec q_sub = q.subvec(1, 2);
+                arma::mat S_sub = S.submat(1, 1, 2, 2);
+                arma::vec delta_null = arma::inv(S_sub) * q_sub;
+                // I think this is the same equation as in the paper
+                arma::eig_sym(eigval, eigvec, delta_null(0) * Kc + delta_null(1) * M);
+
+                // this is the one from MAPIT1_Davies, however may introduce more errors if was supposed to use the line above
+                eig_sym(evals,
+                    (
+                        eigvec.cols(find(eigval > 0))
+                        * arma::diagmat(sqrt(eigval(find(eigval > 0))))
+                        * arma::trans(eigvec.cols(find(eigval > 0)))
+                    )
+                    * (Sinv(0, 0) * Gc + Sinv(0, 1) * Kc + Sinv(0, 2) * M )
+                    * (
+                        eigvec.cols(find(eigval > 0))
+                        * arma::diagmat(sqrt(eigval(find(eigval > 0))))
+                        * arma::trans(eigvec.cols(find(eigval > 0)))
+                    )
+                    );
+                // evals = arma::eig_sym((Sinv(0, 0) * Gc + Sinv(0, 1) * M) * q(1) / S(1, 1));
+                //august: where is this line from?
+#ifdef WITH_LOGGER
+                logger->info("Davies method with C = NULL; number of eigenvalues: {}.", evals.n_elem);
+#endif
             }
             else
             {
@@ -450,11 +430,8 @@ Rcpp::List MAPITCpp(arma::mat X,
         //Compute the PVE
         pve(i) = delta(0) / arma::accu(delta);
 #ifdef WITH_LOGGER
-        logger->info("PVE({}) = {}.", i, pve(i));
-        if (pve(i) < 0 || pve(i) > 1) 
-        {   
-            logger->warn("Total variance estimate is {}.", arma::accu(delta));
-        }
+        logger->info("PVE({}) = {}.", i + 1, pve(i));
+        logger->info("Total variance estimate is {}.", arma::accu(delta));
 #endif
     }
 #ifdef WITH_LOGGER
@@ -468,7 +445,7 @@ Rcpp::List MAPITCpp(arma::mat X,
     else //Default to test method "normal"
     {
         //Compute the p-values for each estimate
-        Rcpp::NumericVector sigma_pval = 2*Rcpp::pnorm(abs(sigma_est/sigma_se),0.0,1.0,0,0); //H0: sigma = 0 vs. H1: sigma != 0
+        Rcpp::NumericVector sigma_pval = 2 * Rcpp::pnorm(abs(sigma_est / sigma_se), 0.0, 1.0, 0, 0); //H0: sigma = 0 vs. H1: sigma != 0
 
         return Rcpp::List::create(Rcpp::Named("Est") = sigma_est, Rcpp::Named("SE") = sigma_se, Rcpp::Named("pvalues") = sigma_pval, Rcpp::Named("PVE") = pve);
     }
