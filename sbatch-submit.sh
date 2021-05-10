@@ -1,5 +1,23 @@
 #!/bin/bash
 
+function assert_var_not_null() {
+  local FATAL VAR COUNT_NULL=0
+  [[ "$1" = "-f" ]] && { shift; FATAL=1; }
+  for VAR in "$@"; do
+    [[ -z "${!VAR}" ]] &&
+      printf '%s\n' "Environment variable '${VAR}' not set" >&2 &&
+      ((COUNT_NULL++))
+  done
+
+  if ((COUNT_NULL > 0)); then
+    [[ "${FATAL}" ]] && exit 1
+    return 1
+  fi
+  return 0
+}
+
+assert_var_not_null -f SIMULATIONS_DIR MVMAPIT_DIR SLURM_OUT
+
 TIMEOUT=10h # timeout for tailing the slulrm job log output
 SUCCESS_MESSAGE='Finished mvMAPIT'
 FAILURE_MESSAGE='FAILURE'

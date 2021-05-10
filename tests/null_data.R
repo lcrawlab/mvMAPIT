@@ -1,16 +1,30 @@
+library('MAPIT')
 library('mvMAPIT')
 library('foreach')
 
-datadir  <- Sys.getenv(c("MVMAPIT_DATA_DIR"))
+datadir  <- Sys.getenv(c("SIMULATIONS_DIR"))
 data_files <- list.files(path = file.path(datadir, "data/control"), pattern = 'null_H[0-9]_R[0-9]{1,2}_.*rds')
-results <- list()
+mvmapit_results <- list()
 for(f in data_files[1]) {
+  st=format(Sys.time(), "%Y-%m-%d_%H:%M")
+  mvmapit_out <- paste("mvMAPIT_",st, ".rds", sep = "")
+  mapit_out <- paste("MAPIT_",st, ".rds", sep = "")
   simulated <- readRDS(file.path(datadir, 'data/control', f))
-  results[[f]] <- foreach(s=simulated[1]) %do% {
-    #ind <- sample(seq_len(nrow(s$genotype)), 500, replace = FALSE)
-    Y <- s$phenotype[, 1:2]
+  mapit_results <- foreach(s=simulated[1]) %do% {
+    y <- s$phenotype[,1]
     X <- s$genotype
-    #X <- X[, -as.numeric(which(apply(X, 2, var) == 0))]
+    maf <- colMeans(X) / 2
+    X <- X[, (maf > 0.01)]
+    MAPIT(
+      t(X),
+      y
+    )
+  }
+  mvmapit_results <- foreach(s=simulated[1]) %do% {
+    Y <- s$phenotype[,1]
+    X <- s$genotype
+    maf <- colMeans(X) / 2
+    X <- X[, (maf > 0.01)]
     MvMAPIT(
       t(X),
       t(Y),
@@ -22,10 +36,10 @@ for(f in data_files[1]) {
       cores = 1,
       variantIndex = NULL,
       phenotypeCovariance = "identity",
-      logLevel = "DEBUG",
-      #logFile = 'eval_type_1.log'
+      logLevel = "DEBUG"
     )
   }
+  saveRDS(mvmapit_results, file=file.path(datadir, 'data/control/out', mvmapit_out))
+  saveRDS(mapit_results, file=file.path(datadir, 'data/control/out', mapit_out))
 }
-saveRDS(results, file=file.path(datadir, 'data/control/out', 'results.rds'))
 print('Finished mvMAPIT.')

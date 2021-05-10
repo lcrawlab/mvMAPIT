@@ -14,6 +14,7 @@ simulate_phenotypes(
   rho = 0.8,
   marginal_correlation = 0.3,
   epistatic_correlation = 0.3,
+  maf_threshold = 0.01,
   seed = 67132,
   logLevel = "INFO",
   logFile = NULL
@@ -37,6 +38,8 @@ simulate_phenotypes(
 \item{marginal_correlation}{Correlation between the additive effects of the phenotype.}
 
 \item{epistatic_correlation}{Correlation between the epistatic effects of the phenotype.}
+
+\item{maf_threshold}{is a float parameter defining the threshold for the minor allele frequency not included in causal SNPs.}
 
 \item{seed}{Random seed for simulation.}
 

@@ -78,22 +78,27 @@ MvMAPIT <- function(X,
   log$debug('Genotype matrix: %d x %d', nrow(X), ncol(X))
   log$debug('Phenotype matrix: %d x %d', nrow(Y), ncol(Y))
   log$debug('Genotype matrix determinant: %f', det((X) %*% t(X)))
-  
-  
-  
+
   if (hybrid == TRUE) {
     vc.mod <- MAPITCpp(X, Y, W, C, variantIndex, "normal", cores = cores, NULL, phenotypeCovariance) # Normal Z-Test
     pvals <- vc.mod$pvalues
     names(pvals) <- rownames(X)
     pves <- vc.mod$PVE
     names(pves) <- rownames(X)
-    if (sum(is.na(pvals)) > 0) {
+    if (any(is.na(pvals))) {
       log$warn('Found %d NA in p-values.', sum(is.na(pvals)))
       log$warn('Indices of NA values: %s.', which(is.na(pvals)))
     }
-    
-    ind <- which(pvals <= threshold) # Find the indices of the p-values that are below the threshold
 
+    if (sum(pvals < 0) > 0) {
+      log$warn('Found %d negative p-values.', sum(pvals < 0))
+      log$warn('Indices of negative values: %s.', which(is.na(pvals)))
+    }
+
+    ind <- which(pvals <= threshold) # Find the indices of the p-values that are below the threshold
+    log$info('%d p-values are significant with alpha = %f', length(ind), threshold)
+
+    log$info('Running davies method on selected SNPs.')
     vc.mod <- MAPITCpp(X, Y, W, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
 
     davies.pvals <- davies_exact(vc.mod, X)
@@ -104,7 +109,7 @@ MvMAPIT <- function(X,
     names(pvals) <- rownames(X)
     pves <- vc.mod$PVE
     names(pves) <- rownames(X)
-    if (sum(is.na(pvals)) > 0) {
+    if (any(is.na(pvals))) {
       log$warn('Found %d NA in p-values.', sum(is.na(pvals)))
       log$warn('Indices of NA values: %s.', which(is.na(pvals)))
     }
