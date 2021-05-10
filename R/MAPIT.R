@@ -74,6 +74,7 @@ MvMAPIT <- function(X,
     log$addHandler(logging::writeToFile, file=filePath)
   }
   
+  log$debug('Running in %s test mode.', test)
   log$debug('Genotype matrix: %d x %d', nrow(X), ncol(X))
   log$debug('Phenotype matrix: %d x %d', nrow(Y), ncol(Y))
   log$debug('Genotype matrix determinant: %f', det((X) %*% t(X)))
@@ -86,7 +87,11 @@ MvMAPIT <- function(X,
     names(pvals) <- rownames(X)
     pves <- vc.mod$PVE
     names(pves) <- rownames(X)
-
+    if (sum(is.na(pvals)) > 0) {
+      log$warn('Found %d NA in p-values.', sum(is.na(pvals)))
+      log$warn('Indices of NA values: %s.', which(is.na(pvals)))
+    }
+    
     ind <- which(pvals <= threshold) # Find the indices of the p-values that are below the threshold
 
     vc.mod <- MAPITCpp(X, Y, W, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
@@ -99,6 +104,10 @@ MvMAPIT <- function(X,
     names(pvals) <- rownames(X)
     pves <- vc.mod$PVE
     names(pves) <- rownames(X)
+    if (sum(is.na(pvals)) > 0) {
+      log$warn('Found %d NA in p-values.', sum(is.na(pvals)))
+      log$warn('Indices of NA values: %s.', which(is.na(pvals)))
+    }
   } else {
     ind <- ifelse(variantIndex, variantIndex, 1:nrow(X))
     vc.mod <- MAPITCpp(X, Y, W, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
