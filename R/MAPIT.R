@@ -78,6 +78,9 @@ MvMAPIT <- function(X,
   log$debug('Genotype matrix: %d x %d', nrow(X), ncol(X))
   log$debug('Phenotype matrix: %d x %d', nrow(Y), ncol(Y))
   log$debug('Genotype matrix determinant: %f', det((X) %*% t(X)))
+  zero_var <- which(apply(X, 1, var) != 0)
+  log$debug('Number of zero variance variants: %d', length(zero_var))
+  X <- remove_zero_variance(X) # operates on rows
 
   if (hybrid == TRUE) {
     vc.mod <- MAPITCpp(X, Y, W, C, variantIndex, "normal", cores = cores, NULL, phenotypeCovariance) # Normal Z-Test
@@ -85,16 +88,7 @@ MvMAPIT <- function(X,
     names(pvals) <- rownames(X)
     pves <- vc.mod$PVE
     names(pves) <- rownames(X)
-    if (any(is.na(pvals))) {
-      log$warn('Found %d NA in p-values.', sum(is.na(pvals)))
-      log$warn('Indices of NA values: %s.', which(is.na(pvals)))
-    }
-
-    if (sum(pvals < 0) > 0) {
-      log$warn('Found %d negative p-values.', sum(pvals < 0))
-      log$warn('Indices of negative values: %s.', which(is.na(pvals)))
-    }
-
+    timings <- vc.mod$timings
     ind <- which(pvals <= threshold) # Find the indices of the p-values that are below the threshold
     log$info('%d p-values are significant with alpha = %f', length(ind), threshold)
 
@@ -109,18 +103,18 @@ MvMAPIT <- function(X,
     names(pvals) <- rownames(X)
     pves <- vc.mod$PVE
     names(pves) <- rownames(X)
-    if (any(is.na(pvals))) {
-      log$warn('Found %d NA in p-values.', sum(is.na(pvals)))
-      log$warn('Indices of NA values: %s.', which(is.na(pvals)))
-    }
+    timings <- vc.mod$timings
   } else {
     ind <- ifelse(variantIndex, variantIndex, 1:nrow(X))
     vc.mod <- MAPITCpp(X, Y, W, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
     davies.pvals <- davies_exact(vc.mod, X)
     pvals <- davies.pvals
     pves <- vc.mod$PVE
+    timings <- vc.mod$timings
   }
-  return(list("pvalues" = pvals, "pves" = pves))
+  timings_mean <- apply(timings[rowSums(timings) != 0, ], 2, mean)
+  log$info('Calculated mean time of execution. Return list.')
+  return(list("pvalues" = pvals, "pves" = pves, "timings" = timings_mean))
 }
 
 # Runs the Davies portion of the hypothesis testing
@@ -138,4 +132,8 @@ davies_exact <- function(vc.mod, X) {
     names(davies.pvals)[i] <- names(vc.ts[i])
   }
   return(davies.pvals)
+}
+
+remove_zero_variance <- function(X) {
+  return(X[which(apply(X, 1, var) != 0),])
 }

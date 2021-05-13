@@ -173,7 +173,8 @@ simulate_phenotypes <- function(genotype_matrix,
     rho = rho,
     phenotype = Y,
     genotype = genotype_matrix,
-    snps = causal_snps
+    snps = causal_snps,
+    seed = seed
   )
   
   return(simulated_pleiotropic_epistasis_data)

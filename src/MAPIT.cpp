@@ -1,4 +1,5 @@
 #include "MAPIT.h"
+#include <chrono>
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins(cpp11)]]
@@ -202,6 +203,7 @@ Rcpp::List MAPITCpp(arma::mat X,
     const int p = X.n_rows;
     const int d = Y.n_rows;
     int q = 0;
+    arma::mat execution_times(p, 6);
 
 #ifdef WITH_LOGGER
     std::string logname = "MAPITcpp";
@@ -292,16 +294,20 @@ Rcpp::List MAPITCpp(arma::mat X,
         }
 
         //Compute K and G covariance matrices
+        auto start = std::chrono::steady_clock::now();
         arma::mat K = (GSM * p - arma::trans(X.row(i)) * X.row(i)) / (p - 1); //Create the linear kernel
         arma::mat G = K;
         G.each_row() %= X.row(i);
         G.each_col() %= arma::trans(X.row(i));
+        auto end = std::chrono::steady_clock::now();
+        execution_times(i, 0) = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
 #ifdef WITH_LOGGER
         logger->info("Dimensions of polygenic background: {} x {}.", K.n_cols, K.n_rows);
 #endif
 
         //Transform K and G using projection M
+        start = std::chrono::steady_clock::now();
         arma::mat b = arma::zeros(n, q + 2);
         b.col(0) = arma::ones<arma::vec>(n);
         if (q > 0)
@@ -309,6 +315,15 @@ Rcpp::List MAPITCpp(arma::mat X,
             b.cols(1, q) = Rcpp::as<arma::mat>(Z.get()).t();
         }
         b.col(q + 1) = arma::trans(X.row(i));
+        const float det_btb = arma::det(b.t() * b);
+        logger->warn("The determinant of the b.t() * b matrix is {}.", det_btb);
+        if (det_btb == 0)
+        {
+#ifdef WITH_LOGGER
+            logger->info("Skip variant {}.", i + 1);
+#endif
+            continue;
+        }
         arma::mat btb_inv = arma::inv(b.t() * b);
         arma::mat M = ComputeProjectionMatrix(n, b);
         arma::mat Kc = M * K * M;
@@ -320,12 +335,19 @@ Rcpp::List MAPITCpp(arma::mat X,
             Cc = M * Rcpp::as<arma::mat>(C.get()) * M; // M*C*M, but C is converted to an arma::mat first
         }
         arma::mat Yc = Y * M;
+        end = std::chrono::steady_clock::now();
+        execution_times(i, 1) = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+
+
+        start = std::chrono::steady_clock::now();
         arma::vec yc = vectorise(Yc); // vectorise the multi-phenotype matrix
 
         // kronecker products
         arma::mat Kc_kron = kron(V_K, Kc);
         arma::mat Gc_kron = kron(V_G, Gc);
         arma::mat M_kron = kron(V_M, M);
+        end = std::chrono::steady_clock::now();
+        execution_times(i, 2) = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
         //Compute the quantities q and S
         std::vector<arma::mat> matrices;
@@ -337,17 +359,25 @@ Rcpp::List MAPITCpp(arma::mat X,
         {
             matrices = { Gc_kron, Kc_kron, M_kron };
         }
+        start = std::chrono::steady_clock::now();
         arma::vec q = ComputeqVector(yc, matrices);
+        end = std::chrono::steady_clock::now();
+        execution_times(i, 3) = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        start = std::chrono::steady_clock::now();
         arma::mat S = ComputeSMatrix(matrices);
+        end = std::chrono::steady_clock::now();
+        execution_times(i, 4) = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
         //Compute delta and Sinv
-#ifdef WITH_LOGGER
         const float det_S = arma::det(S);
-        if (det_S == 0) 
-        {   
+        if (det_S == 0)
+        {
+#ifdef WITH_LOGGER
             logger->warn("The determinant of the S matrix is {}.", det_S);
-        }
+            logger->info("Skip variant {}.", i + 1);
 #endif
+            continue;
+        }
         arma::mat Sinv = arma::inv(S);
         arma::vec delta = Sinv * q;
 
@@ -365,11 +395,12 @@ Rcpp::List MAPITCpp(arma::mat X,
 #endif
 
         // TODO these blocks should probably be extracted into methods
+        start = std::chrono::steady_clock::now();
         if (testMethod == "normal")
         {
             // Compute var(delta(0))
             double V_sigma = ComputeVarianceSigma(yc, Sinv, delta, matrices);
-            
+
             // Save SE of the epistasis component
             sigma_se(i) = sqrt(V_sigma);
 #ifdef WITH_LOGGER
@@ -392,23 +423,32 @@ Rcpp::List MAPITCpp(arma::mat X,
                 //can move the below into a function if helpful
                 arma::vec q_sub = q.subvec(1, 2);
                 arma::mat S_sub = S.submat(1, 1, 2, 2);
+                const float det_S_sub = arma::det(S_sub);
+                if (det_S_sub == 0)
+                {
+#ifdef WITH_LOGGER
+                    logger->warn("The determinant of the S sub matrix is {}.", det_S_sub);
+                    logger->info("Skip davies method for variant {}.", i + 1);
+#endif
+                    continue;
+                }
                 arma::vec delta_null = arma::inv(S_sub) * q_sub;
                 // I think this is the same equation as in the paper
                 arma::eig_sym(eigval, eigvec, delta_null(0) * Kc + delta_null(1) * M);
 
                 // this is the one from MAPIT1_Davies, however may introduce more errors if was supposed to use the line above
                 eig_sym(evals,
-                    (
-                        eigvec.cols(find(eigval > 0))
-                        * arma::diagmat(sqrt(eigval(find(eigval > 0))))
-                        * arma::trans(eigvec.cols(find(eigval > 0)))
-                    )
-                    * (Sinv(0, 0) * Gc + Sinv(0, 1) * Kc + Sinv(0, 2) * M )
-                    * (
-                        eigvec.cols(find(eigval > 0))
-                        * arma::diagmat(sqrt(eigval(find(eigval > 0))))
-                        * arma::trans(eigvec.cols(find(eigval > 0)))
-                    )
+                        (
+                            eigvec.cols(find(eigval > 0))
+                            * arma::diagmat(sqrt(eigval(find(eigval > 0))))
+                            * arma::trans(eigvec.cols(find(eigval > 0)))
+                        )
+                        * (Sinv(0, 0) * Gc + Sinv(0, 1) * Kc + Sinv(0, 2) * M )
+                        * (
+                            eigvec.cols(find(eigval > 0))
+                            * arma::diagmat(sqrt(eigval(find(eigval > 0))))
+                            * arma::trans(eigvec.cols(find(eigval > 0)))
+                        )
                     );
                 // evals = arma::eig_sym((Sinv(0, 0) * Gc + Sinv(0, 1) * M) * q(1) / S(1, 1));
                 //august: where is this line from?
@@ -419,13 +459,36 @@ Rcpp::List MAPITCpp(arma::mat X,
             else
             {
                 // Compute P and P^{1/2} matrix
+                const float det_S = arma::det(S);
+                if (det_S == 0)
+                {
+#ifdef WITH_LOGGER
+                    logger->warn("The determinant of the S matrix is {}.", det_S);
+                    logger->info("Skip variant {}.", i + 1);
+#endif
+                    continue;
+                }
                 arma::vec delta_null = arma::inv(S) * q;
                 arma::eig_sym(eigval, eigvec, delta_null(0) * Kc + delta_null(1) * Cc + delta_null(2) * M);
 
-                evals = arma::eig_sym((eigvec.cols(find(eigval > 0)) * arma::diagmat(sqrt(eigval(find(eigval > 0)))) * arma::trans(eigvec.cols(find(eigval > 0)))) * (Sinv(0, 0) * Gc + Sinv(0, 1) * Kc + Sinv(0, 2) * Cc + Sinv(0, 3) * M) * (eigvec.cols(find(eigval > 0)) * arma::diagmat(sqrt(eigval(find(eigval > 0)))) * trans(eigvec.cols(find(eigval > 0)))));
+                evals = arma::eig_sym(
+                                (
+                                    eigvec.cols(find(eigval > 0))
+                                    * arma::diagmat(sqrt(eigval(find(eigval > 0))))
+                                    * arma::trans(eigvec.cols(find(eigval > 0)))
+                                )
+                                * (Sinv(0, 0) * Gc + Sinv(0, 1) * Kc + Sinv(0, 2) * Cc + Sinv(0, 3) * M)
+                                * (
+                                    eigvec.cols(find(eigval > 0))
+                                    * arma::diagmat(sqrt(eigval(find(eigval > 0))))
+                                    * trans(eigvec.cols(find(eigval > 0)))
+                                )
+                            );
             }
             Lambda.col(i) = evals;
         }
+        end = std::chrono::steady_clock::now();
+        execution_times(i, 5) = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
         //Compute the PVE
         pve(i) = delta(0) / arma::accu(delta);
@@ -434,20 +497,36 @@ Rcpp::List MAPITCpp(arma::mat X,
         logger->info("Total variance estimate is {}.", arma::accu(delta));
 #endif
     }
+    //arma::mat timings = arma::mean(execution_times);
 #ifdef WITH_LOGGER
     logger->info("Elapsed time: {}", sw);
 #endif
     //Return a Rcpp::List  of the arguments
     if (testMethod == "davies")
     {
-        return Rcpp::List::create(Rcpp::Named("Est") = sigma_est, Rcpp::Named("Eigenvalues") = Lambda,Rcpp::Named("PVE") = pve);
+#ifdef WITH_LOGGER
+    logger->info("Return from davies method.");
+#endif
+        return Rcpp::List::create(Rcpp::Named("Est") = sigma_est,
+                                  Rcpp::Named("Eigenvalues") = Lambda,
+                                  Rcpp::Named("PVE") = pve,
+                                  Rcpp::Named("timings") = execution_times
+                                  );
     }
     else //Default to test method "normal"
     {
         //Compute the p-values for each estimate
         Rcpp::NumericVector sigma_pval = 2 * Rcpp::pnorm(abs(sigma_est / sigma_se), 0.0, 1.0, 0, 0); //H0: sigma = 0 vs. H1: sigma != 0
 
-        return Rcpp::List::create(Rcpp::Named("Est") = sigma_est, Rcpp::Named("SE") = sigma_se, Rcpp::Named("pvalues") = sigma_pval, Rcpp::Named("PVE") = pve);
+#ifdef WITH_LOGGER
+    logger->info("Return from normal method.");
+#endif
+        return Rcpp::List::create(Rcpp::Named("Est") = sigma_est,
+                                  Rcpp::Named("SE") = sigma_se,
+                                  Rcpp::Named("pvalues") = sigma_pval,
+                                  Rcpp::Named("PVE") = pve,
+                                  Rcpp::Named("timings") = execution_times
+                                  );
     }
 }
 

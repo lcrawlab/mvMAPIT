@@ -14,7 +14,7 @@ test_that("Simulate multiple phenotypes returns apropriate phenotype object", {
   expect_equal(nrow(data$phenotype), n)
   expect_equal(ncol(data$phenotype), d)
   expect_equal(sum(is.na(data$phenotype)), 0) # no NA values in phenotype
-  expect_equal(length(data), 7)
+  expect_equal(length(data), 8)
 })
 
 test_that("Simulate multiple phenotypes returns causal SNPs", {
