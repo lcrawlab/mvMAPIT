@@ -18,10 +18,13 @@ node {
                 allowAnyHosts: true
         ]
         stage('Install R package mvMAPIT') {
-            sshScript remote: remote, script: "install-from-source.sh"
+            sshScript remote: remote, script: "oscar/install-from-source.sh"
+        }
+        stage('Run R script on login node') {
+            //sshScript remote: remote, script: "oscar/run-R-script.sh"
         }
         stage('Submit sbatch job') {
-            sshScript remote: remote, script: "sbatch-submit.sh"
+            sshScript remote: remote, script: "oscar/sbatch-submit.sh"
         }
     }
 }
