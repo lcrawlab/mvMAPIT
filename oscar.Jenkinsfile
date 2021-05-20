@@ -21,10 +21,10 @@ node {
             sshScript remote: remote, script: "oscar/install-from-source.sh"
         }
         stage('Run R script on login node') {
-            //sshScript remote: remote, script: "oscar/run-R-script.sh"
+            sshScript remote: remote, script: "oscar/run-R-script.sh"
         }
-        stage('Submit sbatch job') {
-            sshScript remote: remote, script: "oscar/sbatch-submit.sh"
-        }
+        //stage('Submit sbatch job') {
+        //    sshScript remote: remote, script: "oscar/sbatch-submit-array.sh"
+        //}
     }
 }
