@@ -78,9 +78,10 @@ MvMAPIT <- function(X,
   log$debug('Genotype matrix: %d x %d', nrow(X), ncol(X))
   log$debug('Phenotype matrix: %d x %d', nrow(Y), ncol(Y))
   log$debug('Genotype matrix determinant: %f', det((X) %*% t(X)))
-  zero_var <- which(apply(X, 1, var) != 0)
+  zero_var <- which(apply(X, 1, var) == 0)
   log$debug('Number of zero variance variants: %d', length(zero_var))
   X <- remove_zero_variance(X) # operates on rows
+  log$debug('Genotype matrix after removing zero variance variants: %d x %d', nrow(X), ncol(X))
 
   if (hybrid == TRUE) {
     vc.mod <- MAPITCpp(X, Y, W, C, variantIndex, "normal", cores = cores, NULL, phenotypeCovariance) # Normal Z-Test

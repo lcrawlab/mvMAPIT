@@ -4,9 +4,12 @@
 #define ARMA_64BIT_WORD 1
 #include <RcppArmadillo.h>
 
+#include <chrono>
+
 #ifdef _OPENMP
 #include <omp.h>
 #endif
+
 
 #ifdef WITH_LOGGER // check value
 #define SPDLOG_DISABLE_DEFAULT_LOGGER 1

@@ -1,5 +1,4 @@
 #include "MAPIT.h"
-#include <chrono>
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins(cpp11)]]
@@ -39,7 +38,7 @@ double ProductTrace(arma::mat a, arma::mat b)
 
 arma::mat ComputeSMatrix(std::vector<arma::mat> matrices)
 {
-#ifdef WITH_LOGGER
+#ifdef WITH_LOGGER_FINE
     std::string logname = "MAPITcpp::ComputeSMatrix";
     auto logger = spdlog::get(logname);                         // retrieve existing one
     if (logger == nullptr) logger = spdlog::r_sink_mt(logname);     // or create new one if needed
@@ -55,7 +54,7 @@ arma::mat ComputeSMatrix(std::vector<arma::mat> matrices)
             {
                 S(i,j) = ProductTrace(matrices[i], matrices[j]);
                 S(j,i) = S(i,j);
-#ifdef WITH_LOGGER
+#ifdef WITH_LOGGER_FINE
                 logger->info("S({},{}) = {}", i, j, S(i,j));
                 if (S(i,j) < 0) {
                     logger->warn("S({},{}) negative", i, j);
@@ -69,7 +68,7 @@ arma::mat ComputeSMatrix(std::vector<arma::mat> matrices)
 
 arma::vec ComputeqVector(arma::vec yc, std::vector<arma::mat> matrices)
 {
-#ifdef WITH_LOGGER
+#ifdef WITH_LOGGER_FINE
     std::string logname = "MAPITcpp::ComputeqVector";
     auto logger = spdlog::get(logname);                         // retrieve existing one
     if (logger == nullptr) logger = spdlog::r_sink_mt(logname);     // or create new one if needed
@@ -80,7 +79,7 @@ arma::vec ComputeqVector(arma::vec yc, std::vector<arma::mat> matrices)
     for (int i = 0; i < num_variance_components; i++)
     {
         q(i) = arma::as_scalar(yc.t() * matrices[i] * yc);
-#ifdef WITH_LOGGER
+#ifdef WITH_LOGGER_FINE
         logger->info("q({}) = {}", i, q(i));
         if (q(i) < 0) {
             logger->warn("q({}) negative", i);
@@ -93,7 +92,7 @@ arma::vec ComputeqVector(arma::vec yc, std::vector<arma::mat> matrices)
 // TODO ComputeHMatrix and ComputeVMatrix can probably be merged
 arma::mat ComputeHMatrix(arma::mat Sinv, std::vector<arma::mat> matrices)
 {
-#ifdef WITH_LOGGER
+#ifdef WITH_LOGGER_FINE
     std::string logname = "MAPITcpp::ComputeHMatrix";
     auto logger = spdlog::get(logname);                         // retrieve existing one
     if (logger == nullptr) logger = spdlog::r_sink_mt(logname);     // or create new one if needed
@@ -109,7 +108,7 @@ arma::mat ComputeHMatrix(arma::mat Sinv, std::vector<arma::mat> matrices)
 
 arma::mat ComputeVMatrix(arma::vec delta, std::vector<arma::mat> matrices)
 {
-#ifdef WITH_LOGGER
+#ifdef WITH_LOGGER_FINE
     std::string logname = "MAPITcpp::ComputeVMatrix";
     auto logger = spdlog::get(logname);                         // retrieve existing one
     if (logger == nullptr) logger = spdlog::r_sink_mt(logname);     // or create new one if needed
@@ -126,7 +125,7 @@ arma::mat ComputeVMatrix(arma::vec delta, std::vector<arma::mat> matrices)
 // TODO should this be called ComputeVarianceDelta?
 double ComputeVarianceSigma(arma::vec yc, arma::mat H, arma::mat V)
 {
-#ifdef WITH_LOGGER
+#ifdef WITH_LOGGER_FINE
     std::string logname = "MAPITcpp::ComputeVarianceSigma";
     auto logger = spdlog::get(logname);                         // retrieve existing one
     if (logger == nullptr) logger = spdlog::r_sink_mt(logname);     // or create new one if needed
@@ -139,7 +138,7 @@ double ComputeVarianceSigma(arma::vec yc, arma::mat Sinv, arma::vec delta, std::
 {
     arma::mat H = ComputeHMatrix(Sinv, matrices);
     arma::mat V = ComputeVMatrix(delta, matrices);
-#ifdef WITH_LOGGER
+#ifdef WITH_LOGGER_FINE
     std::string logname = "MAPITcpp::ComputeVarianceSigma";
     auto logger = spdlog::get(logname);                         // retrieve existing one
     if (logger == nullptr) logger = spdlog::r_sink_mt(logname);     // or create new one if needed
@@ -217,6 +216,11 @@ Rcpp::List MAPITCpp(arma::mat X,
     logger->info("Number of phenotypes: {}", d);
     logger->info("Test method: {}", testMethod);
     logger->info("Phenotype covariance model: {}", phenotypeCovariance);
+
+#ifdef _OPENMP
+    logger->info("Execute c++ routine on {} cores.", cores);
+#endif
+
 #endif
 
 
@@ -287,7 +291,7 @@ Rcpp::List MAPITCpp(arma::mat X,
             if (std::find(ind.begin(), ind.end(), i+1) == ind.end())
             {
 #ifdef WITH_LOGGER
-                logger->info("Variant not of interest. Skip to next.");
+                logger->info("Variant {}/{} not of interest. Skip to next.", i + 1, p);
 #endif
                 continue; // skip to next variant if you don't find a match
             }
@@ -302,7 +306,7 @@ Rcpp::List MAPITCpp(arma::mat X,
         auto end = std::chrono::steady_clock::now();
         execution_times(i, 0) = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
-#ifdef WITH_LOGGER
+#ifdef WITH_LOGGER_FINE
         logger->info("Dimensions of polygenic background: {} x {}.", K.n_cols, K.n_rows);
 #endif
 
@@ -315,16 +319,7 @@ Rcpp::List MAPITCpp(arma::mat X,
             b.cols(1, q) = Rcpp::as<arma::mat>(Z.get()).t();
         }
         b.col(q + 1) = arma::trans(X.row(i));
-        const float det_btb = arma::det(b.t() * b);
-        logger->warn("The determinant of the b.t() * b matrix is {}.", det_btb);
-        if (det_btb == 0)
-        {
-#ifdef WITH_LOGGER
-            logger->info("Skip variant {}.", i + 1);
-#endif
-            continue;
-        }
-        arma::mat btb_inv = arma::inv(b.t() * b);
+
         arma::mat M = ComputeProjectionMatrix(n, b);
         arma::mat Kc = M * K * M;
         arma::mat Gc = M * G * M;
@@ -383,7 +378,7 @@ Rcpp::List MAPITCpp(arma::mat X,
 
         sigma_est(i) = delta(0); // Save point estimates of the epistasis component
         
-#ifdef WITH_LOGGER
+#ifdef WITH_LOGGER_FINE
         const float len_delta = delta.n_elem;
         for(int l=0; l<len_delta; l++){ 
             logger->info("Variance component delta({}) = {}.", l, delta(l));
@@ -403,7 +398,7 @@ Rcpp::List MAPITCpp(arma::mat X,
 
             // Save SE of the epistasis component
             sigma_se(i) = sqrt(V_sigma);
-#ifdef WITH_LOGGER
+#ifdef WITH_LOGGER_FINE
             double pval_i = 2 * R::pnorm(abs(sigma_est(i) / sigma_se(i)), 0.0, 1.0, 0, 0);
             logger->info("The normal method standard error of the epistatic variance component is {}.", sigma_se(i));
             logger->info("p-value({}) = {}.", i + 1, pval_i);
@@ -423,10 +418,10 @@ Rcpp::List MAPITCpp(arma::mat X,
                 //can move the below into a function if helpful
                 arma::vec q_sub = q.subvec(1, 2);
                 arma::mat S_sub = S.submat(1, 1, 2, 2);
+#ifdef WITH_LOGGER
                 const float det_S_sub = arma::det(S_sub);
                 if (det_S_sub == 0)
                 {
-#ifdef WITH_LOGGER
                     logger->warn("The determinant of the S sub matrix is {}.", det_S_sub);
                     logger->info("Skip davies method for variant {}.", i + 1);
 #endif
@@ -452,17 +447,17 @@ Rcpp::List MAPITCpp(arma::mat X,
                     );
                 // evals = arma::eig_sym((Sinv(0, 0) * Gc + Sinv(0, 1) * M) * q(1) / S(1, 1));
                 //august: where is this line from?
-#ifdef WITH_LOGGER
+#ifdef WITH_LOGGER_FINE
                 logger->info("Davies method with C = NULL; number of eigenvalues: {}.", evals.n_elem);
 #endif
             }
             else
             {
                 // Compute P and P^{1/2} matrix
+#ifdef WITH_LOGGER
                 const float det_S = arma::det(S);
                 if (det_S == 0)
                 {
-#ifdef WITH_LOGGER
                     logger->warn("The determinant of the S matrix is {}.", det_S);
                     logger->info("Skip variant {}.", i + 1);
 #endif
@@ -492,12 +487,11 @@ Rcpp::List MAPITCpp(arma::mat X,
 
         //Compute the PVE
         pve(i) = delta(0) / arma::accu(delta);
-#ifdef WITH_LOGGER
+#ifdef WITH_LOGGER_FINE
         logger->info("PVE({}) = {}.", i + 1, pve(i));
         logger->info("Total variance estimate is {}.", arma::accu(delta));
 #endif
     }
-    //arma::mat timings = arma::mean(execution_times);
 #ifdef WITH_LOGGER
     logger->info("Elapsed time: {}", sw);
 #endif

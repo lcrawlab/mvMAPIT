@@ -19,12 +19,14 @@ for(f in data_files) {
     print(dim(X))
     maf <- colMeans(X) / 2
     X <- X[, (maf > 0.01)]
-    MAPIT(
-      t(X),
-      y
-    )
+    #MAPIT(
+    #  t(X),
+    #  y,
+    #  hybrid = FALSE,
+    #  cores = 28
+    #)
   }
-  mvmapit_results <- foreach(s=simulated[1:3]) %do% {
+  mvmapit_results <- foreach(s=simulated) %do% {
     Y <- s$phenotype
     X <- s$genotype
     print(dim(X))
@@ -40,7 +42,7 @@ for(f in data_files) {
       hybrid = FALSE,
       threshold = 0.05,
       test = "normal",
-      cores = 1,
+      cores = 64,
       variantIndex = NULL,
       phenotypeCovariance = "identity",
       logLevel = "DEBUG"
@@ -48,6 +50,6 @@ for(f in data_files) {
   }
   print('Save data.')
   saveRDS(mvmapit_results, file=file.path(datadir, 'data/control/out', mvmapit_out))
-  # saveRDS(mapit_results, file=file.path(datadir, 'data/control/out', mapit_out))
+  #saveRDS(mapit_results, file=file.path(datadir, 'data/control/out', mapit_out))
 }
 print('Finished mvMAPIT.')
