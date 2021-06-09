@@ -119,18 +119,18 @@ MvMAPIT <- function(X,
 }
 
 # Runs the Davies portion of the hypothesis testing
-davies_exact <- function(vc.mod, X) {
+davies_exact <- function(cpp.struct, X) {
   ### Apply Davies Exact Method ###
-  vc.ts <- vc.mod$Est
-  names(vc.ts) <- rownames(X)
+  point_estimates <- cpp.struct$Est
+  names(point_estimates) <- rownames(X)
 
   davies.pvals <- c()
-  for (i in seq_len(length(vc.ts))) {
-    lambda <- sort(vc.mod$Eigenvalues[, i], decreasing = T)
+  for (i in seq_len(length(point_estimates))) {
+    lambda <- sort(cpp.struct$Eigenvalues[, i], decreasing = T)
 
-    Davies_Method <- davies(vc.mod$Est[i], lambda = lambda, acc = 1e-8)
+    Davies_Method <- davies(cpp.struct$Est[i], lambda = lambda, acc = 1e-8)
     davies.pvals[i] <- 2 * min(Davies_Method$Qq, 1 - Davies_Method$Qq)
-    names(davies.pvals)[i] <- names(vc.ts[i])
+    names(davies.pvals)[i] <- names(point_estimates[i])
   }
   return(davies.pvals)
 }

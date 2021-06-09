@@ -1,17 +1,23 @@
 library('foreach')
 library('gap')
 
-simulations_dir  <- Sys.getenv(c("DATA_DIR"))
-args = commandArgs(trailingOnly=TRUE)
-data_dir <- "normal/control"
-data_files <- list.files(path = file.path(simulations_dir, data_dir), pattern = 'mvMAPIT.*rds')
+print('Create qq-plots')
+main_dir  <- Sys.getenv(c("DATA_DIR"))
+data_dir <- file.path(main_dir, c("normal/control", "davies/control"))
+data_files <- foreach(d=data_dir, .combine = c) %do% {
+  file_names <- list.files(path = d, pattern = 'mvMAPIT_.*rds', include.dirs = TRUE)
+  foreach(n=file_names, .combine = c) %do% {
+    file.path(d, n)
+  }
+}
 for(f in data_files) {
-  mapit <- readRDS(file.path(simulations_dir, data_dir, f))
+  print(f)
+  mapit <- readRDS(f)
   pvalues <- foreach(s=mapit, .combine = c) %do% {
     p <- as.numeric(s$pvalues)
     p <- p[!is.na(p)]
   }
-  png(paste0(file.path(simulations_dir, data_dir), sub('\\.rds', '', f), '_qqplot.png'))
+  png(sub('\\.rds', '_qqplot.png', f), width=300, height=450)
   qqunif(pvalues, ci=TRUE)
   dev.off()
 }
