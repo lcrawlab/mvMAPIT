@@ -15,7 +15,7 @@ st=format(Sys.time(), "%Y-%m-%d_%H:%M_")
 mvmapit_out <- paste("mvMAPIT_davies_",st, f, sep = "")
 print(mvmapit_out)
 simulated <- readRDS(file.path(datadir, 'data/control', f))
-mvmapit_results <- foreach(s=simulated[1:20]) %do% {
+mvmapit_results <- foreach(s=simulated[1:10]) %do% {
   Y <- s$phenotype
   X <- s$genotype
   print(dim(X))

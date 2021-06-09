@@ -131,7 +131,8 @@ double ComputeVarianceSigma(arma::vec yc, arma::mat H, arma::mat V)
     if (logger == nullptr) logger = spdlog::r_sink_mt(logname);     // or create new one if needed
     logger->info("Computing variance of variance component.");
 #endif
-    return arma::as_scalar(2 * yc.t() * H.t() * V * H * yc);
+    arma::mat Hy = H * yc;
+    return arma::as_scalar(2 * Hy.t() * V * Hy);
 }
 
 double ComputeVarianceSigma(arma::vec yc, arma::mat Sinv, arma::vec delta, std::vector<arma::mat> matrices)
@@ -233,7 +234,7 @@ Rcpp::List MAPITCpp(arma::mat X,
     Rcpp::NumericVector sigma_est(p);
     Rcpp::NumericVector sigma_se(p);
     Rcpp::NumericVector pve(p);
-    arma::mat Lambda(n, p);
+    arma::mat Lambda(n * d, p);
 
     arma::mat GSM;
     if (GeneticSimilarityMatrix.isNull())
@@ -429,24 +430,22 @@ Rcpp::List MAPITCpp(arma::mat X,
                 }
                 arma::vec delta_null = arma::inv(S_sub) * q_sub;
                 // I think this is the same equation as in the paper
-                arma::eig_sym(eigval, eigvec, delta_null(0) * Kc + delta_null(1) * M);
+                arma::eig_sym(eigval, eigvec, delta_null(0) * Kc_kron + delta_null(1) * M_kron);
 
                 // this is the one from MAPIT1_Davies, however may introduce more errors if was supposed to use the line above
+                arma::uvec ind_gt_zero = arma::find(eigval > 0);
+                arma::mat EV_mat = (
+                            eigvec.cols(ind_gt_zero)
+                            * arma::diagmat(sqrt(eigval(ind_gt_zero)))
+                            * arma::trans(eigvec.cols(ind_gt_zero))
+                        );
                 eig_sym(evals,
-                        (
-                            eigvec.cols(find(eigval > 0))
-                            * arma::diagmat(sqrt(eigval(find(eigval > 0))))
-                            * arma::trans(eigvec.cols(find(eigval > 0)))
-                        )
-                        * (Sinv(0, 0) * Gc + Sinv(0, 1) * Kc + Sinv(0, 2) * M )
-                        * (
-                            eigvec.cols(find(eigval > 0))
-                            * arma::diagmat(sqrt(eigval(find(eigval > 0))))
-                            * arma::trans(eigvec.cols(find(eigval > 0)))
-                        )
+                        EV_mat
+                        * (Sinv(0, 0) * Gc_kron + Sinv(0, 1) * Kc_kron + Sinv(0, 2) * M_kron)
+                        * EV_mat
                     );
                 // evals = arma::eig_sym((Sinv(0, 0) * Gc + Sinv(0, 1) * M) * q(1) / S(1, 1));
-                //august: where is this line from?
+                // august: where is this line from?
 #ifdef WITH_LOGGER_FINE
                 logger->info("Davies method with C = NULL; number of eigenvalues: {}.", evals.n_elem);
 #endif
@@ -466,18 +465,16 @@ Rcpp::List MAPITCpp(arma::mat X,
                 arma::vec delta_null = arma::inv(S) * q;
                 arma::eig_sym(eigval, eigvec, delta_null(0) * Kc + delta_null(1) * Cc + delta_null(2) * M);
 
+                arma::uvec ind_gt_zero = arma::find(eigval > 0);
+                arma::mat EV_mat = (
+                            eigvec.cols(ind_gt_zero)
+                            * arma::diagmat(sqrt(eigval(ind_gt_zero)))
+                            * arma::trans(eigvec.cols(ind_gt_zero))
+                        );
                 evals = arma::eig_sym(
-                                (
-                                    eigvec.cols(find(eigval > 0))
-                                    * arma::diagmat(sqrt(eigval(find(eigval > 0))))
-                                    * arma::trans(eigvec.cols(find(eigval > 0)))
-                                )
+                                EV_mat
                                 * (Sinv(0, 0) * Gc + Sinv(0, 1) * Kc + Sinv(0, 2) * Cc + Sinv(0, 3) * M)
-                                * (
-                                    eigvec.cols(find(eigval > 0))
-                                    * arma::diagmat(sqrt(eigval(find(eigval > 0))))
-                                    * trans(eigvec.cols(find(eigval > 0)))
-                                )
+                                * EV_mat
                             );
             }
             Lambda.col(i) = evals;
