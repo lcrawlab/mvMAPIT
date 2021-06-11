@@ -2,7 +2,9 @@
 
 #include "MAPIT.h"
 
-using namespace std::chrono;
+using std::chrono::steady_clock;
+using std::chrono::duration_cast;
+using std::chrono::microseconds;
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins(cpp11)]]
