@@ -7,7 +7,7 @@
 #SBATCH --mail-type=ALL # Type of email notification- BEGIN,END,FAIL,ALL
 #SBATCH --mail-user=julian_stamp@brown.edu # Email to which notifications will be sent
 
-NPROC=$(($SLURM_JOB_CPUS_PER_NODE*$SLURM_NNODES))
+NPROC=$((SLURM_JOB_CPUS_PER_NODE * SLURM_NNODES))
 echo "${NPROC} threads"
 export OMP_NUM_THREADS=$NPROC
 

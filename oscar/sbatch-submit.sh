@@ -32,7 +32,7 @@ do
     echo "# Job pending."
     sleep 5
 done
-echo "Tailing "${SLURM_OUT}"/slurm-${JOB_ID}.out"
+echo "Tailing ${SLURM_OUT}/slurm-${JOB_ID}.out"
 
 while IFS= read -r LOGLINE || [[ -n "$LOGLINE" ]]; do
     printf '%s\n' "$LOGLINE"
@@ -40,6 +40,6 @@ while IFS= read -r LOGLINE || [[ -n "$LOGLINE" ]]; do
     [[ "${LOGLINE}" =~ .*"${FAILURE_MESSAGE}".* ]] && exit 1
     [[ "${LOGLINE}" =~ .*"${HALTED_MESSAGE}".* ]] && exit 1
     [[ "${LOGLINE}" =~ .*"${CANCELLATION_MESSAGE}".* ]] && exit 2
-done < <(timeout "${TIMEOUT}" tail -f "${SLURM_OUT}"/slurm-${JOB_ID}.out)
+done < <(timeout "${TIMEOUT}" tail -f "${SLURM_OUT}/slurm-${JOB_ID}.out")
 echo "Tailing timed out after ${TIMEOUT}"
 exit 3
