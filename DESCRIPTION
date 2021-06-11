@@ -24,6 +24,7 @@ Imports:
 LinkingTo: Rcpp, RcppArmadillo, testthat, RcppSpdlog
 Encoding: UTF-8
 LazyData: true
+LazyDataCompression: xz
 RoxygenNote: 7.1.1
 Suggests: knitr,
     rmarkdown

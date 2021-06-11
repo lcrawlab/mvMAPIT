@@ -28,7 +28,7 @@ test_that("MvMapit executes without error when hybrid = FALSE.", {
                    t(Y), 
                    hybrid = FALSE, 
                    cores = 1, 
-                   variantIndex = c(1),
+                   variantIndex = c(1:2),
                    phenotypeCovariance = 'covariance', 
                    logLevel = "DEBUG")
   # then
@@ -48,12 +48,13 @@ test_that("MvMapit executes without error when hybrid = FALSE and test = davies.
                    hybrid = FALSE, 
                    test = 'davies', 
                    cores = 1, 
-                   variantIndex = c(1),
+                   variantIndex = c(1:2),
                    phenotypeCovariance = 'covariance',
                    logLevel = "DEBUG")
   # then
   expect_equal(length(mapit$pvalues), p)
 })
+
 test_that("MvMapit times computations when hybrid = TRUE.", {
   # given
   p <- 10
@@ -66,6 +67,7 @@ test_that("MvMapit times computations when hybrid = TRUE.", {
                    t(Y),
                    cores = 1,
                    #variantIndex = c(1),
+                   hybrid = TRUE,
                    phenotypeCovariance = 'covariance',
                    logLevel = "DEBUG")
   # then

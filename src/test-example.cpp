@@ -1,4 +1,5 @@
-/*
+/* Copyright 2017-2021 Lorin Crawford.
+ *
  * This file uses the Catch unit testing library, alongside
  * testthat's simple bindings, to test a C++ function.
  *
@@ -18,15 +19,13 @@
 // might begin an R test file with 'context()', expect the
 // associated context should be wrapped in braced.
 context("GetLinearKernel") {
-
   test_that("GetLinearKernel of identity is I/p") {
-      arma::mat GSM = GetLinearKernel(arma::eye(2,2));
-    expect_true(arma::approx_equal(GSM, arma::eye(2,2)/2, "absdiff", 0.001));
+      arma::mat GSM = GetLinearKernel(arma::eye(2, 2));
+    expect_true(arma::approx_equal(GSM, arma::eye(2, 2)/2, "absdiff", 0.001));
   }
 }
 
 context("ComputePCs") {
-    
     // Problem from: https://mysite.science.uottawa.ca/phofstra/MAT2342/SVDproblems.pdf
     // However it has an error, U has wrong signs
     test_that("ComputePCs returns right values") {
@@ -38,5 +37,4 @@ context("ComputePCs") {
             {-2/sqrt(3), sqrt(2)/sqrt(3), 0} };
         expect_true(arma::approx_equal(pc_cols, answer, "absdiff", 0.01));
     }
-
 }
