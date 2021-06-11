@@ -113,7 +113,7 @@ MvMAPIT <- function(X,
     pves <- vc.mod$PVE
     timings <- vc.mod$timings
   }
-  timings_mean <- apply(timings[rowSums(timings) != 0, ], 2, mean)
+  timings_mean <- apply(as.matrix(timings[rowSums(timings) != 0, ]), 2, mean)
   log$info('Calculated mean time of execution. Return list.')
   return(list("pvalues" = pvals, "pves" = pves, "timings" = timings_mean))
 }

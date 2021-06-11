@@ -39,7 +39,7 @@ echo "
   Configuration for ${PACKAGE_NAME} ${PACKAGE_VERSION}
 
     cppflags: ${CPPFLAGS} ${PKG_CPPFLAGS}
-    cxxflags: ${PKG_CXX11STD} ${CXXFLAGS}
+    cxxflags: ${PKG_CXX11STD} ${CXXFLAGS} ${BLAS_LIBS}
     libs:     ${PKG_LIBS} ${BLAS_LIBS} ${LAPACK_LIBS} ${FLIBS}
 
   --------------------------------------------------

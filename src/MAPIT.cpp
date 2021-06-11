@@ -2,6 +2,8 @@
 
 #include "MAPIT.h"
 
+using namespace std::chrono;
+
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::plugins(openmp)]]
@@ -191,7 +193,7 @@ Rcpp::List MAPITCpp(
     const int p = X.n_rows;
     const int d = Y.n_rows;
     int q = 0;
-    arma::mat execution_times(p, 6);
+    arma::mat execution_t(p, 6);
 
 #ifdef WITH_LOGGER
     std::string logname = "MAPITcpp";
@@ -285,14 +287,14 @@ Rcpp::List MAPITCpp(
         }
 
         // Compute K and G covariance matrices
-        auto start = std::chrono::steady_clock::now();
+        auto start = steady_clock::now();
         // Create the linear kernel
         arma::mat K = (GSM * p - arma::trans(X.row(i)) * X.row(i)) / (p - 1);
         arma::mat G = K;
         G.each_row() %= X.row(i);
         G.each_col() %= arma::trans(X.row(i));
-        auto end = std::chrono::steady_clock::now();
-        execution_times(i, 0) = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        auto end = steady_clock::now();
+        execution_t(i, 0) = duration_cast<microseconds>(end - start).count();
 
 #ifdef WITH_LOGGER_FINE
         logger->info("Dimensions of polygenic background: {} x {}.",
@@ -301,7 +303,7 @@ Rcpp::List MAPITCpp(
 #endif
 
         // Transform K and G using projection M
-        start = std::chrono::steady_clock::now();
+        start = steady_clock::now();
         arma::mat b = arma::zeros(n, q + 2);
         b.col(0) = arma::ones<arma::vec>(n);
         if (q > 0) {
@@ -319,19 +321,19 @@ Rcpp::List MAPITCpp(
             Cc = M * Rcpp::as<arma::mat>(C.get()) * M;
         }
         arma::mat Yc = Y * M;
-        end = std::chrono::steady_clock::now();
-        execution_times(i, 1) = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        end = steady_clock::now();
+        execution_t(i, 1) = duration_cast<microseconds>(end - start).count();
 
 
-        start = std::chrono::steady_clock::now();
+        start = steady_clock::now();
         arma::vec yc = vectorise(Yc);  // vectorise the multi-phenotype matrix
 
         // kronecker products
         arma::mat Kc_kron = kron(V_K, Kc);
         arma::mat Gc_kron = kron(V_G, Gc);
         arma::mat M_kron = kron(V_M, M);
-        end = std::chrono::steady_clock::now();
-        execution_times(i, 2) = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        end = steady_clock::now();
+        execution_t(i, 2) = duration_cast<microseconds>(end - start).count();
 
         // Compute the quantities q and S
         std::vector<arma::mat> matrices;
@@ -341,15 +343,15 @@ Rcpp::List MAPITCpp(
         } else {
             matrices = { Gc_kron, Kc_kron, M_kron };
         }
-        start = std::chrono::steady_clock::now();
+        start = steady_clock::now();
         arma::vec q = ComputeqVector(yc, matrices);
-        end = std::chrono::steady_clock::now();
-        execution_times(i, 3) =
-        std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-        start = std::chrono::steady_clock::now();
+        end = steady_clock::now();
+        execution_t(i, 3) =
+        duration_cast<microseconds>(end - start).count();
+        start = steady_clock::now();
         arma::mat S = ComputeSMatrix(matrices);
-        end = std::chrono::steady_clock::now();
-        execution_times(i, 4) = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        end = steady_clock::now();
+        execution_t(i, 4) = duration_cast<microseconds>(end - start).count();
 
         // Compute delta and Sinv
         const float det_S = arma::det(S);
@@ -377,7 +379,7 @@ Rcpp::List MAPITCpp(
 #endif
 
         // TODO(jdstamp): these blocks should  be extracted into methods?
-        start = std::chrono::steady_clock::now();
+        start = steady_clock::now();
         if (testMethod == "normal") {
             // Compute var(delta(0))
             double V_sigma = ComputeVarianceSigma(yc, Sinv, delta, matrices);
@@ -424,8 +426,8 @@ Rcpp::List MAPITCpp(
                             eigvec,
                             delta_null(0) * Kc_kron + delta_null(1) * M_kron);
 
-                // this is the one from MAPIT1_Davies, however may introduce more
-                // errors if was supposed to use the line above
+                // this is the one from MAPIT1_Davies, however may introduce
+                // more errors if was supposed to use the line above
                 arma::uvec ind_gt_zero = arma::find(eigval > 0);
                 arma::mat EV_mat = (eigvec.cols(ind_gt_zero)
                                     * arma::diagmat(sqrt(eigval(ind_gt_zero)))
@@ -445,7 +447,8 @@ Rcpp::List MAPITCpp(
                 const float det_S = arma::det(S);
                 if (det_S == 0) {
 #ifdef WITH_LOGGER
-                    logger->warn("The determinant of the S matrix is {}.", det_S);
+                    logger->warn("The determinant of the S matrix is {}.",
+                                 det_S);
                     logger->info("Skip variant {}.", i + 1);
 #endif
                     continue;
@@ -471,8 +474,8 @@ Rcpp::List MAPITCpp(
             }
             Lambda.col(i) = evals;
         }
-        end = std::chrono::steady_clock::now();
-        execution_times(i, 5) = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        end = ::steady_clock::now();
+        execution_t(i, 5) = duration_cast<microseconds>(end - start).count();
 
         // Compute the PVE
         pve(i) = delta(0) / arma::accu(delta);
@@ -492,7 +495,7 @@ Rcpp::List MAPITCpp(
         return Rcpp::List::create(Rcpp::Named("Est") = sigma_est,
                                   Rcpp::Named("Eigenvalues") = Lambda,
                                   Rcpp::Named("PVE") = pve,
-                                  Rcpp::Named("timings") = execution_times);
+                                  Rcpp::Named("timings") = execution_t);
     } else {  // Default to test method "normal"
         // Compute the p-values for each estimate
         Rcpp::NumericVector sigma_pval = 2 * Rcpp::pnorm(
@@ -500,7 +503,8 @@ Rcpp::List MAPITCpp(
                                                 0.0,
                                                 1.0,
                                                 0,
-                                                0);  // H0: sigma = 0 vs. H1: sigma != 0
+                                                0);
+        // H0: sigma = 0 vs. H1: sigma != 0
 
 #ifdef WITH_LOGGER
     logger->info("Return from normal method.");
@@ -509,21 +513,22 @@ Rcpp::List MAPITCpp(
                                   Rcpp::Named("SE") = sigma_se,
                                   Rcpp::Named("pvalues") = sigma_pval,
                                   Rcpp::Named("PVE") = pve,
-                                  Rcpp::Named("timings") = execution_times);
+                                  Rcpp::Named("timings") = execution_t);
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
-// Here is an alternative version MAPIT with a prespecified genomic regions to analyze
+// Here is an alternative version MAPIT with a prespecified genomic regions to
+// analyze
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 // [[Rcpp::export]]
 Rcpp::List  MAPIT_CisTrans(arma::mat X,
@@ -556,18 +561,15 @@ Rcpp::List  MAPIT_CisTrans(arma::mat X,
         arma::mat G;
         if (useCis) {
             G = (
-                    GetLinearKernel(X.rows(cis - 1))
-                    * cis.n_elem - arma::trans(X.row(i))
-                    * X.row(i)
-                 ) / (cis.n_elem - 1);  // Create the linear kernel
+                GetLinearKernel(X.rows(cis - 1))
+                * cis.n_elem - arma::trans(X.row(i))
+                * X.row(i))
+                / (cis.n_elem - 1);  // Create the linear kernel
         } else {
-            G = (
-                    (
-                        GSM * nsnp
-                        - GetLinearKernel(X.rows(cis - 1)) * cis.n_elem
-                    )
-                    - arma::trans(X.row(i)) * X.row(i)
-                ) / (nsnp - cis.n_elem - 1);  // Create the linear kernel
+            G = ((GSM * nsnp
+                    - GetLinearKernel(X.rows(cis - 1)) * cis.n_elem)
+                  - arma::trans(X.row(i)) * X.row(i))
+                / (nsnp - cis.n_elem - 1);  // Create the linear kernel
         }
         G.each_row() %= X.row(i);
         G.each_col() %= arma::trans(X.row(i));
@@ -595,13 +597,15 @@ Rcpp::List  MAPIT_CisTrans(arma::mat X,
 
         // Find the eigenvalues of the projection matrix
         arma::vec evals;
-        arma::eig_sym(evals, (Sinv(0,0) * Gc + Sinv(0,1) * M) * q(1) / S(1,1));
+        arma::eig_sym(evals,
+                      (Sinv(0, 0) * Gc
+                      + Sinv(0, 1) * M) * q(1) / S(1, 1));
         Lambda.col(i) = evals;
 
         // Compute the PVE
         pve(i) = delta(0) / arma::accu(delta);
     }
-    
+
     // Return a Rcpp::List  of the arguments
     return Rcpp::List ::create(
                             Rcpp::Named("Est") = sigma_est,

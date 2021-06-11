@@ -1,11 +1,12 @@
 // Copyright 2017-2021 Lorin Crawford.
 #pragma once
 
+#include <string>
+#include <vector>
+
 // #define WITH_LOGGER 1 // uncomment for logging during development
 #define ARMA_64BIT_WORD 1
 #include <RcppArmadillo.h>
-
-#include <chrono>
 
 #ifdef _OPENMP
 #include <omp.h>
