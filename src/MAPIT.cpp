@@ -580,7 +580,6 @@ Rcpp::List  MAPIT_CisTrans(arma::mat X,
         arma::mat b = arma::zeros(n, 2);
         b.col(0) = arma::ones<arma::vec>(n);
         b.col(1) = arma::trans(X.row(i));
-        arma::mat btb_inv = arma::inv(b.t() * b);
         arma::mat M = ComputeProjectionMatrix(n, b);
         arma::mat Gc = M * G * M;
         arma::vec yc = M * y;
