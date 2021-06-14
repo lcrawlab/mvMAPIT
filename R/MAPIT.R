@@ -30,8 +30,8 @@
 #' 
 #' @param X is the p x n genotype matrix where p is the number of variants and n is the number of samples. Must be a matrix and not a data.frame.
 #' @param Y is the d x n matrix of d quantitative or continuous traits for n samples.
-#' @param W is the matrix qxn matrix of covariates. Must be a matrix and not a data.frame.
-#' @param C is an nxn covariance matrix detailing environmental effects and population structure effects.
+#' @param Z is the matrix q x n matrix of covariates. Must be a matrix and not a data.frame.
+#' @param C is an n x n covariance matrix detailing environmental effects and population structure effects.
 #' @param hybrid is a parameter detailing if the function should run the hybrid hypothesis testing procedure between the normal Z test and the Davies method. Default is TRUE.
 #' @param threshold is a parameter detailing the value at which to recalibrate the Z test p values. If nothing is defined by the user, the default value will be 0.05 as recommended by the Crawford et al. (2017).
 #' @param test is a parameter defining what hypothesis test should be implemented. Takes on values 'normal' or 'davies'. This parameter only matters when hybrid = FALSE. If test is not defined when hybrid = FALSE, the function will automatically use test = 'normal'.
@@ -45,9 +45,10 @@
 #' @useDynLib mvMAPIT
 #' @export
 #' @import CompQuadForm
+#'
 MvMAPIT <- function(X, 
                     Y, 
-                    W = NULL, 
+                    Z = NULL,
                     C = NULL, 
                     hybrid = TRUE, 
                     threshold = 0.05, 
@@ -84,7 +85,7 @@ MvMAPIT <- function(X,
   log$debug('Genotype matrix after removing zero variance variants: %d x %d', nrow(X), ncol(X))
 
   if (hybrid == TRUE) {
-    vc.mod <- MAPITCpp(X, Y, W, C, variantIndex, "normal", cores = cores, NULL, phenotypeCovariance) # Normal Z-Test
+    vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, NULL, phenotypeCovariance) # Normal Z-Test
     pvals <- vc.mod$pvalues
     names(pvals) <- rownames(X)
     pves <- vc.mod$PVE
@@ -94,12 +95,12 @@ MvMAPIT <- function(X,
     log$info('%d p-values are significant with alpha = %f', length(ind), threshold)
 
     log$info('Running davies method on selected SNPs.')
-    vc.mod <- MAPITCpp(X, Y, W, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
+    vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
 
     davies.pvals <- davies_exact(vc.mod, X)
     pvals[ind] <- davies.pvals[ind]
   } else if (test == "normal") {
-    vc.mod <- MAPITCpp(X, Y, W, C, variantIndex, "normal", cores = cores, NULL, phenotypeCovariance)
+    vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, NULL, phenotypeCovariance)
     pvals <- vc.mod$pvalues
     names(pvals) <- rownames(X)
     pves <- vc.mod$PVE
@@ -107,7 +108,7 @@ MvMAPIT <- function(X,
     timings <- vc.mod$timings
   } else {
     ind <- ifelse(variantIndex, variantIndex, 1:nrow(X))
-    vc.mod <- MAPITCpp(X, Y, W, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
+    vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
     davies.pvals <- davies_exact(vc.mod, X)
     pvals <- davies.pvals
     pves <- vc.mod$PVE
