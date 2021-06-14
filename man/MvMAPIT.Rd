@@ -7,7 +7,7 @@
 MvMAPIT(
   X,
   Y,
-  W = NULL,
+  Z = NULL,
   C = NULL,
   hybrid = TRUE,
   threshold = 0.05,
@@ -24,9 +24,9 @@ MvMAPIT(
 
 \item{Y}{is the d x n matrix of d quantitative or continuous traits for n samples.}
 
-\item{W}{is the matrix qxn matrix of covariates. Must be a matrix and not a data.frame.}
+\item{Z}{is the matrix q x n matrix of covariates. Must be a matrix and not a data.frame.}
 
-\item{C}{is an nxn covariance matrix detailing environmental effects and population structure effects.}
+\item{C}{is an n x n covariance matrix detailing environmental effects and population structure effects.}
 
 \item{hybrid}{is a parameter detailing if the function should run the hybrid hypothesis testing procedure between the normal Z test and the Davies method. Default is TRUE.}
 

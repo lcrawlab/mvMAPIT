@@ -334,22 +334,22 @@ Rcpp::List MAPITCpp(
         arma::mat Kc_kron = kron(V_K, Kc);
         arma::mat Gc_kron = kron(V_G, Gc);
         arma::mat M_kron = kron(V_M, M);
+        arma::mat Cc_kron;
         end = steady_clock::now();
         execution_t(i, 2) = duration_cast<microseconds>(end - start).count();
 
         // Compute the quantities q and S
         std::vector<arma::mat> matrices;
         if (C.isNotNull()) {
-            // TODO(jdstamp): MM-19 Cc not included in multivariate version yet
-            matrices = { Gc_kron, Kc_kron, Cc, M_kron };
+            Cc_kron = kron(V_K, Cc);
+            matrices = { Gc_kron, Kc_kron, Cc_kron, M_kron };
         } else {
             matrices = { Gc_kron, Kc_kron, M_kron };
         }
         start = steady_clock::now();
         arma::vec q = ComputeqVector(yc, matrices);
         end = steady_clock::now();
-        execution_t(i, 3) =
-        duration_cast<microseconds>(end - start).count();
+        execution_t(i, 3) = duration_cast<microseconds>(end - start).count();
         start = steady_clock::now();
         arma::mat S = ComputeSMatrix(matrices);
         end = steady_clock::now();
@@ -458,9 +458,9 @@ Rcpp::List MAPITCpp(
                 arma::vec delta_null = arma::inv(S) * q;
                 arma::eig_sym(eigval,
                               eigvec,
-                              delta_null(0) * Kc
-                              + delta_null(1) * Cc
-                              + delta_null(2) * M);
+                              delta_null(0) * Kc_kron
+                              + delta_null(1) * Cc_kron
+                              + delta_null(2) * M_kron);
 
                 arma::uvec ind_gt_zero = arma::find(eigval > 0);
                 arma::mat EV_mat = (eigvec.cols(ind_gt_zero)
@@ -468,10 +468,10 @@ Rcpp::List MAPITCpp(
                                     * arma::trans(eigvec.cols(ind_gt_zero)));
                 evals = arma::eig_sym(
                                 EV_mat
-                                * (Sinv(0, 0) * Gc
-                                   + Sinv(0, 1) * Kc
-                                   + Sinv(0, 2) * Cc
-                                   + Sinv(0, 3) * M)
+                                * (Sinv(0, 0) * Gc_kron
+                                   + Sinv(0, 1) * Kc_kron
+                                   + Sinv(0, 2) * Cc_kron
+                                   + Sinv(0, 3) * M_kron)
                                 * EV_mat);
             }
             Lambda.col(i) = evals;
