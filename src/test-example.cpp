@@ -9,7 +9,9 @@
  */
 // probably need to make this an equivalent header file...
 #include <RcppArmadillo.h>
-#include "MAPIT.h"
+#include "mapit/util.h"
+#include "gsm/gsm.h"
+
 
 // All test files should include the <testthat.h>
 // header file.

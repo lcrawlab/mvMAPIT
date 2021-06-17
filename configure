@@ -644,6 +644,7 @@ ac_includes_default="\
 #endif"
 
 ac_header_cxx_list=
+ac_unique_file="src"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 CXX11
@@ -653,6 +654,8 @@ PKG_CXX11STD
 LAPACK_LIBS
 FLIBS
 BLAS_LIBS
+SUBDIR_SOURCES
+MAIN_SOURCES
 ac_ct_CXX
 CXXFLAGS
 CXX
@@ -4147,6 +4150,17 @@ else $as_nop
 fi
 
 done
+
+# Verify the correct src directory exists from where the file is being run.
+
+
+### Determine subdirectory source files
+# Dynamically generate list of sources from subdirectories via shell
+MAIN_SOURCES="$(cd src/ && ls *.cpp | tr '\n' ' ')"
+SUBDIR_SOURCES="$(cd src/ && ls {mapit,mqs,gsm}/*.cpp | tr '\n' ' ')"
+# Supply it as a variable
+
+
 
 # Write the flags into the src/Makevars file.
 BLAS_LIBS="${BLAS_LIBS}"

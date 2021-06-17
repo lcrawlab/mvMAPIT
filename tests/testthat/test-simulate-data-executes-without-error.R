@@ -8,7 +8,7 @@ test_that("Simulate multiple phenotypes returns apropriate phenotype object", {
   X <- matrix(runif(p * n), ncol = p)
 
   # when
-  data <- simulate_phenotypes(X, causal_fraction = f, pleiotropic_fraction = g, d = d, maf_threshold = 0.0, logLevel = 'DEBUG')
+  data <- simulate_phenotypes(X, causal_fraction = f, pleiotropic_fraction = g, d = d, maf_threshold = 0.0, logLevel = 'ERROR')
   
   # then
   expect_equal(nrow(data$phenotype), n)
@@ -28,7 +28,7 @@ test_that("Simulate multiple phenotypes returns causal SNPs", {
   total_causal <- (f * p) # single trait SNPs plus pleiotropic SNPs
   
   # when
-  data <- simulate_phenotypes(X, causal_fraction = f, pleiotropic_fraction = g, d = d, maf_threshold = 0.0, logLevel = 'DEBUG')
+  data <- simulate_phenotypes(X, causal_fraction = f, pleiotropic_fraction = g, d = d, maf_threshold = 0.0, logLevel = 'ERROR')
   
   # then
   expect_equal(length(data$snps$phenotype_1$causal_snps), total_causal)

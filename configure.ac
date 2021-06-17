@@ -23,6 +23,17 @@ AC_PROG_CPP
 AC_SEARCH_LIBS(deflate, z, [], [AC_MSG_ERROR(The zlib library is required.)])
 AC_CHECK_HEADERS(zlib.h, [], [AC_MSG_ERROR(The zlib library headers are required.)])
 
+# Verify the correct src directory exists from where the file is being run.
+AC_CONFIG_SRCDIR([src])
+
+### Determine subdirectory source files
+# Dynamically generate list of sources from subdirectories via shell
+MAIN_SOURCES="$(cd src/ && ls *.cpp | tr '\n' ' ')"
+SUBDIR_SOURCES="$(cd src/ && ls {mapit,mqs,gsm}/*.cpp | tr '\n' ' ')"
+# Supply it as a variable
+AC_SUBST(MAIN_SOURCES)
+AC_SUBST(SUBDIR_SOURCES)
+
 # Write the flags into the src/Makevars file.
 AC_SUBST([BLAS_LIBS], ["${BLAS_LIBS}"])
 AC_SUBST([FLIBS], ["${FLIBS}"])
