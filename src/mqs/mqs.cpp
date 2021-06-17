@@ -1,6 +1,6 @@
 // Copyright 2021 Lorin Crawford.
 #include <RcppArmadillo.h>
-#include "mqs.h"
+#include "mqs/mqs.h"
 
 // #define WITH_LOGGER 1 // uncomment for logging during development
 #ifdef WITH_LOGGER  // check value

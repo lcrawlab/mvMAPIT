@@ -1,5 +1,8 @@
 // Copyright 2021 Lorin Crawford.
 #pragma once
+#include <vector>
+#include <string>
+
 double ProductTrace(arma::mat a, arma::mat b);
 
 arma::mat ComputeSMatrix(std::vector<arma::mat> matrices);
