@@ -16,40 +16,6 @@ using std::chrono::microseconds;
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::plugins(openmp)]]
 
-// TODO(jdstamp) should this be called ComputeVarianceDelta?
-double ComputeVarianceSigma(arma::vec yc, arma::mat H, arma::mat V) {
-#ifdef WITH_LOGGER_FINE
-    std::string logname = "MAPITcpp::ComputeVarianceSigma";
-    auto logger = spdlog::get(logname);
-    if (logger == nullptr) logger = spdlog::r_sink_mt(logname);
-    logger->info("Computing variance of variance component.");
-#endif
-    arma::mat Hy = H * yc;
-    return arma::as_scalar(2 * Hy.t() * V * Hy);
-}
-
-double ComputeVarianceSigma(arma::vec yc,
-                            arma::mat Sinv,
-                            arma::vec delta,
-                            std::vector<arma::mat> matrices) {
-    arma::mat H = ComputeHMatrix(Sinv, matrices);
-    arma::mat V = ComputeVMatrix(delta, matrices);
-#ifdef WITH_LOGGER_FINE
-    std::string logname = "MAPITcpp::ComputeVarianceSigma";
-    auto logger = spdlog::get(logname);
-    if (logger == nullptr) logger = spdlog::r_sink_mt(logname);
-    const float det_H = arma::det(H);
-    if (det_H == 0) {
-        logger->warn("The determinant of the H matrix is {}.", det_H);
-    }
-    const float det_V = arma::det(V);
-    if (det_V == 0) {
-        logger->warn("The determinant of the V matrix is {}.", det_V);
-    }
-#endif
-    return ComputeVarianceSigma(yc, H, V);
-}
-
 ////////////////////////////////////////////////////////////////////////////
 
 // Below are functions for MAPIT using two hypothesis testing strategies:
@@ -121,7 +87,7 @@ Rcpp::List MAPITCpp(
 
     arma::mat GSM;
     if (GeneticSimilarityMatrix.isNull()) {
-        GSM = GetLinearKernel(X);
+        GSM = get_linear_kernel(X);
     } else {
         GSM = Rcpp::as<arma::mat>(GeneticSimilarityMatrix.get());
     }
@@ -184,8 +150,8 @@ Rcpp::List MAPITCpp(
         auto start = steady_clock::now();
         // Create the linear kernel
         arma::rowvec x_k = X(arma::span(i), arma::span::all);
-        arma::mat K = ComputeKMatrix(GSM, x_k, p);
-        arma::mat G = ComputeGMatrix(K, x_k);
+        arma::mat K = compute_k_matrix(GSM, x_k, p);
+        arma::mat G = compute_g_matrix(K, x_k);
         auto end = steady_clock::now();
         execution_t(i, 0) = duration_cast<microseconds>(end - start).count();
 
@@ -204,7 +170,7 @@ Rcpp::List MAPITCpp(
         }
         b.col(q + 1) = arma::trans(X.row(i));
 
-        arma::mat M = ComputeProjectionMatrix(n, b);
+        arma::mat M = compute_projection_matrix(n, b);
         arma::mat Kc = M * K * M;
         arma::mat Gc = M * G * M;
         arma::mat Cc;
@@ -238,11 +204,11 @@ Rcpp::List MAPITCpp(
             matrices = { Gc_kron, Kc_kron, M_kron };
         }
         start = steady_clock::now();
-        arma::vec q = ComputeqVector(yc, matrices);
+        arma::vec q = compute_q_vector(yc, matrices);
         end = steady_clock::now();
         execution_t(i, 3) = duration_cast<microseconds>(end - start).count();
         start = steady_clock::now();
-        arma::mat S = ComputeSMatrix(matrices);
+        arma::mat S = compute_s_matrix(matrices);
         end = steady_clock::now();
         execution_t(i, 4) = duration_cast<microseconds>(end - start).count();
 
@@ -275,7 +241,7 @@ Rcpp::List MAPITCpp(
         start = steady_clock::now();
         if (testMethod == "normal") {
             // Compute var(delta(0))
-            double V_sigma = ComputeVarianceSigma(yc, Sinv, delta, matrices);
+            double V_sigma = compute_variance_delta(yc, Sinv, delta, matrices);
 
             // Save SE of the epistasis component
             sigma_se(i) = sqrt(V_sigma);
