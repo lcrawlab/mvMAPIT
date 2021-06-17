@@ -25,27 +25,11 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// MAPIT_CisTrans
-Rcpp::List MAPIT_CisTrans(arma::mat X, arma::vec y, Rcpp::List regions, bool useCis, int cores);
-RcppExport SEXP _mvMAPIT_MAPIT_CisTrans(SEXP XSEXP, SEXP ySEXP, SEXP regionsSEXP, SEXP useCisSEXP, SEXP coresSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type y(ySEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type regions(regionsSEXP);
-    Rcpp::traits::input_parameter< bool >::type useCis(useCisSEXP);
-    Rcpp::traits::input_parameter< int >::type cores(coresSEXP);
-    rcpp_result_gen = Rcpp::wrap(MAPIT_CisTrans(X, y, regions, useCis, cores));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 RcppExport SEXP run_testthat_tests();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_mvMAPIT_MAPITCpp", (DL_FUNC) &_mvMAPIT_MAPITCpp, 9},
-    {"_mvMAPIT_MAPIT_CisTrans", (DL_FUNC) &_mvMAPIT_MAPIT_CisTrans, 5},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},
     {NULL, NULL, 0}
 };

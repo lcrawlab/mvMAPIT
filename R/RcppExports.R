@@ -5,7 +5,3 @@ MAPITCpp <- function(X, Y, Z = NULL, C = NULL, variantIndices = NULL, testMethod
     .Call('_mvMAPIT_MAPITCpp', PACKAGE = 'mvMAPIT', X, Y, Z, C, variantIndices, testMethod, cores, GeneticSimilarityMatrix, phenotypeCovariance)
 }
 
-MAPIT_CisTrans <- function(X, y, regions, useCis, cores = 1L) {
-    .Call('_mvMAPIT_MAPIT_CisTrans', PACKAGE = 'mvMAPIT', X, y, regions, useCis, cores)
-}
-
