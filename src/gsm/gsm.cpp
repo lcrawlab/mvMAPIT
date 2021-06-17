@@ -1,6 +1,6 @@
 // Copyright 2021 Lorin Crawford.
 #include <RcppArmadillo.h>
-#include "gsm.h"
+#include "gsm/gsm.h"
 
 arma::mat GetLinearKernel(const arma::mat& X) {
     double p = X.n_rows;

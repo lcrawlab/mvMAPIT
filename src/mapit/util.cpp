@@ -1,6 +1,6 @@
 // Copyright 2021 Lorin Crawford.
 #include <RcppArmadillo.h>
-#include "util.h"
+#include "mapit/util.h"
 
 arma::mat ComputePCs(arma::mat X, int top = 10) {
     arma::mat U;

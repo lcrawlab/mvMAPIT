@@ -9,13 +9,14 @@
  */
 // probably need to make this an equivalent header file...
 #include <RcppArmadillo.h>
-#include "mapit/util.h"
-#include "gsm/gsm.h"
 
 
 // All test files should include the <testthat.h>
 // header file.
 #include <testthat.h>
+
+#include "mapit/util.h"
+#include "gsm/gsm.h"
 
 // Initialize a unit test context. This is similar to how you
 // might begin an R test file with 'context()', expect the
