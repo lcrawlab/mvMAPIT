@@ -1,5 +1,6 @@
 // Copyright 2021 Lorin Crawford.
 #pragma once
+#include <vector>
 
 arma::vec davies_routine(const arma::mat& S,
                              const arma::mat& Sinv,

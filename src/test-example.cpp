@@ -77,3 +77,19 @@ context("skip_variant") {
         expect_true(skip == false);
     }
 }
+
+context("matrix_to_vector_of_vectors") {
+    test_that("matrix_to_vector_of_vectors returns correct vectors") {
+        // given
+        arma::mat matrix(3, 3); matrix.eye();
+        arma::vec v1(3, arma::fill::zeros); v1(0) = 1;
+        arma::vec v2(3, arma::fill::zeros); v2(1) = 1;
+        arma::vec v3(3, arma::fill::zeros); v3(2) = 1;
+        // when
+        std::vector<arma::vec> vectors = matrix_to_vector_of_vectors(matrix);
+        // then
+        expect_true(arma::approx_equal(vectors[0], v1, "absdiff", 0.01));
+        expect_true(arma::approx_equal(vectors[1], v2, "absdiff", 0.01));
+        expect_true(arma::approx_equal(vectors[2], v3, "absdiff", 0.01));
+    }
+}

@@ -3,6 +3,7 @@
 #include "MAPIT.h"
 #include "mapit/davies.h"
 #include "mapit/projection.h"
+#include "mapit/kronecker.h"
 #include "mapit/util.h"
 #include "gsm/gsm.h"
 #include "mqs/mqs.h"
@@ -46,12 +47,12 @@ Rcpp::List MAPITCpp(
      std::string testMethod = "normal",
      int cores = 1,
      Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix = R_NilValue,
-     std::string phenotypeCovariance = "identity") {
+     std::string phenotypeCovariance = "") {
     int i;
     const int n = X.n_cols;
     const int p = X.n_rows;
     const int d = Y.n_rows;
-    int q = 0;
+    int z = 0;
 
 #ifdef WITH_LOGGER
     std::string logname = "MAPITcpp";
@@ -86,9 +87,10 @@ Rcpp::List MAPITCpp(
         GSM = Rcpp::as<arma::mat>(GeneticSimilarityMatrix.get());
     }
 
+    arma::mat Zz;
     if (Z.isNotNull()) {
-        // TODO(jdstamp) benchmark this conversion, as we'll do it again below
-        q = Rcpp::as<arma::mat>(Z.get()).n_rows;  // convert to arma matrix
+        Zz = Rcpp::as<arma::mat>(Z.get());
+        z = Zz.n_rows;
     }
 
     arma::vec ind;
@@ -144,21 +146,25 @@ Rcpp::List MAPITCpp(
 
         // Transform K and G using projection M
         start = steady_clock::now();
-        arma::mat b = arma::zeros(n, q + 2);
+        arma::mat b = arma::zeros(n, z + 2);
         b.col(0) = arma::ones<arma::vec>(n);
-        if (q > 0) {
-            b.cols(1, q) = Rcpp::as<arma::mat>(Z.get()).t();
+        if (z > 0) {
+            b.cols(1, z) = Zz.t();
         }
-        b.col(q + 1) = arma::trans(X.row(i));
+        b.col(z + 1) = arma::trans(X.row(i));
 
         arma::mat M = compute_projection_matrix(n, b);
         arma::mat Kc = M * K * M;
         arma::mat Gc = M * G * M;
         arma::mat Cc;
+        arma::vec yc;
+        std::vector<arma::mat> matrices;
 
         if (C.isNotNull()) {
-            // M*C*M, but C is converted to an arma::mat first
             Cc = M * Rcpp::as<arma::mat>(C.get()) * M;
+            matrices = { Gc, Kc, Cc, M };
+        } else {
+            matrices = { Gc, Kc, M };
         }
         arma::mat Yc = Y * M;
         end = steady_clock::now();
@@ -166,20 +172,12 @@ Rcpp::List MAPITCpp(
 
 
         start = steady_clock::now();
-        arma::vec yc = vectorise(Yc);  // vectorise the multi-phenotype matrix
 
-        // kronecker products
-        arma::mat Kc_kron = kron(V_phenotype, Kc);
-        arma::mat Gc_kron = kron(V_phenotype, Gc);
-        arma::mat M_kron = kron(V_error, M);
-        arma::mat Cc_kron;
-
-        std::vector<arma::mat> matrices;
-        if (C.isNotNull()) {
-            Cc_kron = kron(V_phenotype, Cc);
-            matrices = { Gc_kron, Kc_kron, Cc_kron, M_kron };
+        if (phenotypeCovariance.empty() && d > 1) {
+           yc = arma::conv_to< arma::colvec >::from(Yc.row(0));
         } else {
-            matrices = { Gc_kron, Kc_kron, M_kron };
+            yc = vectorise(Yc);
+            matrices = kronecker_products(matrices, V_phenotype, V_error);
         }
 
         end = steady_clock::now();
@@ -240,7 +238,7 @@ Rcpp::List MAPITCpp(
                                                matrices);
             } catch (std::exception& e) {
 #ifdef WITH_LOGGER
-                logger->error("Error: {}.", e);
+                logger->error("Error: {}.", e.what());
                 logger->info("Skip davies method for variant {}.", i + 1);
 #endif
                 continue;

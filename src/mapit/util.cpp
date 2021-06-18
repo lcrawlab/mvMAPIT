@@ -8,7 +8,7 @@ arma::mat compute_principal_components(const arma::mat& X, int top = 10) {
     arma::mat V;
     svd(U, s, V, X);
 
-    arma::mat PCs = U*diagmat(s);
+    arma::mat PCs = U * diagmat(s);
     return PCs.cols(0, top - 1);
 }
 
@@ -30,4 +30,12 @@ bool skip_variant(const arma::vec& ind, int i) {
         return true;
     }
     return false;
+}
+
+std::vector<arma::vec> matrix_to_vector_of_vectors(const arma::mat& matrix) {
+    std::vector<arma::vec> V(matrix.n_rows);
+    for (int i = 0; i < matrix.n_rows; ++i) {
+        V[i] = arma::conv_to<arma::vec>::from(matrix.row(i));
+    };
+    return V;
 }

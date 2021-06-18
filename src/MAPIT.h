@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <stdexcept>
+#include <exception>
 
 // #define WITH_LOGGER 1 // uncomment for logging during development
 #define ARMA_64BIT_WORD 1

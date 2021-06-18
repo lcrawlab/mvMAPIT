@@ -167,7 +167,6 @@ test_that("hybrid = FALSE. phenotypeCovariance = identity", {
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-7)
 })
 
-
 test_that("hybrid = FALSE. phenotypeCovariance = homogeneous", {
   # given
   p <- 10
@@ -192,6 +191,35 @@ test_that("hybrid = FALSE. phenotypeCovariance = homogeneous", {
                    hybrid = FALSE,
                    cores = 1,
                    phenotypeCovariance = 'homogeneous',
+                   logLevel = "ERROR")
+  # then
+  expect_equal(mapit$pvalues, pvalues, tolerance = 1e-7)
+})
+
+test_that("hybrid = FALSE. phenotypeCovariance = ''", {
+  # given
+  p <- 10
+  n <- 5
+  d <- 3
+  pvalues <- c(0.6528335,
+               0.6111131,
+               0.6812731,
+               0.8327742,
+               0.4477438,
+               0.8998389,
+               0.5087860,
+               0.3021797,
+               0.4771740,
+               0.8711670)
+  set.seed(6)
+  X <- matrix(runif(p * n), ncol = p)
+  Y <- matrix(runif(d * n), ncol = d)
+  # when
+  mapit <- MvMAPIT(t(X),
+                   t(Y),
+                   hybrid = FALSE,
+                   cores = 1,
+                   phenotypeCovariance = '',
                    logLevel = "ERROR")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-7)
