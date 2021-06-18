@@ -19,3 +19,15 @@ arma::vec remove_first_element(const arma::vec& vector) {
     }
     return new_vector;
 }
+
+bool skip_variant(const arma::vec& ind, int i) {
+    if (ind.is_empty()) {
+        // look for i+1 because R uses 1-based indexing
+        // if there is no match find == ind.end()
+        return false;
+    }
+    if (std::find(ind.begin(), ind.end(), i+1) == ind.end()) {
+        return true;
+    }
+    return false;
+}

@@ -7,7 +7,6 @@
  * placed within the `src/` folder, and that you include
  * `LinkingTo: testthat` within your DESCRIPTION file.
  */
-// probably need to make this an equivalent header file...
 #include <RcppArmadillo.h>
 
 
@@ -23,8 +22,12 @@
 // associated context should be wrapped in braced.
 context("get_linear_kernel") {
   test_that("get_linear_kernel of identity is I/p") {
-      arma::mat GSM = get_linear_kernel(arma::eye(2, 2));
-    expect_true(arma::approx_equal(GSM, arma::eye(2, 2)/2, "absdiff", 0.001));
+      // given
+      arma::mat I = arma::eye(2, 2);
+      // when
+      arma::mat GSM = get_linear_kernel(I);
+      // then
+      expect_true(arma::approx_equal(GSM, arma::eye(2, 2)/2, "absdiff", 0.001));
   }
 }
 
@@ -32,12 +35,45 @@ context("compute_principal_components") {
     // Problem from: https://mysite.science.uottawa.ca/phofstra/MAT2342/SVDproblems.pdf
     // However it has an error, U has wrong signs
     test_that("compute_principal_components returns right values") {
+        // given
         arma::mat X = { { 0, 1, 1 }, {sqrt(2), 2, 0}, {0, 1, 1} };
-        arma::mat pc_cols = compute_principal_components(X, 3);
-        expect_true(pc_cols.n_cols == 3);
         arma::mat answer = { { -2/sqrt(3), sqrt(2)/sqrt(3), 0},
         {-4/sqrt(3), -sqrt(2)/sqrt(3), 0},
             {-2/sqrt(3), sqrt(2)/sqrt(3), 0} };
+        // when
+        arma::mat pc_cols = compute_principal_components(X, 3);
+        // then
+        expect_true(pc_cols.n_cols == 3);
         expect_true(arma::approx_equal(pc_cols, answer, "absdiff", 0.01));
+    }
+}
+
+context("skip_variant") {
+    test_that("test_variant does not skip when empty") {
+        // given
+        int i = 1;
+        arma::vec ind;
+        // when
+        bool skip = skip_variant(ind, i);
+        // then
+        expect_true(skip == false);
+    }
+    test_that("test_variant skips when not in list") {
+        // given
+        int i = 10;
+        arma::vec ind(1);  ind = 2;
+        // when
+        bool skip = skip_variant(ind, i);
+        // then
+        expect_true(skip == true);
+    }
+    test_that("test_variant does not skip when in list") {
+        // given
+        int i = 1;
+        arma::vec ind(1);  ind = i + 1;
+        // when
+        bool skip = skip_variant(ind, i);
+        // then
+        expect_true(skip == false);
     }
 }

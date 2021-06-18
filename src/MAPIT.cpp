@@ -2,7 +2,6 @@
 
 #include "MAPIT.h"
 #include "mapit/davies.h"
-#include "mapit/normal.h"
 #include "mapit/projection.h"
 #include "mapit/util.h"
 #include "gsm/gsm.h"
@@ -53,7 +52,6 @@ Rcpp::List MAPITCpp(
     const int p = X.n_rows;
     const int d = Y.n_rows;
     int q = 0;
-    arma::mat execution_t(p, 6);
 
 #ifdef WITH_LOGGER
     std::string logname = "MAPITcpp";
@@ -75,21 +73,22 @@ Rcpp::List MAPITCpp(
 #endif
 
 
-    if (Z.isNotNull()) {
-        // TODO(jdstamp) benchmark this conversion, as we'll do it again below
-        q = Rcpp::as<arma::mat>(Z.get()).n_rows;  // convert to arma matrix
-    }
-
     Rcpp::NumericVector sigma_est(p);
     Rcpp::NumericVector sigma_se(p);
     Rcpp::NumericVector pve(p);
     arma::mat Lambda(n * d, p);
+    arma::mat execution_t(p, 6);
 
     arma::mat GSM;
     if (GeneticSimilarityMatrix.isNull()) {
         GSM = get_linear_kernel(X);
     } else {
         GSM = Rcpp::as<arma::mat>(GeneticSimilarityMatrix.get());
+    }
+
+    if (Z.isNotNull()) {
+        // TODO(jdstamp) benchmark this conversion, as we'll do it again below
+        q = Rcpp::as<arma::mat>(Z.get()).n_rows;  // convert to arma matrix
     }
 
     arma::vec ind;
@@ -99,29 +98,15 @@ Rcpp::List MAPITCpp(
     }
 
     // between phenotype variance
-    arma::mat V_M(d, d); V_M.eye();  // effect of error uncorrelated
-    arma::mat V_K(d, d);
-    arma::mat V_G(d, d);
+    arma::mat V_error(d, d); V_error.eye();  // effect of error uncorrelated
+    arma::mat V_phenotype(d, d);
     // string.compare() returns '0' if equal
     if (phenotypeCovariance.compare("covariance") == 0) {
-#ifdef WITH_LOGGER
-        logger->info("Covariance of effects proportional "
-                     "to phenotype covariance.");
-#endif
-        V_K = cov(Y.t());
-        V_G = V_K;
+        V_phenotype = cov(Y.t());
     } else if (phenotypeCovariance.compare("homogeneous") == 0) {
-#ifdef WITH_LOGGER
-        logger->info("Effect of a variant homogeneous across phenotypes.");
-#endif
-        V_K.ones();
-        V_G.ones();
-    } else {
-#ifdef WITH_LOGGER
-        logger->info("Effect of a variant uncorrelated across phenotypes.");
-#endif
-        V_K.eye();
-        V_G.eye();
+        V_phenotype.ones();
+    } else {  // 'identity' as default
+        V_phenotype.eye();
     }
 
 #ifdef _OPENMP
@@ -132,18 +117,14 @@ Rcpp::List MAPITCpp(
 #ifdef WITH_LOGGER
         logger->info("Variant {}/{}.", i + 1, p);
 #endif
-        // check if we are provided variants of interest
-        if (variantIndices.isNotNull()) {
-            // look for i+1 because R uses 1-based indexing
-            // if there is no match find == ind.end()
-            if (std::find(ind.begin(), ind.end(), i+1) == ind.end()) {
+
+        if (skip_variant(ind, i)) {
 #ifdef WITH_LOGGER
-                logger->info("Variant {}/{} not of interest. Skip to next.",
+            logger->info("Variant {}/{} not of interest. Skip to next.",
                              i + 1,
                              p);
 #endif
-                continue;  // skip to next variant if you don't find a match
-            }
+            continue;
         }
 
         // Compute K and G covariance matrices
@@ -188,25 +169,28 @@ Rcpp::List MAPITCpp(
         arma::vec yc = vectorise(Yc);  // vectorise the multi-phenotype matrix
 
         // kronecker products
-        arma::mat Kc_kron = kron(V_K, Kc);
-        arma::mat Gc_kron = kron(V_G, Gc);
-        arma::mat M_kron = kron(V_M, M);
+        arma::mat Kc_kron = kron(V_phenotype, Kc);
+        arma::mat Gc_kron = kron(V_phenotype, Gc);
+        arma::mat M_kron = kron(V_error, M);
         arma::mat Cc_kron;
-        end = steady_clock::now();
-        execution_t(i, 2) = duration_cast<microseconds>(end - start).count();
 
-        // Compute the quantities q and S
         std::vector<arma::mat> matrices;
         if (C.isNotNull()) {
-            Cc_kron = kron(V_K, Cc);
+            Cc_kron = kron(V_phenotype, Cc);
             matrices = { Gc_kron, Kc_kron, Cc_kron, M_kron };
         } else {
             matrices = { Gc_kron, Kc_kron, M_kron };
         }
+
+        end = steady_clock::now();
+        execution_t(i, 2) = duration_cast<microseconds>(end - start).count();
+
+        // Compute the quantities q and S
         start = steady_clock::now();
         arma::vec q = compute_q_vector(yc, matrices);
         end = steady_clock::now();
         execution_t(i, 3) = duration_cast<microseconds>(end - start).count();
+
         start = steady_clock::now();
         arma::mat S = compute_s_matrix(matrices);
         end = steady_clock::now();
@@ -241,97 +225,26 @@ Rcpp::List MAPITCpp(
         start = steady_clock::now();
         if (testMethod == "normal") {
             // Compute var(delta(0))
-            double V_sigma = compute_variance_delta(yc, Sinv, delta, matrices);
-
+            double var_delta = compute_variance_delta(yc,
+                                                      Sinv,
+                                                      delta,
+                                                      matrices);
             // Save SE of the epistasis component
-            sigma_se(i) = sqrt(V_sigma);
-#ifdef WITH_LOGGER_FINE
-            double pval_i = 2 * R::pnorm(abs(sigma_est(i) / sigma_se(i)),
-                                            0.0,
-                                            1.0,
-                                            0,
-                                            0);
-            logger->info("The normal method standard error of the "
-                         "epistatic variance component is {}.", sigma_se(i));
-            logger->info("p-value({}) = {}.", i + 1, pval_i);
-            logger->info("ratio({}) = {}.", i + 1,
-                                            abs(sigma_est(i) / sigma_se(i)));
-#endif
+            sigma_se(i) = sqrt(var_delta);
+
         } else if (testMethod == "davies") {
-            // Find the eigenvalues of the projection matrix
-            // TODO(jdstamp): this could probably be cleaned up
-            arma::vec evals;
-            arma::vec eigval;
-            arma::mat eigvec;
-            if (C.isNull()) {
-                // august: ok, my guess is that we ended up with missing values
-                // because things needed to be filled out further
-                // can move the below into a function if helpful
-                arma::vec q_sub = q.subvec(1, 2);
-                arma::mat S_sub = S.submat(1, 1, 2, 2);
-                const float det_S_sub = arma::det(S_sub);
-                if (det_S_sub == 0) {
+            try {
+                Lambda.col(i) = davies_routine(S,
+                                               Sinv,
+                                               q,
+                                               matrices);
+            } catch (std::exception& e) {
 #ifdef WITH_LOGGER
-                    logger->warn("The determinant of the S sub matrix is {}.",
-                                  det_S_sub);
-                    logger->info("Skip davies method for variant {}.", i + 1);
+                logger->error("Error: {}.", e);
+                logger->info("Skip davies method for variant {}.", i + 1);
 #endif
-                    continue;
-                }
-                arma::vec delta_null = arma::inv(S_sub) * q_sub;
-                // I think this is the same equation as in the paper
-                arma::eig_sym(
-                            eigval,
-                            eigvec,
-                            delta_null(0) * Kc_kron + delta_null(1) * M_kron);
-
-                // this is the one from MAPIT1_Davies, however may introduce
-                // more errors if was supposed to use the line above
-                arma::uvec ind_gt_zero = arma::find(eigval > 0);
-                arma::mat EV_mat = (eigvec.cols(ind_gt_zero)
-                                    * arma::diagmat(sqrt(eigval(ind_gt_zero)))
-                                    * arma::trans(eigvec.cols(ind_gt_zero)));
-                eig_sym(evals,
-                        EV_mat
-                        * (Sinv(0, 0) * Gc_kron
-                           + Sinv(0, 1) * Kc_kron
-                           + Sinv(0, 2) * M_kron)
-                        * EV_mat);
-#ifdef WITH_LOGGER_FINE
-                logger->info("Davies method with C = NULL; "
-                             "number of eigenvalues: {}.", evals.n_elem);
-#endif
-            } else {
-                // Compute P and P^{1/2} matrix
-                const float det_S = arma::det(S);
-                if (det_S == 0) {
-#ifdef WITH_LOGGER
-                    logger->warn("The determinant of the S matrix is {}.",
-                                 det_S);
-                    logger->info("Skip variant {}.", i + 1);
-#endif
-                    continue;
-                }
-                arma::vec delta_null = arma::inv(S) * q;
-                arma::eig_sym(eigval,
-                              eigvec,
-                              delta_null(0) * Kc_kron
-                              + delta_null(1) * Cc_kron
-                              + delta_null(2) * M_kron);
-
-                arma::uvec ind_gt_zero = arma::find(eigval > 0);
-                arma::mat EV_mat = (eigvec.cols(ind_gt_zero)
-                                    * arma::diagmat(sqrt(eigval(ind_gt_zero)))
-                                    * arma::trans(eigvec.cols(ind_gt_zero)));
-                evals = arma::eig_sym(
-                                EV_mat
-                                * (Sinv(0, 0) * Gc_kron
-                                   + Sinv(0, 1) * Kc_kron
-                                   + Sinv(0, 2) * Cc_kron
-                                   + Sinv(0, 3) * M_kron)
-                                * EV_mat);
+                continue;
             }
-            Lambda.col(i) = evals;
         }
         end = ::steady_clock::now();
         execution_t(i, 5) = duration_cast<microseconds>(end - start).count();
@@ -356,6 +269,9 @@ Rcpp::List MAPITCpp(
                                   Rcpp::Named("PVE") = pve,
                                   Rcpp::Named("timings") = execution_t);
     } else {  // Default to test method "normal"
+#ifdef WITH_LOGGER
+    logger->info("Return from normal method.");
+#endif
         // Compute the p-values for each estimate
         Rcpp::NumericVector sigma_pval = 2 * Rcpp::pnorm(
                                                 abs(sigma_est / sigma_se),
@@ -365,9 +281,6 @@ Rcpp::List MAPITCpp(
                                                 0);
         // H0: sigma = 0 vs. H1: sigma != 0
 
-#ifdef WITH_LOGGER
-    logger->info("Return from normal method.");
-#endif
         return Rcpp::List::create(Rcpp::Named("Est") = sigma_est,
                                   Rcpp::Named("SE") = sigma_se,
                                   Rcpp::Named("pvalues") = sigma_pval,
