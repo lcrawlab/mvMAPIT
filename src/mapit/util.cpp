@@ -36,6 +36,18 @@ std::vector<arma::vec> matrix_to_vector_of_vectors(const arma::mat& matrix) {
     std::vector<arma::vec> V(matrix.n_rows);
     for (int i = 0; i < matrix.n_rows; ++i) {
         V[i] = arma::conv_to<arma::vec>::from(matrix.row(i));
-    };
+    }
     return V;
+}
+
+int factorial(int n) {
+     return (n == 0) || (n == 1) ? 1 : n * factorial(n-1);
+}
+
+int num_combinations_with_replacement(int num_available, int num_selected) {
+     if (num_available < num_selected) {
+        return 0;
+     }
+     return factorial(num_available + num_selected - 1)
+                / (factorial(num_selected) * factorial(num_available - 1));
 }

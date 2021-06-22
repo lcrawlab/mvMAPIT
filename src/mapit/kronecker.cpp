@@ -1,5 +1,4 @@
 // Copyright 2021 Lorin Crawford.
-#include <RcppArmadillo.h>
 #include "mapit/kronecker.h"
 
 std::vector<arma::mat> kronecker_products(std::vector<arma::mat> matrices,

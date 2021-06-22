@@ -29,7 +29,7 @@ AC_CONFIG_SRCDIR([src])
 ### Determine subdirectory source files
 # Dynamically generate list of sources from subdirectories via shell
 MAIN_SOURCES="$(cd src/ && ls *.cpp | tr '\n' ' ')"
-SUBDIR_SOURCES="$(cd src/ && ls {mapit,mqs,gsm}/*.cpp | tr '\n' ' ')"
+SUBDIR_SOURCES="$(cd src/ && ls {mapit,mqs,gsm,tests}/*.cpp | tr '\n' ' ')"
 # Supply it as a variable
 AC_SUBST(MAIN_SOURCES)
 AC_SUBST(SUBDIR_SOURCES)

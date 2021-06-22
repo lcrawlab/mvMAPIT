@@ -1,9 +1,9 @@
 // Copyright 2021 Lorin Crawford.
-#include <RcppArmadillo.h>
 #include "mqs/mqs.h"
+#include "mapit/util.h"
 
-// #define WITH_LOGGER 1 // uncomment for logging during development
-#ifdef WITH_LOGGER  // check value
+#define WITH_LOGGER_T 1  // uncomment for logging during development
+#ifdef WITH_LOGGER_T  // check value
 #define SPDLOG_DISABLE_DEFAULT_LOGGER 1
 #include <RcppSpdlog>
 #endif
@@ -43,7 +43,13 @@ arma::mat compute_s_matrix(const std::vector<arma::mat>& matrices) {
     return S;
 }
 
-arma::vec compute_q_vector(const arma::vec& yc,
+arma::vec compute_q_vector(const arma::vec& y,
+                           const std::vector<arma::mat>& matrices) {
+    return compute_q_vector(y, y, matrices);
+}
+
+arma::vec compute_q_vector(const arma::vec& y1,
+                           const arma::vec& y2,
                            const std::vector<arma::mat>& matrices) {
 #ifdef WITH_LOGGER
     std::string logname = "mqs::mqs::compute_q_vector";
@@ -54,13 +60,47 @@ arma::vec compute_q_vector(const arma::vec& yc,
     arma::vec q = arma::zeros(num_variance_components);
 
     for (int i = 0; i < num_variance_components; i++) {
-        q(i) = arma::as_scalar(yc.t() * matrices[i] * yc);
+        q(i) = arma::as_scalar(y1.t() * matrices[i] * y2);
 #ifdef WITH_LOGGER
         logger->info("q({}) = {}", i, q(i));
         if (q(i) < 0) {
             logger->warn("q({}) negative", i);
         }
 #endif
+    }
+    return q;
+}
+
+arma::mat compute_q_matrix(const std::vector<arma::vec>& Y,
+                           const std::vector<arma::mat>& matrices) {
+#ifdef WITH_LOGGER
+    std::string logname = "mqs::mqs::compute_q_matrix";
+    auto logger = spdlog::get(logname);
+    if (logger == nullptr) logger = spdlog::r_sink_mt(logname);
+    logger->info("Computing q matrix");
+#endif
+    int num_variance_components = matrices.size();
+    int max_index = Y.size();
+    int num_combinations =
+        num_combinations_with_replacement(max_index, 2);
+    int index_q_col = 0;
+    arma::mat q; q.zeros(num_variance_components, num_combinations);
+#ifdef WITH_LOGGER
+    logger->info("Number variance components: {}", num_variance_components);
+    logger->info("Max index Y vector: {}", max_index);
+    logger->info("Number of combinations: {}", num_combinations);
+#endif
+    for (int j = 0; j < max_index; j++) {
+        for (int k = 0; k < max_index; k++) {
+            if (k <= j) {
+    #ifdef WITH_LOGGER
+                logger->info("Combination: {}, {}", j, k);
+                logger->info("q column: {}", index_q_col);
+    #endif
+                q.col(index_q_col) = compute_q_vector(Y[j], Y[k], matrices);
+                index_q_col += 1;
+            }
+        }
     }
     return q;
 }

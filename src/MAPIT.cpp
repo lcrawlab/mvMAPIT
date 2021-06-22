@@ -171,23 +171,33 @@ Rcpp::List MAPITCpp(
         execution_t(i, 1) = duration_cast<microseconds>(end - start).count();
 
 
-        start = steady_clock::now();
-
+        arma::vec q;
         if (phenotypeCovariance.empty() && d > 1) {
-           yc = arma::conv_to< arma::colvec >::from(Yc.row(0));
+            start = steady_clock::now();
+            std::vector<arma::vec> phenotype_vecs =
+                matrix_to_vector_of_vectors(Yc);
+            yc = phenotype_vecs[0];
+            end = steady_clock::now();
+            execution_t(i, 2) = duration_cast<microseconds>(end - start).count();
+
+            // Compute the quantities q and S
+            start = steady_clock::now();
+            q = compute_q_vector(yc, matrices);
+            end = steady_clock::now();
+            execution_t(i, 3) = duration_cast<microseconds>(end - start).count();
         } else {
+            start = steady_clock::now();
             yc = vectorise(Yc);
             matrices = kronecker_products(matrices, V_phenotype, V_error);
+            end = steady_clock::now();
+            execution_t(i, 2) = duration_cast<microseconds>(end - start).count();
+
+            // Compute the quantities q and S
+            start = steady_clock::now();
+            q = compute_q_vector(yc, matrices);
+            end = steady_clock::now();
+            execution_t(i, 3) = duration_cast<microseconds>(end - start).count();
         }
-
-        end = steady_clock::now();
-        execution_t(i, 2) = duration_cast<microseconds>(end - start).count();
-
-        // Compute the quantities q and S
-        start = steady_clock::now();
-        arma::vec q = compute_q_vector(yc, matrices);
-        end = steady_clock::now();
-        execution_t(i, 3) = duration_cast<microseconds>(end - start).count();
 
         start = steady_clock::now();
         arma::mat S = compute_s_matrix(matrices);
@@ -219,7 +229,6 @@ Rcpp::List MAPITCpp(
         }
 #endif
 
-        // TODO(jdstamp): these blocks should  be extracted into methods?
         start = steady_clock::now();
         if (testMethod == "normal") {
             // Compute var(delta(0))
