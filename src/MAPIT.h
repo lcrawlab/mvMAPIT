@@ -4,8 +4,9 @@
 #include <string>
 #include <vector>
 #include <exception>
+#include <typeinfo>
 
-// #define WITH_LOGGER 1 // uncomment for logging during development
+// #define WITH_LOGGER 1  // uncomment for logging during development
 #define ARMA_64BIT_WORD 1
 #include <RcppArmadillo.h>
 

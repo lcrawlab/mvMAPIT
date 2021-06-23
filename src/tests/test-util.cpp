@@ -1,7 +1,5 @@
 /* Copyright 2021 Lorin Crawford.
  */
-#include <RcppArmadillo.h>
-#include <testthat.h>
 #include "mapit/util.h"
 
 context("num_combinations_with_replacement") {
@@ -31,7 +29,7 @@ context("num_combinations_with_replacement") {
         // given
         int num_available = 1;
         int num_selected = 2;
-        int correct_answer = 0;
+        int correct_answer = 1;
         // when
         int result = num_combinations_with_replacement(num_available,
                                                             num_selected);
@@ -81,19 +79,45 @@ context("factorial") {
     }
 }
 
-context("matrix_to_vector_of_vectors") {
-    test_that("matrix_to_vector_of_vectors returns correct vectors") {
+context("matrix_to_vector_of_rows") {
+    test_that("matrix_to_vector_of_rows returns correct vectors") {
         // given
         arma::mat matrix(3, 3); matrix.eye();
         arma::vec v1(3, arma::fill::zeros); v1(0) = 1;
         arma::vec v2(3, arma::fill::zeros); v2(1) = 1;
         arma::vec v3(3, arma::fill::zeros); v3(2) = 1;
         // when
-        std::vector<arma::vec> vectors = matrix_to_vector_of_vectors(matrix);
+        std::vector<arma::vec> vectors = matrix_to_vector_of_rows(matrix);
         // then
         expect_true(arma::approx_equal(vectors[0], v1, "absdiff", 0.01));
         expect_true(arma::approx_equal(vectors[1], v2, "absdiff", 0.01));
         expect_true(arma::approx_equal(vectors[2], v3, "absdiff", 0.01));
+    }
+    test_that("matrix_to_vector_of_rows works with nx1 matrix") {
+        // given
+        arma::mat matrix(1, 3); matrix.zeros(); matrix(0, 0) = 1;
+        arma::vec correct_answer(3, arma::fill::zeros); correct_answer(0) = 1;
+        // when
+        std::vector<arma::vec> result = matrix_to_vector_of_rows(matrix);
+        // then
+        expect_true(result[0].size() == 3);
+        expect_true(typeid(result[0]).name() == typeid(correct_answer).name());
+        expect_true(arma::approx_equal(result[0], correct_answer, "absdiff", 0.01));
+    }
+}
+
+context("vectorise_to_matrix") {
+    test_that("vectorise_to_matrix returns correct vectors") {
+        // given
+        arma::mat matrix(3, 3); matrix.eye();
+        arma::mat correct_answer(9, 1); correct_answer.zeros();
+        correct_answer(0, 0) = 1;
+        correct_answer(4, 0) = 1;
+        correct_answer(8, 0) = 1;
+        // when
+        arma::mat result = vectorise_to_matrix(matrix);
+        // then
+        expect_true(arma::approx_equal(result, correct_answer, "absdiff", 0.01));
     }
 }
 

@@ -1,12 +1,11 @@
 // Copyright 2021 Lorin Crawford.
 #include "mqs/mqs.h"
-#include "mapit/util.h"
-
-#define WITH_LOGGER_T 1  // uncomment for logging during development
-#ifdef WITH_LOGGER_T  // check value
+// #define WITH_LOGGER 1  // uncomment for logging during development
+#ifdef WITH_LOGGER  // check value
 #define SPDLOG_DISABLE_DEFAULT_LOGGER 1
 #include <RcppSpdlog>
 #endif
+#include "mapit/util.h"
 
 // Computes Tr(ab)
 double product_trace(const arma::mat& a, const arma::mat& b) {
@@ -135,16 +134,24 @@ arma::mat compute_v_matrix(const arma::vec& delta,
     return V;
 }
 
-double compute_variance_delta(const arma::vec& yc,
-                              const arma::mat& H, const arma::mat& V) {
+double compute_mqs_var_approximation(const arma::vec& yc,
+                              const arma::mat& H,
+                              const arma::mat& V) {
 #ifdef WITH_LOGGER
-    std::string logname = "mqs::mqs::compute_variance_delta";
+    std::string logname = "mqs::mqs::compute_mqs_var_approximation";
     auto logger = spdlog::get(logname);
     if (logger == nullptr) logger = spdlog::r_sink_mt(logname);
-    logger->info("Computing variance of variance component.");
+    logger->info("Computing variance of variance component. One phenotype.");
 #endif
     arma::mat Hy = H * yc;
     return arma::as_scalar(2 * Hy.t() * V * Hy);
+}
+
+double compute_mqs_var_approximation(const arma::vec& y1,
+                              const arma::vec& y2,
+                              const arma::mat& H,
+                              const arma::mat& V) {
+    return arma::as_scalar(2 * y1.t() * H.t() * V * H * y2);
 }
 
 double compute_variance_delta(const arma::vec& yc,
@@ -166,5 +173,37 @@ double compute_variance_delta(const arma::vec& yc,
         logger->warn("The determinant of the V matrix is {}.", det_V);
     }
 #endif
-    return compute_variance_delta(yc, H, V);
+    return compute_mqs_var_approximation(yc, H, V);
+}
+
+arma::vec compute_variance_delta(const std::vector<arma::vec>& Y,
+                                 const arma::mat& Sinv,
+                                 const arma::mat& delta,
+                                 const std::vector<arma::mat>& matrices) {
+#ifdef WITH_LOGGER
+    std::string logname = "mqs.mqs.compute_variance_delta";
+    auto logger = spdlog::get(logname);
+    if (logger == nullptr) logger = spdlog::r_sink_mt(logname);
+    logger->info("Computing variance of variance component. Two phenotypes.");
+#endif
+    arma::mat H = compute_h_matrix(Sinv, matrices);
+    arma::vec variance(delta.n_cols, arma::fill::zeros);
+    int max_index = Y.size();
+    int index_delta = 0;
+    for (int j = 0; j < max_index; j++) {
+        for (int k = 0; k < max_index; k++) {
+            if (k <= j) {
+#ifdef WITH_LOGGER
+            logger->info("({},{}) {}/{}.", j,
+                                           k,
+                                           index_delta + 1,
+                                           delta.n_cols);
+#endif
+                arma::mat V = compute_v_matrix(delta.col(index_delta), matrices);
+                variance(index_delta) = compute_mqs_var_approximation(Y[j], Y[k], H, V);
+                index_delta += 1;
+            }
+        }
+    }
+    return variance;
 }

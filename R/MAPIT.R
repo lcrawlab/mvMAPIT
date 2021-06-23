@@ -128,8 +128,8 @@ davies_exact <- function(cpp.struct, X) {
   davies.pvals <- c()
   for (i in seq_len(length(point_estimates))) {
     lambda <- sort(cpp.struct$Eigenvalues[, i], decreasing = T)
-
-    Davies_Method <- davies(cpp.struct$Est[i], lambda = lambda, acc = 1e-8)
+    # TODO(jdstamp): can the warning be resolved by correct choice of acc?
+    Davies_Method <- suppressWarnings(davies(cpp.struct$Est[i], lambda = lambda, acc = 1e-8))
     davies.pvals[i] <- 2 * min(Davies_Method$Qq, 1 - Davies_Method$Qq)
     names(davies.pvals)[i] <- names(point_estimates[i])
   }

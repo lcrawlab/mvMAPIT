@@ -32,11 +32,17 @@ bool skip_variant(const arma::vec& ind, int i) {
     return false;
 }
 
-std::vector<arma::vec> matrix_to_vector_of_vectors(const arma::mat& matrix) {
+std::vector<arma::vec> matrix_to_vector_of_rows(const arma::mat& matrix) {
     std::vector<arma::vec> V(matrix.n_rows);
     for (int i = 0; i < matrix.n_rows; ++i) {
         V[i] = arma::conv_to<arma::vec>::from(matrix.row(i));
     }
+    return V;
+}
+
+arma::mat vectorise_to_matrix(const arma::mat& matrix) {
+    arma::mat V(matrix.n_rows * matrix.n_cols, 1);
+    V.col(0) = vectorise(matrix);
     return V;
 }
 
@@ -45,9 +51,6 @@ int factorial(int n) {
 }
 
 int num_combinations_with_replacement(int num_available, int num_selected) {
-     if (num_available < num_selected) {
-        return 0;
-     }
      return factorial(num_available + num_selected - 1)
                 / (factorial(num_selected) * factorial(num_available - 1));
 }

@@ -118,3 +118,28 @@ context("compute_q_vector") {
         expect_true(result(2) == correct_answer(2));
     }
 }
+
+context("compute_mqs_var_approximation") {
+    test_that("compute_mqs_var_approximation 2x2 identity, 1 phenotype") {
+        // given
+        arma::mat A = arma::eye(2, 2);
+        arma::mat B = arma::eye(2, 2);
+        arma::vec y = arma::vec(2, arma::fill::ones);
+        double correct_answer = 4;
+        // when
+        double result = compute_mqs_var_approximation(y, A, B);
+        // then
+        expect_true(result == correct_answer);
+    }
+    test_that("compute_mqs_var_approximation 2x2 identity, 2 phenotypes") {
+        // given
+        arma::mat A = arma::eye(2, 2);
+        arma::mat B = arma::eye(2, 2);
+        arma::vec y = arma::vec(2, arma::fill::ones);
+        double correct_answer = 4;
+        // when
+        double result = compute_mqs_var_approximation(y, y, A, B);
+        // then
+        expect_true(result == correct_answer);
+    }
+}
