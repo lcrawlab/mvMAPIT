@@ -199,8 +199,12 @@ arma::vec compute_variance_delta(const std::vector<arma::vec>& Y,
                                            index_delta + 1,
                                            delta.n_cols);
 #endif
-                arma::mat V = compute_v_matrix(delta.col(index_delta), matrices);
-                variance(index_delta) = compute_mqs_var_approximation(Y[j], Y[k], H, V);
+                arma::mat V = compute_v_matrix(delta.col(index_delta),
+                                                matrices);
+                variance(index_delta) = compute_mqs_var_approximation(Y[j],
+                                                                      Y[k],
+                                                                      H,
+                                                                      V);
                 index_delta += 1;
             }
         }

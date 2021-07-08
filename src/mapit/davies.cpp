@@ -9,7 +9,19 @@
 #include <RcppSpdlog>
 #endif
 
-arma::vec davies_routine(const arma::mat& S,
+arma::mat davies_routine(const arma::mat& S,
+                         const arma::mat& Sinv,
+                         const arma::mat& q,
+                         const std::vector<arma::mat>& matrices) {
+    arma::mat eigenvalues(matrices[0].n_cols, q.n_cols);
+
+    for (int i = 0; i < q.n_cols; i++) {
+        eigenvalues.col(i) = davies_routine_vec(S, Sinv, q.col(i), matrices);
+    }
+    return eigenvalues;
+}
+
+arma::vec davies_routine_vec(const arma::mat& S,
                              const arma::mat& Sinv,
                              const arma::vec& q,
                              const std::vector<arma::mat>& matrices) {

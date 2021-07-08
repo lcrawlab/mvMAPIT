@@ -2,7 +2,12 @@
 #pragma once
 #include <vector>
 
-arma::vec davies_routine(const arma::mat& S,
+arma::mat davies_routine(const arma::mat& S,
+                         const arma::mat& Sinv,
+                         const arma::mat& q,
+                         const std::vector<arma::mat>& matrices);
+
+arma::vec davies_routine_vec(const arma::mat& S,
                              const arma::mat& Sinv,
                              const arma::vec& q,
                              const std::vector<arma::mat>& matrices);

@@ -3,7 +3,7 @@ test_that("MvMapit executes without error when hybrid = TRUE.", {
   p <- 10
   n <- 5
   d <- 1
-  pvalues <- c(0.6772546,
+  pvalues <- matrix(c(0.6772546,
                0.5690567,
                0.3366181,
                0.5523170,
@@ -12,7 +12,7 @@ test_that("MvMapit executes without error when hybrid = TRUE.", {
                0.7090439,
                0.6147064,
                0.7128274,
-               0.6088642)
+               0.6088642), ncol = 1)
   set.seed(5)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
@@ -31,7 +31,8 @@ test_that("MvMapit executes without error when hybrid = FALSE.", {
   p <- 10
   n <- 5
   d <- 3
-  pvalues <- c(0.3409648,
+  pvalues <- matrix(
+              c(0.3409648,
                0.5879707,
                0.5973206,
                0.2912437,
@@ -40,15 +41,15 @@ test_that("MvMapit executes without error when hybrid = FALSE.", {
                0.5612714,
                0.9947883,
                0.6359662,
-               0.8031088)
+               0.8031088), ncol = 1)
   set.seed(6)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
   # when
-  mapit <- MvMAPIT(t(X), 
-                   t(Y), 
-                   hybrid = FALSE, 
-                   cores = 1, 
+  mapit <- MvMAPIT(t(X),
+                   t(Y),
+                   hybrid = FALSE,
+                   cores = 1,
                    phenotypeCovariance = 'covariance',
                    logLevel = "ERROR")
   # then
@@ -60,7 +61,8 @@ test_that("MvMapit executes without error when hybrid = FALSE and test = davies.
   p <- 10
   n <- 5
   d <- 3
-  pvalues <- c(0.4855836,
+  pvalues <- matrix(
+             c(0.4855836,
                0.5042975,
                0.6235587,
                0.2560563,
@@ -69,16 +71,16 @@ test_that("MvMapit executes without error when hybrid = FALSE and test = davies.
                0.6406923,
                0.9294568,
                0.5974718,
-               0.9704179)
+               0.9704179), ncol = 1)
   set.seed(6)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
   # when
-  mapit <- MvMAPIT(t(X), 
-                   t(Y), 
-                   hybrid = FALSE, 
-                   test = 'davies', 
-                   cores = 1, 
+  mapit <- MvMAPIT(t(X),
+                   t(Y),
+                   hybrid = FALSE,
+                   test = 'davies',
+                   cores = 1,
                    variantIndex = c(1:p),
                    phenotypeCovariance = 'covariance',
                    logLevel = "ERROR")
@@ -111,7 +113,8 @@ test_that("MvMapit executes without error when C is not NULL, hybrid = TRUE.", {
   p <- 10
   n <- 5
   d <- 1
-  pvalues <- c(0.6828469,
+  pvalues <- matrix(
+             c(0.6828469,
                0.6014190,
                0.7815753,
                0.8516215,
@@ -120,7 +123,7 @@ test_that("MvMapit executes without error when C is not NULL, hybrid = TRUE.", {
                0.4784025,
                0.3926182,
                0.7893141,
-               0.9439612)
+               0.9439612), ncol = 1)
   set.seed(6)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
@@ -143,7 +146,8 @@ test_that("hybrid = FALSE. phenotypeCovariance = identity", {
   p <- 10
   n <- 5
   d <- 3
-  pvalues <- c(0.4985223,
+  pvalues <- matrix(
+             c(0.4985223,
                0.1910987,
                0.5213573,
                0.1910409,
@@ -152,7 +156,7 @@ test_that("hybrid = FALSE. phenotypeCovariance = identity", {
                0.6225058,
                0.8446667,
                0.8911884,
-               0.2827703)
+               0.2827703), ncol = 1)
   set.seed(6)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
@@ -172,7 +176,8 @@ test_that("hybrid = FALSE. phenotypeCovariance = homogeneous", {
   p <- 10
   n <- 5
   d <- 3
-  pvalues <- c(0.3591053,
+  pvalues <- matrix(
+             c(0.3591053,
                0.3617570,
                0.3562994,
                0.1201573,
@@ -181,7 +186,7 @@ test_that("hybrid = FALSE. phenotypeCovariance = homogeneous", {
                0.4901897,
                0.4350181,
                0.9916274,
-               0.5053453)
+               0.5053453), ncol = 1)
   set.seed(6)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
@@ -191,35 +196,6 @@ test_that("hybrid = FALSE. phenotypeCovariance = homogeneous", {
                    hybrid = FALSE,
                    cores = 1,
                    phenotypeCovariance = 'homogeneous',
-                   logLevel = "ERROR")
-  # then
-  expect_equal(mapit$pvalues, pvalues, tolerance = 1e-7)
-})
-
-test_that("hybrid = FALSE. phenotypeCovariance = ''", {
-  # given
-  p <- 10
-  n <- 5
-  d <- 3
-  pvalues <- c(0.6528335,
-               0.6111131,
-               0.6812731,
-               0.8327742,
-               0.4477438,
-               0.8998389,
-               0.5087860,
-               0.3021797,
-               0.4771740,
-               0.8711670)
-  set.seed(6)
-  X <- matrix(runif(p * n), ncol = p)
-  Y <- matrix(runif(d * n), ncol = d)
-  # when
-  mapit <- MvMAPIT(t(X),
-                   t(Y),
-                   hybrid = FALSE,
-                   cores = 1,
-                   phenotypeCovariance = '',
                    logLevel = "ERROR")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-7)
