@@ -92,25 +92,32 @@ MvMAPIT <- function(X,
     names(pves) <- rownames(X)
     timings <- vc.mod$timings
     ind <- which(pvals <= threshold) # Find the indices of the p-values that are below the threshold
+    if (is.na(phenotypeCovariance) || phenotypeCovariance == '') {
+      any_significance <- apply(pvals, 1, function(r) any(r <= threshold))
+      ind_temp <- ind
+      ind <- which(any_significance == TRUE)
+    }
     log$info('%d p-values are significant with alpha = %f', length(ind), threshold)
 
     log$info('Running davies method on selected SNPs.')
     vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
-
-    davies.pvals <- davies_exact(vc.mod, X)
-    pvals[ind] <- davies.pvals[ind]
+    davies.pvals <- davies_exact_wrapper(vc.mod, X)
+    if (is.na(phenotypeCovariance) || phenotypeCovariance == '') {
+      pvals[ind_temp] <- davies.pvals[ind_temp]
+    } else {
+      pvals[ind] <- davies.pvals[ind]
+    }
   } else if (test == "normal") {
     vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, NULL, phenotypeCovariance)
     pvals <- vc.mod$pvalues
-    names(pvals) <- rownames(X)
+    row.names(pvals) <- rownames(X)
     pves <- vc.mod$PVE
-    names(pves) <- rownames(X)
+    row.names(pves) <- rownames(X)
     timings <- vc.mod$timings
   } else {
     ind <- ifelse(variantIndex, variantIndex, 1:nrow(X))
     vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
-    davies.pvals <- davies_exact(vc.mod, X)
-    pvals <- davies.pvals
+    pvals <- davies_exact_wrapper(vc.mod, X)
     pves <- vc.mod$PVE
     timings <- vc.mod$timings
   }
@@ -120,16 +127,26 @@ MvMAPIT <- function(X,
 }
 
 # Runs the Davies portion of the hypothesis testing
-davies_exact <- function(cpp.struct, X) {
+davies_exact_wrapper <- function(cpp_structure, X) {
+    num_combinations <- dim(cpp_structure$Eigenvalues)[2]
+    davies.pvals <- matrix(1, nrow(X), num_combinations)
+    for (combi in seq_len(num_combinations)) {
+      davies.pvals[, combi] <- davies_exact(cpp_structure$Est[, combi],
+                                            cpp_structure$Eigenvalues[, combi,],
+                                            X)
+    }
+  return(davies.pvals)
+}
+
+davies_exact <- function(point_estimates, eigenvalues, X) {
   ### Apply Davies Exact Method ###
-  point_estimates <- cpp.struct$Est
   names(point_estimates) <- rownames(X)
 
   davies.pvals <- c()
   for (i in seq_len(length(point_estimates))) {
-    lambda <- sort(cpp.struct$Eigenvalues[, i], decreasing = T)
-
-    Davies_Method <- davies(cpp.struct$Est[i], lambda = lambda, acc = 1e-8)
+    lambda <- sort(eigenvalues[, i], decreasing = T)
+    # TODO(jdstamp): can the warning be resolved by correct choice of acc?
+    Davies_Method <- suppressWarnings(davies(point_estimates[i], lambda = lambda, acc = 1e-8))
     davies.pvals[i] <- 2 * min(Davies_Method$Qq, 1 - Davies_Method$Qq)
     names(davies.pvals)[i] <- names(point_estimates[i])
   }
