@@ -250,6 +250,11 @@ Rcpp::List MAPITCpp(
                                                Sinv,
                                                q,
                                                matrices);
+
+#ifdef WITH_LOGGER_FINE
+    logger->info("Lambda.slice({}). {}", i + 1,
+                                        matrix_to_string(Lambda.slice(i)));
+#endif
             } catch (std::exception& e) {
 #ifdef WITH_LOGGER
                 logger->error("Error: {}.", e.what());
