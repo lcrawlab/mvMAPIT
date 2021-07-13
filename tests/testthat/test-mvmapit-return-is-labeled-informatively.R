@@ -7,12 +7,12 @@ test_that("pairwise test with d = 3. hybrid = FALSE.", {
                     nrow = p, ncol = 6)
   set.seed(853)
   variants <- sprintf("SNP%s", 1:p)
-  phenotypes <- sprintf("P%s", 1:d)
+  phenotypes <- sprintf("Q%s", 1:d)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
   colnames(X) <- variants
   colnames(Y) <- phenotypes
-  resulting_colnames <- c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3")
+  resulting_colnames <- c("Q1*Q1", "Q2*Q1", "Q2*Q2", "Q3*Q1", "Q3*Q2", "Q3*Q3")
   # when
   mapit <- MvMAPIT(t(X),
                    t(Y),

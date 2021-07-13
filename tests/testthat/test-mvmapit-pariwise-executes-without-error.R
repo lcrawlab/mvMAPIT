@@ -5,6 +5,7 @@ test_that("hybrid = FALSE. phenotypeCovariance = ''", {
   d <- 3
   pvalues <- matrix(c(0.4705, 0.5025, 0.4007, 0.3927, 0.6591, 0.6629, 0.4171, 0.0285, 0.3101, 0.1738, 0.0308, 0.0503),
                     nrow = p, ncol = 6)
+  colnames(pvalues) <- c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3")
   set.seed(853)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
@@ -38,6 +39,7 @@ test_that("hybrid = FALSE, test = davies. phenotypeCovariance = ''", {
                       0.3355311,
                       0.2968991),
                     nrow = p, ncol = 6)
+  colnames(pvalues) <- c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3")
   set.seed(853)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
@@ -72,6 +74,7 @@ test_that("hybrid = TRUE. phenotypeCovariance = ''", {
                       0.33553110,
                       0.05034315),
                     nrow = p, ncol = 6)
+  colnames(pvalues) <- c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3")
   set.seed(853)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
@@ -96,6 +99,7 @@ test_that("hybrid = TRUE, C is not NULL. phenotypeCovariance = ''", {
                       0.4798231, 0.2094195, 0.2815634, 0.8230605, 0.5942647, 0.6129602,
                       0.9890769, 0.4501949, 0.9670782, 0.6231966, 0.3842330, 0.8414133),
                     nrow = p, ncol = 6)
+  colnames(pvalues) <- c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3")
   set.seed(853)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
@@ -122,6 +126,7 @@ test_that("hybrid = FALSE, C is not NULL. phenotypeCovariance = ''", {
                       0.4798231, 0.2094195, 0.2815634, 0.8230605, 0.5942647, 0.6129602,
                       0.9890769, 0.4501949, 0.9670782, 0.6231966, 0.3842330, 0.8414133),
                     nrow = p, ncol = 6)
+  colnames(pvalues) <- c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3")
   set.seed(853)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
@@ -148,6 +153,7 @@ test_that("hybrid = FALSE, C is not NULL, test = 'davies'. phenotypeCovariance =
                       0.7108441, 0.0001347479, 0.8417294, 0.6122342, 0.978414917, 0.0438949,
                       0.1439900, 0.5461373817, 0.0, 0.8058156, 0.571396524, 0.8780500),
                     nrow = p, ncol = 6, byrow = TRUE)
+  colnames(pvalues) <- c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3")
   set.seed(853)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
