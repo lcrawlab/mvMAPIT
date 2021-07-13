@@ -125,10 +125,14 @@ MvMAPIT <- function(X,
   row.names(pves) <- rownames(X)
   if (length(rownames(Y)) > 0) {
     column_names <- pvalue_names(Y, phenotypeCovariance)
-    colnames(pvals) <- column_names
-    colnames(pves) <- column_names
+  } else if (nrow(Y) > 1 && (is.na(phenotypeCovariance) || phenotypeCovariance == '')) {
+    row.names(Y) <- sprintf("P%s", 1:nrow(Y))
+    column_names <- pvalue_names(Y, phenotypeCovariance)
+  } else {
+    column_names <- NULL
   }
-  print(pves)
+  colnames(pvals) <- column_names
+  colnames(pves) <- column_names
   return(list("pvalues" = pvals, "pves" = pves, "timings" = timings_mean))
 }
 
