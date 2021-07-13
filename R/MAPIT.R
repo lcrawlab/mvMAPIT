@@ -87,9 +87,9 @@ MvMAPIT <- function(X,
   if (hybrid == TRUE) {
     vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, NULL, phenotypeCovariance) # Normal Z-Test
     pvals <- vc.mod$pvalues
-    names(pvals) <- rownames(X)
+    #row.names(pvals) <- rownames(X)
     pves <- vc.mod$PVE
-    names(pves) <- rownames(X)
+    #row.names(pves) <- rownames(X)
     timings <- vc.mod$timings
     ind <- which(pvals <= threshold) # Find the indices of the p-values that are below the threshold
     if (is.na(phenotypeCovariance) || phenotypeCovariance == '') {
@@ -101,7 +101,7 @@ MvMAPIT <- function(X,
 
     log$info('Running davies method on selected SNPs.')
     vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
-    davies.pvals <- davies_exact_wrapper(vc.mod, X, threshold)
+    davies.pvals <- davies_exact_wrapper(vc.mod, X, Y, threshold)
     if (is.na(phenotypeCovariance) || phenotypeCovariance == '') {
       pvals[ind_temp] <- davies.pvals[ind_temp]
     } else {
@@ -110,24 +110,30 @@ MvMAPIT <- function(X,
   } else if (test == "normal") {
     vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, NULL, phenotypeCovariance)
     pvals <- vc.mod$pvalues
-    row.names(pvals) <- rownames(X)
     pves <- vc.mod$PVE
-    row.names(pves) <- rownames(X)
     timings <- vc.mod$timings
   } else {
     ind <- ifelse(variantIndex, variantIndex, 1:nrow(X))
     vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
-    pvals <- davies_exact_wrapper(vc.mod, X, threshold)
+    pvals <- davies_exact_wrapper(vc.mod, X, Y, threshold)
     pves <- vc.mod$PVE
     timings <- vc.mod$timings
   }
   timings_mean <- apply(as.matrix(timings[rowSums(timings) != 0, ]), 2, mean)
   log$info('Calculated mean time of execution. Return list.')
+  row.names(pvals) <- rownames(X)
+  row.names(pves) <- rownames(X)
+  if (length(rownames(Y)) > 0) {
+    column_names <- pvalue_names(Y, phenotypeCovariance)
+    colnames(pvals) <- column_names
+    colnames(pves) <- column_names
+  }
+  print(pves)
   return(list("pvalues" = pvals, "pves" = pves, "timings" = timings_mean))
 }
 
 # Runs the Davies portion of the hypothesis testing
-davies_exact_wrapper <- function(cpp_structure, X, alpha) {
+davies_exact_wrapper <- function(cpp_structure, X, Y, alpha) {
   num_combinations <- dim(cpp_structure$Eigenvalues)[2]
   p <- nrow(X)
   accuracy <- alpha / (p * num_combinations)
@@ -160,4 +166,22 @@ davies_exact <- function(point_estimates, eigenvalues, acc) {
 
 remove_zero_variance <- function(X) {
   return(X[which(apply(X, 1, var) != 0),])
+}
+
+# This naming sequence has to match the creation of the q-matrix in the C++ routine of mvMAPIT
+pvalue_names <- function (Y, phenotypeCovariance) {
+  if (length(phenotypeCovariance) > 0 && !(phenotypeCovariance == '')) {
+    return(c('kronecker'))
+  }
+  phenotype_names <- rownames(Y)
+  phenotype_combinations <- c()
+  for (i in seq_len(nrow(Y))) {
+    for (j in seq_len(nrow(Y))) {
+      if (j <= i) {
+        phenotype_combinations <- c(phenotype_combinations,
+                                    paste0(phenotype_names[i], "*", phenotype_names[j]))
+      }
+    }
+  }
+  return(phenotype_combinations)
 }
