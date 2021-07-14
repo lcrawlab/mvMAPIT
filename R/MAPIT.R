@@ -51,7 +51,8 @@ MvMAPIT <- function(X,
                     Z = NULL,
                     C = NULL, 
                     hybrid = TRUE, 
-                    threshold = 0.05, 
+                    threshold = 0.05,
+                    accuracy = 1e-8,
                     test = "normal", 
                     cores = 1, 
                     variantIndex = NULL, 
@@ -101,7 +102,7 @@ MvMAPIT <- function(X,
 
     log$info('Running davies method on selected SNPs.')
     vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
-    davies.pvals <- davies_exact_wrapper(vc.mod, X, threshold)
+    davies.pvals <- davies_exact_wrapper(vc.mod, X, accuracy)
     if (is.na(phenotypeCovariance) || phenotypeCovariance == '') {
       pvals[ind_temp] <- davies.pvals[ind_temp]
     } else {
@@ -115,7 +116,7 @@ MvMAPIT <- function(X,
   } else {
     ind <- ifelse(variantIndex, variantIndex, 1:nrow(X))
     vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
-    pvals <- davies_exact_wrapper(vc.mod, X, threshold)
+    pvals <- davies_exact_wrapper(vc.mod, X, accuracy)
     pves <- vc.mod$PVE
     timings <- vc.mod$timings
   }
@@ -137,10 +138,9 @@ MvMAPIT <- function(X,
 }
 
 # Runs the Davies portion of the hypothesis testing
-davies_exact_wrapper <- function(cpp_structure, X, alpha) {
+davies_exact_wrapper <- function(cpp_structure, X, accuracy) {
   num_combinations <- dim(cpp_structure$Eigenvalues)[2]
   p <- nrow(X)
-  accuracy <- if (p * num_combinations > 1e5) alpha / (p * num_combinations) else 1e-5
   davies.pvals <- matrix(1, p, num_combinations)
   for (combi in seq_len(num_combinations)) {
     davies.pvals[, combi] <- davies_exact(cpp_structure$Est[, combi],

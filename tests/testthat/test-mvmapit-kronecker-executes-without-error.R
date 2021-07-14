@@ -80,6 +80,7 @@ test_that("MvMapit executes without error when hybrid = FALSE and test = davies.
                    t(Y),
                    hybrid = FALSE,
                    test = 'davies',
+                   accuracy = 1e-5,
                    cores = 1,
                    variantIndex = c(1:p),
                    phenotypeCovariance = 'covariance',
@@ -194,9 +195,10 @@ test_that("hybrid = FALSE. phenotypeCovariance = homogeneous", {
   mapit <- MvMAPIT(t(X),
                    t(Y),
                    hybrid = FALSE,
+                   accuracy = 1e-5,
                    cores = 1,
                    phenotypeCovariance = 'homogeneous',
                    logLevel = "ERROR")
   # then
-  expect_equal(mapit$pvalues, pvalues, tolerance = 1e-7)
+  expect_equal(mapit$pvalues, pvalues, tolerance = 1e-5)
 })

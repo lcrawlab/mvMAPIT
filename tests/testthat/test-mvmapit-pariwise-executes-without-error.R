@@ -110,6 +110,7 @@ test_that("hybrid = TRUE, C is not NULL. phenotypeCovariance = ''", {
                    t(Y),
                    C = C,
                    hybrid = TRUE,
+                   accuracy = 1e-5,
                    cores = 1,
                    phenotypeCovariance = '',
                    logLevel = "ERROR")
@@ -165,6 +166,7 @@ test_that("hybrid = FALSE, C is not NULL, test = 'davies'. phenotypeCovariance =
                    C = C,
                    hybrid = FALSE,
                    test = 'davies',
+                   accuracy = 1e-5,
                    cores = 1,
                    phenotypeCovariance = '',
                    logLevel = "ERROR")
@@ -192,6 +194,7 @@ test_that("hybrid = FALSE, test = 'davies'. phenotypeCovariance = '', d = 1", {
                    C = C,
                    hybrid = FALSE,
                    test = 'davies',
+                   accuracy = 1e-5,
                    cores = 1,
                    phenotypeCovariance = '',
                    logLevel = "ERROR")
