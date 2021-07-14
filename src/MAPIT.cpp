@@ -192,7 +192,6 @@ Rcpp::List MAPITCpp(
         M.reset();
         K.reset();
         G.reset();
-        C.reset();
         b.reset();
         Kc.reset();
         Gc.reset();
