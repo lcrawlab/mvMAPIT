@@ -34,6 +34,7 @@
 #' @param C is an n x n covariance matrix detailing environmental effects and population structure effects.
 #' @param hybrid is a parameter detailing if the function should run the hybrid hypothesis testing procedure between the normal Z test and the Davies method. Default is TRUE.
 #' @param threshold is a parameter detailing the value at which to recalibrate the Z test p values. If nothing is defined by the user, the default value will be 0.05 as recommended by the Crawford et al. (2017).
+#' @param accuracy is a parameter setting the davies function numerical approximation accuracy. This parameter is not needed for the normal test. Smaller p-values than the accuracy will be zero.
 #' @param test is a parameter defining what hypothesis test should be implemented. Takes on values 'normal' or 'davies'. This parameter only matters when hybrid = FALSE. If test is not defined when hybrid = FALSE, the function will automatically use test = 'normal'.
 #' @param cores is a parameter detailing the number of cores to parallelize over. It is important to note that this value only matters when the user has implemented OPENMP on their operating system. If OPENMP is not installed, then please leave cores = 1 and use the standard version of this code and software.
 #' @param variantIndex is a vector containing indices of variants to be included in the computation.
@@ -51,7 +52,8 @@ MvMAPIT <- function(X,
                     Z = NULL,
                     C = NULL, 
                     hybrid = TRUE, 
-                    threshold = 0.05, 
+                    threshold = 0.05,
+                    accuracy = 1e-8,
                     test = "normal", 
                     cores = 1, 
                     variantIndex = NULL, 
@@ -101,7 +103,7 @@ MvMAPIT <- function(X,
 
     log$info('Running davies method on selected SNPs.')
     vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
-    davies.pvals <- davies_exact_wrapper(vc.mod, X, Y, threshold)
+    davies.pvals <- davies_exact_wrapper(vc.mod, X, accuracy)
     if (is.na(phenotypeCovariance) || phenotypeCovariance == '') {
       pvals[ind_temp] <- davies.pvals[ind_temp]
     } else {
@@ -115,7 +117,7 @@ MvMAPIT <- function(X,
   } else {
     ind <- ifelse(variantIndex, variantIndex, 1:nrow(X))
     vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
-    pvals <- davies_exact_wrapper(vc.mod, X, Y, threshold)
+    pvals <- davies_exact_wrapper(vc.mod, X, accuracy)
     pves <- vc.mod$PVE
     timings <- vc.mod$timings
   }
@@ -137,10 +139,9 @@ MvMAPIT <- function(X,
 }
 
 # Runs the Davies portion of the hypothesis testing
-davies_exact_wrapper <- function(cpp_structure, X, Y, alpha) {
+davies_exact_wrapper <- function(cpp_structure, X, accuracy) {
   num_combinations <- dim(cpp_structure$Eigenvalues)[2]
   p <- nrow(X)
-  accuracy <- alpha / (p * num_combinations)
   davies.pvals <- matrix(1, p, num_combinations)
   for (combi in seq_len(num_combinations)) {
     davies.pvals[, combi] <- davies_exact(cpp_structure$Est[, combi],
