@@ -62,16 +62,16 @@ test_that("MvMapit executes without error when hybrid = FALSE and test = davies.
   n <- 5
   d <- 3
   pvalues <- matrix(
-             c(0.4856689,
-               0.5036839,
-               0.6226294,
-               0.2570358,
-               0.9159115,
-               0.8880792,
-               0.6397031,
-               0.9303882,
-               0.5976025,
-               0.9711116), ncol = 1)
+             c(0.4855840,
+               0.5042984,
+               0.6235571,
+               0.2560571,
+               0.9150943,
+               0.8862566,
+               0.6406932,
+               0.9294612,
+               0.5974704,
+               0.9704182), ncol = 1)
   set.seed(6)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
