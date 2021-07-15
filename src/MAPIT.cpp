@@ -152,8 +152,9 @@ Rcpp::List MAPITCpp(
         auto start = steady_clock::now();
         // Create the linear kernel
         const arma::rowvec x_k = X(arma::span(i), arma::span::all);
-        const arma::mat K = compute_k_matrix(GSM, x_k, p);
-        const arma::mat G = compute_g_matrix(K, x_k);
+        arma::mat K = compute_k_matrix(GSM, x_k, p);
+        arma::mat G = compute_g_matrix(K, x_k);
+
         auto end = steady_clock::now();
         execution_t(i, 0) = duration_cast<microseconds>(end - start).count();
 
@@ -170,11 +171,11 @@ Rcpp::List MAPITCpp(
         if (z > 0) {
             b.cols(1, z) = Zz.t();
         }
-        b.col(z + 1) = arma::trans(X.row(i));
+        b.col(z + 1) = arma::trans(x_k);
 
-        const arma::mat M = compute_projection_matrix(n, b);
-        const arma::mat Kc = M * K * M;
-        const arma::mat Gc = M * G * M;
+        arma::mat M = compute_projection_matrix(n, b);
+        arma::mat Kc = M * K * M;
+        arma::mat Gc = M * G * M;
         arma::mat Cc;
         std::vector<arma::mat> matrices;
 
@@ -187,6 +188,14 @@ Rcpp::List MAPITCpp(
         const arma::mat Yc = Y * M;
         end = steady_clock::now();
         execution_t(i, 1) = duration_cast<microseconds>(end - start).count();
+
+        M.reset();
+        K.reset();
+        G.reset();
+        b.reset();
+        Kc.reset();
+        Gc.reset();
+        Cc.reset();
 
         arma::mat q;
         std::vector<arma::vec> phenotypes;
@@ -277,7 +286,7 @@ Rcpp::List MAPITCpp(
     // Return a Rcpp::List of the arguments
     if (testMethod == "davies") {
 #ifdef WITH_LOGGER
-    logger->info("Return from davies method.");
+        logger->info("Return from davies method.");
 #endif
         return Rcpp::List::create(Rcpp::Named("Est") = sigma_est,
                           Rcpp::Named("Eigenvalues") = Lambda,
@@ -285,7 +294,7 @@ Rcpp::List MAPITCpp(
                           Rcpp::Named("timings") = execution_t);
     } else {
 #ifdef WITH_LOGGER
-    logger->info("Return from normal method.");
+        logger->info("Return from normal method.");
 #endif
         // Compute the p-values for each estimate
         arma::mat pvalues = normal_pvalues(sigma_est, sigma_se);

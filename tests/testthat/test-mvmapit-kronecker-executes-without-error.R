@@ -20,6 +20,7 @@ test_that("MvMapit executes without error when hybrid = TRUE.", {
   mapit <- MvMAPIT(t(X),
                    t(Y),
                    cores = 1,
+                   accuracy = 1e-2,
                    phenotypeCovariance = 'covariance',
                    logLevel = "ERROR")
   # then
@@ -103,6 +104,7 @@ test_that("MvMapit times computations when hybrid = TRUE.", {
                    t(Y),
                    cores = 1,
                    hybrid = TRUE,
+                   accuracy = 1e-2,
                    phenotypeCovariance = 'covariance',
                    logLevel = "ERROR")
   # then
@@ -135,6 +137,7 @@ test_that("MvMapit executes without error when C is not NULL, hybrid = TRUE.", {
                    C = C,
                    cores = 1,
                    hybrid = TRUE,
+                   accuracy = 1e-6,
                    phenotypeCovariance = 'covariance',
                    logLevel = "ERROR")
   # then
