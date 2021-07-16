@@ -76,6 +76,10 @@ MvMAPIT <- function(X,
     log$debug('Logging to file: %s', filePath)
     log$addHandler(logging::writeToFile, file=filePath)
   }
+
+  if (is.vector(Y)) {
+    Y <- t(Y)
+  }
   
   log$debug('Running in %s test mode.', test)
   log$debug('Genotype matrix: %d x %d', nrow(X), ncol(X))

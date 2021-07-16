@@ -174,7 +174,6 @@ test_that("hybrid = FALSE, C is not NULL, test = 'davies'. phenotypeCovariance =
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-4)
 })
 
-
 test_that("hybrid = FALSE, test = 'davies'. phenotypeCovariance = '', d = 1", {
   # given
   p <- 10
