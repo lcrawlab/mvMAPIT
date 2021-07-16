@@ -103,7 +103,7 @@ MvMAPIT <- function(X,
 
     log$info('Running davies method on selected SNPs.')
     vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
-    davies.pvals <- davies_exact_wrapper(vc.mod, X, accuracy)
+    davies.pvals <- mvmapit_pvalues(vc.mod, X, accuracy)
     if (is.na(phenotypeCovariance) || phenotypeCovariance == '') {
       pvals[ind_temp] <- davies.pvals[ind_temp]
     } else {
@@ -117,7 +117,7 @@ MvMAPIT <- function(X,
   } else {
     ind <- ifelse(variantIndex, variantIndex, 1:nrow(X))
     vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
-    pvals <- davies_exact_wrapper(vc.mod, X, accuracy)
+    pvals <- mvmapit_pvalues(vc.mod, X, accuracy)
     pves <- vc.mod$PVE
     timings <- vc.mod$timings
   }
@@ -126,10 +126,10 @@ MvMAPIT <- function(X,
   row.names(pvals) <- rownames(X)
   row.names(pves) <- rownames(X)
   if (length(rownames(Y)) > 0) {
-    column_names <- pvalue_names(Y, phenotypeCovariance)
+    column_names <- mapit_struct_names(Y, phenotypeCovariance)
   } else if (nrow(Y) > 1 && (is.na(phenotypeCovariance) || phenotypeCovariance == '')) {
     row.names(Y) <- sprintf("P%s", 1:nrow(Y))
-    column_names <- pvalue_names(Y, phenotypeCovariance)
+    column_names <- mapit_struct_names(Y, phenotypeCovariance)
   } else {
     column_names <- NULL
   }
@@ -138,43 +138,12 @@ MvMAPIT <- function(X,
   return(list("pvalues" = pvals, "pves" = pves, "timings" = timings_mean))
 }
 
-# Runs the Davies portion of the hypothesis testing
-davies_exact_wrapper <- function(cpp_structure, X, accuracy) {
-  num_combinations <- dim(cpp_structure$Eigenvalues)[2]
-  p <- nrow(X)
-  davies.pvals <- matrix(1, p, num_combinations)
-  for (combi in seq_len(num_combinations)) {
-    davies.pvals[, combi] <- davies_exact(cpp_structure$Est[, combi],
-                                          cpp_structure$Eigenvalues[, combi,],
-                                          accuracy)
-  }
-  names(davies.pvals) <- rownames(X)
-  return(davies.pvals)
-}
-
-davies_exact <- function(point_estimates, eigenvalues, acc) {
-  ### Apply Davies Exact Method ###
-  davies.pvals <- c()
-  for (i in seq_len(length(point_estimates))) {
-    lambda <- sort(eigenvalues[, i], decreasing = T)
-    # TODO(jdstamp): can the warning be resolved by correct choice of acc?
-    Davies_Method <- suppressWarnings(davies(point_estimates[i], lambda = lambda, acc = acc))
-    if (Davies_Method$ifault == 0) {
-      davies.pvals[i] <- 2 * min(Davies_Method$Qq, 1 - Davies_Method$Qq)
-    } else {
-      warning(paste("Davies function exited with error code: ", Davies_Method$ifault))
-      davies.pvals[i] <- 1
-    }
-  }
-  return(davies.pvals)
-}
-
 remove_zero_variance <- function(X) {
   return(X[which(apply(X, 1, var) != 0),])
 }
 
 # This naming sequence has to match the creation of the q-matrix in the C++ routine of mvMAPIT
-pvalue_names <- function (Y, phenotypeCovariance) {
+mapit_struct_names <- function (Y, phenotypeCovariance) {
   if (length(phenotypeCovariance) > 0 && !(phenotypeCovariance == '')) {
     return(c('kronecker'))
   }
