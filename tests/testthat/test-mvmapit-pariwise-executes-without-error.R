@@ -175,7 +175,6 @@ test_that("hybrid = FALSE, C is not NULL, test = 'davies'. phenotypeCovariance =
 })
 
 
-
 test_that("hybrid = FALSE, test = 'davies'. phenotypeCovariance = '', d = 1", {
   # given
   p <- 10
