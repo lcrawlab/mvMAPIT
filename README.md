@@ -1,14 +1,14 @@
 # The multivariate MArginal ePIstasis Test (mvMAPIT) [![R-CMD-check](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml)
 
-**WORK IN PROGRESS - DO NOT USE**
-
-:warning: Please go to the [MAPIT implementation](https://github.com/lorinanthony/MAPIT) by [Crawford et al. (2017)](http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869) for working code.
+This R package is a generalization of the [MAPIT implementation](https://github.com/lorinanthony/MAPIT) by [Crawford et al. (2017)](http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869) for any number of phenotypes.
 
 ## Introduction
 Epistasis, commonly defined as the interaction between multiple genes, is an important genetic component underlying phenotypic variation. Many statistical methods have been developed to model and identify epistatic interactions between genetic variants.
-However, because of the large combinatorial search space of interactions, most epistasis mapping methods face enormous computational challenges and often suffer from low statistical power. In [Crawford et al. (2017)](http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869), we present a novel, alternative strategy for mapping epistasis: the MArginal ePIstasis Test (MAPIT).
+However, because of the large combinatorial search space of interactions, most epistasis mapping methods face enormous computational challenges and often suffer from low statistical power. In [Crawford et al. (2017)](http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869), we present a novel, alternative strategy for mapping epistasis: **the MArginal ePIstasis Test (MAPIT)**.
 Our method examines one variant at a time, and estimates and tests its "marginal epistatic effects" --- the combined pairwise interaction effects between a given variant and all other variants. By avoiding explicitly searching for interactions, our method avoids the large combinatorial search space and improves power.
 Our method is novel and relies on a recently developed variance component estimation method for efficient and robust parameter inference and p-value computation.
+
+While **MAPIT** only takes one phenotype of interest into account for the computation of variance components, **mvMAPIT** takes any number of phenotypes into account. It computes variance components for each individual phenotype, recovering the results of **MAPIT**, and additionally it computes variance components for each combination of phenotypes.  
 
 mvMAPIT is implemented as a set of R and C++ routines, which can be carried out within an R environment.
 
@@ -21,9 +21,8 @@ For specific details on how to compile, install, and manage R and R-packages, re
 
 In its current construction, we recommend against running MAPIT while using R Studio.
 
-
 ## R Packages Required for mvMAPIT
-MAPIT requires the installation of the following R libraries:
+mvMAPIT requires the installation of the following R libraries:
 
 [doParallel](https://cran.r-project.org/web/packages/doParallel/index.html)
 
@@ -51,9 +50,13 @@ For extra tips on how to run C++ on macOS, please visit [here](http://seananders
 
 ## OpenMP
 
-Note that MAPIT takes advantage of [OpenMP](http://openmp.org/wp/), an API for multi-platform shared-memory parallel programming in C/C++. This is to speed up the computational time of the modeling algorithm. Unfortunately, OS X does not currently support OpenMP under the default compiler.
-A work around to use OpenMP in R on OS X can be found [here](http://thecoatlessprofessor.com/programming/openmp-in-r-on-os-x/). MAPIT can be compiled without OpenMP, but we recommend using it if applicable.
-  
+Note that mvMAPIT takes advantage of [OpenMP](http://openmp.org/wp/), an API for multi-platform shared-memory parallel programming in C/C++. This is to speed up the computational time of the modeling algorithm. Unfortunately, OS X does not currently support OpenMP under the default compiler.
+A work around to use OpenMP in R on OS X can be found [here](http://thecoatlessprofessor.com/programming/openmp-in-r-on-os-x/). mvMAPIT can be compiled without OpenMP, but we recommend using it if applicable.
+
+### Compiling for OpenMP
+In order to enable the OpenMP implementation of mvMAPIT, the required C++ libraries need to be installed and the `PKG_CXXFLAGS` compiler flag `src/Makevars.in` file needs to be changed to
+
+    PKG_CXXFLAGS = @PKG_CXX11STD@  @CXXFLAGS@ -I. @BLAS_LIBS@
 
 ## Tutorial for Running MAPIT
 For the simulation tutorial provided here, we generate genotypes for 3,000 samples typed at 10,000 unrelated variants. We show in our example R code how to implement MAPIT (both the standard and parallelized versions) to perform a marginal epistasis association mapping test in order to find interacting causal variants of interest.
