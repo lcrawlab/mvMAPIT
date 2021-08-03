@@ -1,4 +1,4 @@
-test_that("hybrid = FALSE. phenotypeCovariance = ''", {
+test_that("test = 'normal'. phenotypeCovariance = 'combinatorial'", {
   # given
   p <- 2
   n <- 10
@@ -12,15 +12,15 @@ test_that("hybrid = FALSE. phenotypeCovariance = ''", {
   # when
   mapit <- MvMAPIT(t(X),
                    t(Y),
-                   hybrid = FALSE,
+                   test = 'normal',
                    cores = 1,
-                   phenotypeCovariance = '',
+                   phenotypeCovariance = 'combinatorial',
                    logLevel = "ERROR")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-4)
 })
 
-test_that("hybrid = FALSE, test = davies. phenotypeCovariance = ''", {
+test_that("test = davies. phenotypeCovariance = 'combinatorial'", {
   # given
   p <- 2
   p <- 2
@@ -47,16 +47,15 @@ test_that("hybrid = FALSE, test = davies. phenotypeCovariance = ''", {
   # when
   mapit <- MvMAPIT(t(X),
                    t(Y),
-                   hybrid = FALSE,
                    test = 'davies',
                    cores = 1,
-                   phenotypeCovariance = '',
+                   phenotypeCovariance = 'combinatorial',
                    logLevel = "ERROR")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-4)
 })
 
-test_that("hybrid = TRUE. phenotypeCovariance = ''", {
+test_that("phenotypeCovariance = 'combinatorial'", {
   # given
   p <- 2
   n <- 10
@@ -82,15 +81,15 @@ test_that("hybrid = TRUE. phenotypeCovariance = ''", {
   # when
   mapit <- MvMAPIT(t(X),
                    t(Y),
-                   hybrid = TRUE,
+                   test = 'hybrid',
                    cores = 1,
-                   phenotypeCovariance = '',
+                   phenotypeCovariance = 'combinatorial',
                    logLevel = "ERROR")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-4)
 })
 
-test_that("hybrid = TRUE, C is not NULL. phenotypeCovariance = ''", {
+test_that("C is not NULL. phenotypeCovariance = 'combinatorial'", {
   # given
   p <- 4
   n <- 10
@@ -109,16 +108,16 @@ test_that("hybrid = TRUE, C is not NULL. phenotypeCovariance = ''", {
   mapit <- MvMAPIT(t(X),
                    t(Y),
                    C = C,
-                   hybrid = TRUE,
+                   test = 'hybrid',
                    accuracy = 1e-5,
                    cores = 1,
-                   phenotypeCovariance = '',
+                   phenotypeCovariance = 'combinatorial',
                    logLevel = "ERROR")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-4)
 })
 
-test_that("hybrid = FALSE, C is not NULL. phenotypeCovariance = ''", {
+test_that("test = 'normal', C is not NULL. phenotypeCovariance = 'combinatorial'", {
   # given
   p <- 4
   n <- 10
@@ -137,15 +136,15 @@ test_that("hybrid = FALSE, C is not NULL. phenotypeCovariance = ''", {
   mapit <- MvMAPIT(t(X),
                    t(Y),
                    C = C,
-                   hybrid = FALSE,
+                   test = 'normal',
                    cores = 1,
-                   phenotypeCovariance = '',
+                   phenotypeCovariance = 'combinatorial',
                    logLevel = "ERROR")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-4)
 })
 
-test_that("hybrid = FALSE, C is not NULL, test = 'davies'. phenotypeCovariance = ''", {
+test_that("C is not NULL, test = 'davies'. phenotypeCovariance = 'combinatorial'", {
   # given
   p <- 4
   n <- 10
@@ -164,17 +163,16 @@ test_that("hybrid = FALSE, C is not NULL, test = 'davies'. phenotypeCovariance =
   mapit <- MvMAPIT(t(X),
                    t(Y),
                    C = C,
-                   hybrid = FALSE,
                    test = 'davies',
                    accuracy = 1e-5,
                    cores = 1,
-                   phenotypeCovariance = '',
+                   phenotypeCovariance = 'combinatorial',
                    logLevel = "ERROR")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-4)
 })
 
-test_that("hybrid = FALSE, test = 'davies'. phenotypeCovariance = '', d = 1", {
+test_that("test = 'davies'. phenotypeCovariance = 'combinatorial', d = 1", {
   # given
   p <- 10
   n <- 4
@@ -190,11 +188,10 @@ test_that("hybrid = FALSE, test = 'davies'. phenotypeCovariance = '', d = 1", {
   mapit <- MvMAPIT(t(X),
                    t(Y),
                    C = C,
-                   hybrid = FALSE,
                    test = 'davies',
                    accuracy = 1e-5,
                    cores = 1,
-                   phenotypeCovariance = '',
+                   phenotypeCovariance = 'combinatorial',
                    logLevel = "ERROR")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-4)

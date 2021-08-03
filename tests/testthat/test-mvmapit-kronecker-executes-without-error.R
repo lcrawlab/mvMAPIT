@@ -1,4 +1,4 @@
-test_that("MvMapit executes without error when hybrid = TRUE.", {
+test_that("MvMapit executes without error when test = hybrid.", {
   # given
   p <- 10
   n <- 5
@@ -19,6 +19,7 @@ test_that("MvMapit executes without error when hybrid = TRUE.", {
   # when
   mapit <- MvMAPIT(t(X),
                    t(Y),
+                   test = 'hybrid',
                    cores = 1,
                    accuracy = 1e-2,
                    phenotypeCovariance = 'covariance',
@@ -27,7 +28,7 @@ test_that("MvMapit executes without error when hybrid = TRUE.", {
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-7)
 })
 
-test_that("MvMapit executes without error when hybrid = FALSE.", {
+test_that("MvMapit executes without error when test = normal.", {
   # given
   p <- 10
   n <- 5
@@ -49,7 +50,7 @@ test_that("MvMapit executes without error when hybrid = FALSE.", {
   # when
   mapit <- MvMAPIT(t(X),
                    t(Y),
-                   hybrid = FALSE,
+                   test = 'normal',
                    cores = 1,
                    phenotypeCovariance = 'covariance',
                    logLevel = "ERROR")
@@ -57,7 +58,7 @@ test_that("MvMapit executes without error when hybrid = FALSE.", {
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-7)
 })
 
-test_that("MvMapit executes without error when hybrid = FALSE and test = davies.", {
+test_that("MvMapit executes without error when test = davies.", {
   # given
   p <- 10
   n <- 5
@@ -79,7 +80,6 @@ test_that("MvMapit executes without error when hybrid = FALSE and test = davies.
   # when
   mapit <- MvMAPIT(t(X),
                    t(Y),
-                   hybrid = FALSE,
                    test = 'davies',
                    accuracy = 1e-5,
                    cores = 1,
@@ -91,7 +91,7 @@ test_that("MvMapit executes without error when hybrid = FALSE and test = davies.
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-7)
 })
 
-test_that("MvMapit times computations when hybrid = TRUE.", {
+test_that("MvMapit times computations when test = hybrid.", {
   # given
   p <- 10
   n <- 5
@@ -103,7 +103,7 @@ test_that("MvMapit times computations when hybrid = TRUE.", {
   mapit <- MvMAPIT(t(X),
                    t(Y),
                    cores = 1,
-                   hybrid = TRUE,
+                   test = 'hybrid',
                    accuracy = 1e-2,
                    phenotypeCovariance = 'covariance',
                    logLevel = "ERROR")
@@ -111,7 +111,7 @@ test_that("MvMapit times computations when hybrid = TRUE.", {
   expect_equal(length(mapit$timings), 6)
 })
 
-test_that("MvMapit executes without error when C is not NULL, hybrid = TRUE.", {
+test_that("MvMapit executes without error when C is not NULL, test = hybrid.", {
   # given
   p <- 10
   n <- 5
@@ -136,7 +136,7 @@ test_that("MvMapit executes without error when C is not NULL, hybrid = TRUE.", {
                    t(Y),
                    C = C,
                    cores = 1,
-                   hybrid = TRUE,
+                   test = 'hybrid',
                    accuracy = 1e-6,
                    phenotypeCovariance = 'covariance',
                    logLevel = "ERROR")
@@ -145,7 +145,7 @@ test_that("MvMapit executes without error when C is not NULL, hybrid = TRUE.", {
 })
 
 
-test_that("hybrid = FALSE. phenotypeCovariance = identity", {
+test_that("test = normal. phenotypeCovariance = identity", {
   # given
   p <- 10
   n <- 5
@@ -167,7 +167,6 @@ test_that("hybrid = FALSE. phenotypeCovariance = identity", {
   # when
   mapit <- MvMAPIT(t(X),
                    t(Y),
-                   hybrid = FALSE,
                    cores = 1,
                    phenotypeCovariance = 'identity',
                    logLevel = "ERROR")
@@ -175,7 +174,7 @@ test_that("hybrid = FALSE. phenotypeCovariance = identity", {
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-7)
 })
 
-test_that("hybrid = FALSE. phenotypeCovariance = homogeneous", {
+test_that("test = normal. phenotypeCovariance = homogeneous", {
   # given
   p <- 10
   n <- 5
@@ -197,7 +196,6 @@ test_that("hybrid = FALSE. phenotypeCovariance = homogeneous", {
   # when
   mapit <- MvMAPIT(t(X),
                    t(Y),
-                   hybrid = FALSE,
                    accuracy = 1e-5,
                    cores = 1,
                    phenotypeCovariance = 'homogeneous',

@@ -9,7 +9,6 @@ test_that("MvMapit can take a vector as phenotype input. hybrid = FALSE, test = 
   # when
   mapit <- MvMAPIT(t(X),
                    Y,
-                   hybrid = FALSE,
                    accuracy = 1e-5,
                    cores = 1,
                    phenotypeCovariance = 'identity',
@@ -29,7 +28,6 @@ test_that("MvMapit can take a vector as phenotype input. hybrid = FALSE, test = 
   # when
   mapit <- MvMAPIT(t(X),
                    Y,
-                   hybrid = FALSE,
                    test = 'davies',
                    accuracy = 1e-5,
                    cores = 1,
