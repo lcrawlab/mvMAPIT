@@ -9,13 +9,12 @@ MvMAPIT(
   Y,
   Z = NULL,
   C = NULL,
-  hybrid = TRUE,
   threshold = 0.05,
   accuracy = 1e-08,
-  test = "normal",
+  test = c("normal", "davies", "hybrid"),
   cores = 1,
   variantIndex = NULL,
-  phenotypeCovariance = "identity",
+  phenotypeCovariance = c("identity", "covariance", "homogeneous", "combinatorial"),
   logLevel = "WARN",
   logFile = NULL
 )
@@ -29,19 +28,17 @@ MvMAPIT(
 
 \item{C}{is an n x n covariance matrix detailing environmental effects and population structure effects.}
 
-\item{hybrid}{is a parameter detailing if the function should run the hybrid hypothesis testing procedure between the normal Z test and the Davies method. Default is TRUE.}
-
 \item{threshold}{is a parameter detailing the value at which to recalibrate the Z test p values. If nothing is defined by the user, the default value will be 0.05 as recommended by the Crawford et al. (2017).}
 
 \item{accuracy}{is a parameter setting the davies function numerical approximation accuracy. This parameter is not needed for the normal test. Smaller p-values than the accuracy will be zero.}
 
-\item{test}{is a parameter defining what hypothesis test should be implemented. Takes on values 'normal' or 'davies'. This parameter only matters when hybrid = FALSE. If test is not defined when hybrid = FALSE, the function will automatically use test = 'normal'.}
+\item{test}{is a parameter defining what hypothesis test should be implemented. Takes on values 'normal', 'davies', and 'hybrid'. The 'hybrid' test runs first the 'normal' test and then the 'davies' test on the significant variants.}
 
 \item{cores}{is a parameter detailing the number of cores to parallelize over. It is important to note that this value only matters when the user has implemented OPENMP on their operating system. If OPENMP is not installed, then please leave cores = 1 and use the standard version of this code and software.}
 
 \item{variantIndex}{is a vector containing indices of variants to be included in the computation.}
 
-\item{phenotypeCovariance}{is a string parameter defining how to model the covariance between phenotypes of effects. Possible values: 'identity', 'covariance', 'homogeneous'.}
+\item{phenotypeCovariance}{is a string parameter defining how to model the covariance between phenotypes of effects. Possible values: 'identity', 'covariance', 'homogeneous', 'combinatorial'.}
 
 \item{logLevel}{is a string parameter defining the log level for the logging package.}
 
@@ -58,11 +55,11 @@ This function will run a multivariate version of the MArginal ePIstasis Test (mv
 
 (1) Standard Model: y = m+g+e where m ~ MVN(0,omega^2K), g ~ MVN(0,sigma^2G), e ~ MVN(0,tau^2M).
 Recall from Crawford et al. (2017) that m is the combined additive effects from all other variants,
-and effectively represents the additive effect of the kth variant under the polygenic background
+and effectively represents the additive effect of the k-th variant under the polygenic background
 of all other variants; K is the genetic relatedness matrix computed using
-genotypes from all variants other than the kth; g is the summation of all pairwise interaction
-effects between the kth variant and all other variants; G represents a relatedness matrix
-computed based on pairwise interaction terms between the kth variant and all other variants. Here,
+genotypes from all variants other than the k-th; g is the summation of all pairwise interaction
+effects between the k-th variant and all other variants; G represents a relatedness matrix
+computed based on pairwise interaction terms between the k-th variant and all other variants. Here,
 we also denote D = diag(x_k) to be an n × n diagonal matrix with the genotype vector x_k as its
 diagonal elements. It is important to note that both K and G change with every new marker k that is
 considered. Lastly; M is a variant specific projection matrix onto both the null space of the intercept

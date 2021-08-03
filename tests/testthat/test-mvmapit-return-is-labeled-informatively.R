@@ -1,4 +1,4 @@
-test_that("pairwise test with d = 3. hybrid = FALSE.", {
+test_that("pairwise test with d = 3. test = 'normal'.", {
   # given
   p <- 10
   n <- 5
@@ -16,9 +16,9 @@ test_that("pairwise test with d = 3. hybrid = FALSE.", {
   # when
   mapit <- MvMAPIT(t(X),
                    t(Y),
-                   hybrid = FALSE,
+                   test = 'normal',
                    cores = 1,
-                   phenotypeCovariance = '',
+                   phenotypeCovariance = 'combinatorial',
                    logLevel = "ERROR")
   # then
   # print(mapit$pvalues)
@@ -26,7 +26,7 @@ test_that("pairwise test with d = 3. hybrid = FALSE.", {
   expect_equal(colnames(mapit$pvalues), resulting_colnames)
 })
 
-test_that("pairwise test with d = 3. hybrid = FALSE.", {
+test_that("pairwise test with d = 3. test = 'normal'.", {
   # given
   p <- 10
   n <- 5
@@ -44,7 +44,7 @@ test_that("pairwise test with d = 3. hybrid = FALSE.", {
   # when
   mapit <- MvMAPIT(t(X),
                    t(Y),
-                   hybrid = FALSE,
+                   test = 'normal',
                    cores = 1,
                    phenotypeCovariance = 'identity',
                    logLevel = "ERROR")

@@ -50,7 +50,7 @@ Rcpp::List MAPITCpp(
      std::string testMethod = "normal",
      int cores = 1,
      Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix = R_NilValue,
-     std::string phenotypeCovariance = "") {
+     std::string phenotypeCovariance = "identity") {
     int i;
     const int n = X.n_cols;
     const int p = X.n_rows;
@@ -58,8 +58,9 @@ Rcpp::List MAPITCpp(
     int num_combinations = 1;
     int z = 0;
 
-    const bool pairwise = (phenotypeCovariance.empty() && d > 1);
-    if (pairwise) {
+    const bool combinatorial =
+      (phenotypeCovariance.compare("combinatorial") == 0 && d > 1);
+    if (combinatorial) {
         num_combinations = num_combinations_with_replacement(d, 2);
     }
 
@@ -75,7 +76,6 @@ Rcpp::List MAPITCpp(
     logger->info("Number of phenotypes: {}", d);
     logger->info("Test method: {}", testMethod);
     logger->info("Phenotype covariance model: {}", phenotypeCovariance);
-    logger->info("mvMAPIT version pairwise: {}", pairwise);
 
 #ifdef _OPENMP
     logger->info("Execute c++ routine on {} cores.", cores);
@@ -90,7 +90,7 @@ Rcpp::List MAPITCpp(
     arma::mat execution_t(p, 6);
 
     int L_rows, L_cols;
-    if (pairwise) {
+    if (combinatorial) {
         L_rows = n;
         L_cols = num_combinations;
     } else {
@@ -200,7 +200,7 @@ Rcpp::List MAPITCpp(
         arma::mat q;
         std::vector<arma::vec> phenotypes;
         start = steady_clock::now();
-        if (pairwise) {
+        if (combinatorial) {
             phenotypes = matrix_to_vector_of_rows(Yc);
 
         } else {

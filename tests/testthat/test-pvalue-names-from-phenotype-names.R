@@ -1,6 +1,6 @@
-test_that("pairwise test with d = 3. Pairwise.", {
+test_that("combinatorial test with d = 3. combinatorial.", {
   # given
-  phenotypeCovariance <- ''
+  phenotypeCovariance <- 'combinatorial'
   n <- 5
   d <- 3
   set.seed(853)
@@ -14,7 +14,7 @@ test_that("pairwise test with d = 3. Pairwise.", {
   expect_equal(result, correct_colnames)
 })
 
-test_that("pairwise test with d = 3. Kronecker.", {
+test_that("combinatorial test with d = 3. Kronecker.", {
   # given
   phenotypeCovariance <- 'identity'
   n <- 5
