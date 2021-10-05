@@ -154,6 +154,14 @@ double compute_mqs_var_approximation(const arma::vec& y1,
     return arma::as_scalar(2 * y1.t() * H.t() * V * H * y2);
 }
 
+double compute_var_bilinear_approx(const arma::vec& y1,
+                              const arma::vec& y2,
+                              const arma::mat& H,
+                              const arma::mat& V11,
+                              const arma::mat& V12) {
+    return arma::as_scalar(y2.t() * H.t() * (V12 * H * y1 + V11 * H * y2));
+}
+
 double compute_variance_delta(const arma::vec& yc,
                               const arma::mat& Sinv,
                               const arma::vec& delta,
@@ -190,9 +198,11 @@ arma::vec compute_variance_delta(const std::vector<arma::vec>& Y,
     arma::vec variance(delta.n_cols, arma::fill::zeros);
     int max_index = Y.size();
     int index_delta = 0;
+    int index_kk;
     for (int j = 0; j < max_index; j++) {
         for (int k = 0; k < max_index; k++) {
-            if (k <= j) {
+            if (k == j) {
+              index_kk = index_delta;
 #ifdef WITH_LOGGER
             logger->info("({},{}) {}/{}.", j,
                                            k,
@@ -201,13 +211,31 @@ arma::vec compute_variance_delta(const std::vector<arma::vec>& Y,
 #endif
                 arma::mat V = compute_v_matrix(delta.col(index_delta),
                                                 matrices);
-                variance(index_delta) = compute_mqs_var_approximation(Y[j],
-                                                                      Y[k],
+                variance(index_delta) = compute_mqs_var_approximation(Y[k],
+                                                                      Y[j],
                                                                       H,
                                                                       V);
+                index_delta += 1;
+            } else if (k < j) {
+#ifdef WITH_LOGGER
+            logger->info("({},{}) {}/{}.", j,
+                                           k,
+                                           index_delta + 1,
+                                           delta.n_cols);
+#endif
+                arma::mat V_kk = compute_v_matrix(delta.col(index_kk),
+                                                 matrices);
+                arma::mat V_jk = compute_v_matrix(delta.col(index_delta),
+                                                 matrices);
+                variance(index_delta) = compute_var_bilinear_approx(Y[k],
+                                                                    Y[j],
+                                                                    H,
+                                                                    V_kk,
+                                                                    V_jk);
                 index_delta += 1;
             }
         }
     }
     return variance;
 }
+
