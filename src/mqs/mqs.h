@@ -33,6 +33,12 @@ double compute_mqs_var_approximation(const arma::vec& y1,
                               const arma::mat& H,
                               const arma::mat& V);
 
+double compute_var_bilinear_approx(const arma::vec& y1,
+                              const arma::vec& y2,
+                              const arma::mat& H,
+                              const arma::mat& V11,
+                              const arma::mat& V12);
+
 double compute_variance_delta(const arma::vec& yc,
                               const arma::mat& Sinv,
                               const arma::vec& delta,
