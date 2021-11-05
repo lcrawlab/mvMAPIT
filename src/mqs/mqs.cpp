@@ -82,24 +82,21 @@ arma::mat compute_q_matrix(const std::vector<arma::vec>& Y,
     int max_index = Y.size();
     int num_combinations =
         num_combinations_with_replacement(max_index, 2);
-    int index_q_col = 0;
+    arma::mat combinations = index_combinations(max_index);
     arma::mat q; q.zeros(num_variance_components, num_combinations);
 #ifdef WITH_LOGGER
     logger->info("Number variance components: {}", num_variance_components);
     logger->info("Max index Y vector: {}", max_index);
     logger->info("Number of combinations: {}", num_combinations);
 #endif
-    for (int j = 0; j < max_index; j++) {
-        for (int k = 0; k < max_index; k++) {
-            if (k <= j) {
-    #ifdef WITH_LOGGER
-                logger->info("Combination: {}, {}", j, k);
-                logger->info("q column: {}", index_q_col);
-    #endif
-                q.col(index_q_col) = compute_q_vector(Y[j], Y[k], matrices);
-                index_q_col += 1;
-            }
-        }
+    for (int k = 0; k < num_combinations; k++) {
+        arma::rowvec pair = combinations.row(k);
+        int i = pair(0); int j = pair(1);
+#ifdef WITH_LOGGER
+        logger->info("Combination: {}, {}", i, j);
+        logger->info("q column: {}", k);
+#endif
+        q.col(k) = compute_q_vector(Y[i], Y[j], matrices);
     }
     return q;
 }
@@ -147,41 +144,15 @@ double compute_mqs_var_approximation(const arma::vec& yc,
     return arma::as_scalar(2 * Hy.t() * V * Hy);
 }
 
-double compute_mqs_var_approximation(const arma::vec& y1,
-                              const arma::vec& y2,
-                              const arma::mat& H,
-                              const arma::mat& V) {
-    return arma::as_scalar(2 * y1.t() * H.t() * V * H * y2);
-}
-
+// TODO(jdstamp): Can we use arma::cov(y1, y2) instead of using V matrix?
+// TODO(jdstamp): MM-42 This function can return negative values for small
+// samples at least.
 double compute_var_bilinear_approx(const arma::vec& y1,
                               const arma::vec& y2,
                               const arma::mat& H,
                               const arma::mat& V11,
                               const arma::mat& V12) {
     return arma::as_scalar(y2.t() * H.t() * (V12 * H * y1 + V11 * H * y2));
-}
-
-double compute_variance_delta(const arma::vec& yc,
-                              const arma::mat& Sinv,
-                              const arma::vec& delta,
-                              const std::vector<arma::mat>& matrices) {
-    arma::mat H = compute_h_matrix(Sinv, matrices);
-    arma::mat V = compute_v_matrix(delta, matrices);
-#ifdef WITH_LOGGER
-    std::string logname = "mqs::mqs::compute_variance_delta";
-    auto logger = spdlog::get(logname);
-    if (logger == nullptr) logger = spdlog::r_sink_mt(logname);
-    const float det_H = arma::det(H);
-    if (det_H == 0) {
-        logger->warn("The determinant of the H matrix is {}.", det_H);
-    }
-    const float det_V = arma::det(V);
-    if (det_V == 0) {
-        logger->warn("The determinant of the V matrix is {}.", det_V);
-    }
-#endif
-    return compute_mqs_var_approximation(yc, H, V);
 }
 
 arma::vec compute_variance_delta(const std::vector<arma::vec>& Y,
@@ -192,49 +163,32 @@ arma::vec compute_variance_delta(const std::vector<arma::vec>& Y,
     std::string logname = "mqs.mqs.compute_variance_delta";
     auto logger = spdlog::get(logname);
     if (logger == nullptr) logger = spdlog::r_sink_mt(logname);
-    logger->info("Computing variance of variance component. Two phenotypes.");
+    logger->info("Computing variance of bilinear/quadratic form.");
 #endif
     arma::mat H = compute_h_matrix(Sinv, matrices);
     arma::vec variance(delta.n_cols, arma::fill::zeros);
     int max_index = Y.size();
-    int index_delta = 0;
-    int index_kk;
-    for (int j = 0; j < max_index; j++) {
-        for (int k = 0; k < max_index; k++) {
-            if (k == j) {
-              index_kk = index_delta;
+    arma::mat combinations = index_combinations(max_index);
+    for (int k = 0; k < delta.n_cols; k++) {
+        arma::rowvec pair = combinations.row(k);
+        int j = pair(0); int i = pair(1);
 #ifdef WITH_LOGGER
-            logger->info("({},{}) {}/{}.", j,
-                                           k,
-                                           index_delta + 1,
-                                           delta.n_cols);
+        logger->info("({},{}) {}/{}.", j, i, k + 1, delta.n_cols);
+        logger->info("delta: {}", vector_to_string(delta.col(k)));
 #endif
-                arma::mat V = compute_v_matrix(delta.col(index_delta),
-                                                matrices);
-                variance(index_delta) = compute_mqs_var_approximation(Y[k],
-                                                                      Y[j],
-                                                                      H,
-                                                                      V);
-                index_delta += 1;
-            } else if (k < j) {
-#ifdef WITH_LOGGER
-            logger->info("({},{}) {}/{}.", j,
-                                           k,
-                                           index_delta + 1,
-                                           delta.n_cols);
-#endif
-                arma::mat V_kk = compute_v_matrix(delta.col(index_kk),
-                                                 matrices);
-                arma::mat V_jk = compute_v_matrix(delta.col(index_delta),
-                                                 matrices);
-                variance(index_delta) = compute_var_bilinear_approx(Y[k],
-                                                                    Y[j],
-                                                                    H,
-                                                                    V_kk,
-                                                                    V_jk);
-                index_delta += 1;
-            }
+        if (j == i) {
+           arma::mat V = compute_v_matrix(delta.col(k), matrices);
+           variance(k) = compute_mqs_var_approximation(Y[j], H, V);
+        } else if (j < i) {
+          arma::rowvec v_jj = {static_cast<double>(j), static_cast<double>(j)};
+          int index_jj = find_row_vector(v_jj, combinations);
+          arma::mat V_jj = compute_v_matrix(delta.col(index_jj), matrices);
+          arma::mat V_ji = compute_v_matrix(delta.col(k), matrices);
+          variance(k) = compute_var_bilinear_approx(Y[j], Y[i], H, V_jj, V_ji);
         }
+#ifdef WITH_LOGGER
+        logger->info("variance: {}", variance(k));
+#endif
     }
     return variance;
 }

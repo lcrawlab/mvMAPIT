@@ -167,3 +167,73 @@ context("compute_principal_components") {
         expect_true(arma::approx_equal(pc_cols, answer, "absdiff", 0.01));
     }
 }
+
+context("index_combinations") {
+    test_that("index_combinations(2) = 00, 01, 11") {
+        // given
+        int num_available = 2;
+        arma::mat correct_answer = { {0, 0}, {0, 1}, {1, 1} };
+        // when
+        arma::mat result = index_combinations(num_available);
+        // then
+        expect_true(arma::approx_equal(result, correct_answer, "absdiff", 0.01));
+    }
+    test_that("index_combinations(3) = 00, 01, 11, 02, 12, 22") {
+        // given
+        int num_available = 3;
+        arma::mat correct_answer = { {0, 0}, {0, 1}, {1, 1}, {0, 2}, {1, 2}, {2, 2} };
+        // when
+        arma::mat result = index_combinations(num_available);
+        // then
+        expect_true(arma::approx_equal(result, correct_answer, "absdiff", 0.01));
+    }
+}
+
+context("find_row_vector") {
+    test_that("find_row_vector((x,y), mat) = i") {
+      // given
+      arma::rowvec v1 = {0, 0};
+      arma::rowvec v2 = {1, 1};
+      arma::rowvec v3 = {0, 2};
+      arma::rowvec v4 = {2, 2};
+      arma::mat indices = { {0, 0}, {0, 1}, {1, 1}, {0, 2}, {1, 2}, {2, 2} };
+      int correct_answer_v1 = 0;
+      int correct_answer_v2 = 2;
+      int correct_answer_v3 = 3;
+      int correct_answer_v4 = 5;
+      // when
+      int result_v1 = find_row_vector(v1, indices);
+      int result_v2 = find_row_vector(v2, indices);
+      int result_v3 = find_row_vector(v3, indices);
+      int result_v4 = find_row_vector(v4, indices);
+      // then
+      expect_true(result_v1 == correct_answer_v1);
+      expect_true(result_v2 == correct_answer_v2);
+      expect_true(result_v3 == correct_answer_v3);
+      expect_true(result_v4 == correct_answer_v4);
+    }
+    test_that("find_row_vector throws exception when vector not exist") {
+      // given
+      arma::rowvec v = {2, 3};
+      arma::mat indices = { {0, 0}, {0, 1}, {1, 1}, {0, 2}, {1, 2}, {2, 2} };
+      // when
+      try {
+          int result = find_row_vector(v, indices);
+      } catch(const char* msg) {
+        // then
+          std::string str(msg);
+          expect_true(str.compare("Row vector not found.") == 0);
+      }
+    }
+    test_that("if multiple find first") {
+      // given
+      arma::rowvec v = {1, 1};
+      arma::mat indices = { {0, 0}, {0, 1}, {1, 1}, {0, 2}, {1, 1}, {2, 2} };
+      int correct_answer = 2;
+      // when
+      int result = find_row_vector(v, indices);
+      // then
+      expect_true(result == correct_answer);
+    }
+}
+

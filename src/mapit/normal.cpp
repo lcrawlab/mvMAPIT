@@ -17,10 +17,8 @@ arma::mat normal_pvalues(const arma::mat& variance_estimate,
      // or create new one if needed
     if (logger == nullptr) logger = spdlog::r_sink_mt(logname);
 #endif
-    arma::mat pvalues(variance_estimate.n_rows,
-                              variance_estimate.n_cols);
-    arma::mat ratio(variance_estimate.n_rows,
-                              variance_estimate.n_cols);
+    arma::mat pvalues(variance_estimate.n_rows, variance_estimate.n_cols);
+    arma::mat ratio(variance_estimate.n_rows, variance_estimate.n_cols);
     ratio = abs(variance_estimate / standard_error);
     for (int j = 0; j < variance_estimate.n_cols; j++) {
         for (int i = 0; i < variance_estimate.n_rows; i++) {
