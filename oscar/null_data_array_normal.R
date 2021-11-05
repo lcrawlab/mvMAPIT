@@ -13,7 +13,7 @@ f <- data_files[task_id]
 print(paste("Data file", f))
 st=format(Sys.time(), "%Y-%m-%d_%H:%M_")
 mvmapit_out <- paste("mvMAPIT_",st, f, sep = "")
-phenotypeCovariance <- 'covariance'
+phenotypeCovariance <- 'combinatorial'
 print(mvmapit_out)
 simulated <- readRDS(file.path(datadir, 'data/control', f))
 mvmapit_results <- foreach(s=simulated) %do% {
@@ -27,10 +27,8 @@ mvmapit_results <- foreach(s=simulated) %do% {
   MvMAPIT(
     t(X),
     t(Y),
-    W = NULL,
+    Z = NULL,
     C = NULL,
-    hybrid = FALSE,
-    threshold = 0.05,
     test = "normal",
     cores = 32,
     variantIndex = NULL,
