@@ -300,9 +300,9 @@ Rcpp::List MAPITCpp(
         arma::mat pvalues = normal_pvalues(sigma_est, sigma_se);
         // H0: sigma = 0 vs. H1: sigma != 0
 #ifdef WITH_LOGGER_FINE
-        logger->info("sigma_est2({}):\n {}.", i + 1,
+        logger->info("sigma_est({}):\n {}.", i + 1,
                                         matrix_to_string(sigma_est));
-        logger->info("sigma_se2({}):\n {}.", i + 1,
+        logger->info("sigma_se({}):\n {}.", i + 1,
                                         matrix_to_string(sigma_se));
         logger->info("pvalues({}):\n {}.", i + 1, matrix_to_string(pvalues));
 #endif

@@ -1,8 +1,9 @@
 // Copyright 2021 Lorin Crawford.
 #pragma once
-#include <RcppArmadillo.h>
 #include <vector>
 #include <string>
+#include <RcppArmadillo.h>
+#include "logging/log.h"
 
 double product_trace(const arma::mat& a, const arma::mat& b);
 
@@ -25,11 +26,6 @@ arma::mat compute_v_matrix(const arma::vec& delta,
                            const std::vector<arma::mat>& matrices);
 
 double compute_mqs_var_approximation(const arma::vec& yc,
-                              const arma::mat& H,
-                              const arma::mat& V);
-
-double compute_mqs_var_approximation(const arma::vec& y1,
-                              const arma::vec& y2,
                               const arma::mat& H,
                               const arma::mat& V);
 

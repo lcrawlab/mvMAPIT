@@ -18,3 +18,8 @@ arma::mat vectorise_to_matrix(const arma::mat& matrix);
 int factorial(int n);
 
 int num_combinations_with_replacement(int num_available, int num_selected);
+
+arma::mat index_combinations(int num_available);
+
+int find_row_vector(arma::rowvec v, arma::mat A);
+

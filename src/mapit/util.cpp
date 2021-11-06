@@ -54,3 +54,30 @@ int num_combinations_with_replacement(int num_available, int num_selected) {
      return factorial(num_available + num_selected - 1)
                 / (factorial(num_selected) * factorial(num_available - 1));
 }
+
+arma::mat index_combinations(int num_available) {
+    int num_selected = 2;
+    int c = num_combinations_with_replacement(num_available, num_selected);
+    arma::mat indices(c, num_selected);
+    arma::rowvec pair(num_selected, arma::fill::zeros);
+    int k = 0;
+    for (int i = 0; i < num_available; ++i) {
+       for (int j = 0; j <= i; ++j) {
+          pair(0) = j; pair(1) = i;
+          indices.row(k) = pair;
+          k += 1;
+       }
+    }
+    return indices;
+}
+
+int find_row_vector(arma::rowvec v, arma::mat A) {
+    arma::uvec q0 = find(A.col(0) == v(0));
+    arma::uvec q1 = find(A.col(1) == v(1));
+    if (q0.is_empty() || q1.is_empty()) {
+      throw "Row vector not found.";
+    }
+    arma::uvec q = arma::intersect(q0, q1);
+    return q(0);
+}
+
