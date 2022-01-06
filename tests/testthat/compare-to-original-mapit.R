@@ -11,16 +11,16 @@ mapit.normal <- MvMAPIT(t(X),
                  (Y),
                  test = 'normal',
                  cores = 1,
-                 variantIndex = indices.diff$normal,
+                 # variantIndex = indices.diff$normal,
                  phenotypeCovariance = 'combinatorial',
-                 logLevel = "ERROR")
+                 logLevel = "INFO")
 mapit.davies <- MvMAPIT(t(X),
                  t(Y),
                  test = 'davies',
                  cores = 1,
                  variantIndex = indices.diff$davies,
                  phenotypeCovariance = 'combinatorial',
-                 logLevel = "ERROR")
+                 logLevel = "INFO")
 # then
 normal <- as.vector(mapit.normal$pvalues)
 names(normal.pvalues) <- NULL
@@ -37,35 +37,29 @@ normal.diff.counter <- 0
 normal.na.counter <- c()
 normal.diff.index <- c()
 for (i in seq_len(nrow(NORMAL))) {
-    if(is.na(NORMAL[i, 1]) || is.na(NORMAL[i, 2])) {
-        print(NORMAL[i, ])
+    if(any(is.na(NORMAL[i, ]))) {
         normal.na.counter <- rbind(normal.na.counter, NORMAL[i, ])
         normal.diff.index <- c(normal.diff.index, i)
         next
+    } else if(abs(NORMAL[i, 1] - NORMAL[i, 2]) > tolerance) {
+        # print(NORMAL[i,])
+        normal.diff.counter <- normal.diff.counter + 1
+        normal.diff.index <- c(normal.diff.index, i)
     }
-    if(abs(NORMAL[i, 1] - NORMAL[i, 2]) > tolerance)
-        {
-            print(NORMAL[i,])
-            normal.diff.counter <- normal.diff.counter + 1
-            normal.diff.index <- c(normal.diff.index, i)
-        }
 }
 davies.diff.counter <- 0
 davies.na.counter <- c()
 davies.diff.index <- c()
 for (i in seq_len(nrow(DAVIES))) {
-    if(is.na(DAVIES[i, 1]) || is.na(DAVIES[i, 2])) {
-        print(DAVIES[i, ])
+    if(any(is.na(DAVIES[i, ]))) {
         davies.na.counter <- rbind(davies.na.counter, DAVIES[i, ])
         davies.diff.index <- c(davies.diff.index, i)
         next
+    } else if (abs(DAVIES[i, 1] - DAVIES[i, 2]) > tolerance) {
+        # print(DAVIES[i,])
+        davies.diff.counter <- davies.diff.counter + 1
+        davies.diff.index <- c(davies.diff.index, i)
     }
-    if(abs(DAVIES[i, 1] - DAVIES[i, 2]) > tolerance)
-        {
-            print(DAVIES[i,])
-            davies.diff.counter <- davies.diff.counter + 1
-            davies.diff.index <- c(davies.diff.index, i)
-        }
 }
 print(paste("Differences in normal:", normal.diff.counter))
 print(paste("NA in normal:", nrow(normal.na.counter)))

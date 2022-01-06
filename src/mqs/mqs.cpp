@@ -12,7 +12,7 @@ double product_trace(const arma::mat& a, const arma::mat& b) {
     // Computed efficiently using Hadamard (elementwise) product
     // https://en.wikipedia.org/wiki/Trace_(linear_algebra)#Trace_of_a_product
     // https://proofwiki.org/wiki/Trace_of_Matrix_Product
-    return arma::as_scalar(accu(a%b));
+    return arma::as_scalar(accu(a.t()%b));
 }
 
 arma::mat compute_s_matrix(const std::vector<arma::mat>& matrices) {
