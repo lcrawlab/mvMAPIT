@@ -42,6 +42,7 @@ arma::mat compute_s_matrix(const std::vector<arma::mat>& matrices) {
     return S;
 }
 
+// TODO: can this method be deprecated?
 arma::vec compute_q_vector(const arma::vec& y,
                            const std::vector<arma::mat>& matrices) {
     return compute_q_vector(y, y, matrices);
