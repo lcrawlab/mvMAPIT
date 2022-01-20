@@ -1,7 +1,7 @@
 library('mvMAPIT')
 # given
 original <- readRDS("original_MAPIT.rds")
-indices.diff <- readRDS("indices.diff.rds")
+# indices.diff <- readRDS("indices.diff.rds")
 X <- original$genotype
 Y <- original$phenotype
 normal.pvalues <- original$normal$pvalues
@@ -18,7 +18,7 @@ mapit.davies <- MvMAPIT(t(X),
                  t(Y),
                  test = 'davies',
                  cores = 1,
-                 variantIndex = indices.diff$davies,
+                 # variantIndex = indices.diff$davies,
                  phenotypeCovariance = 'combinatorial',
                  logLevel = "INFO")
 # then
@@ -42,7 +42,7 @@ for (i in seq_len(nrow(NORMAL))) {
         normal.diff.index <- c(normal.diff.index, i)
         next
     } else if(abs(NORMAL[i, 1] - NORMAL[i, 2]) > tolerance) {
-        # print(NORMAL[i,])
+        print(NORMAL[i,])
         normal.diff.counter <- normal.diff.counter + 1
         normal.diff.index <- c(normal.diff.index, i)
     }
@@ -56,7 +56,7 @@ for (i in seq_len(nrow(DAVIES))) {
         davies.diff.index <- c(davies.diff.index, i)
         next
     } else if (abs(DAVIES[i, 1] - DAVIES[i, 2]) > tolerance) {
-        # print(DAVIES[i,])
+        print(DAVIES[i,])
         davies.diff.counter <- davies.diff.counter + 1
         davies.diff.index <- c(davies.diff.index, i)
     }
