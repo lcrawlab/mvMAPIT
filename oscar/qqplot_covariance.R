@@ -19,11 +19,12 @@ for (f in data_files) {
     p <- p[!row.has.na, ]
   }
   for (i in seq_len(ncol(pvalues))) {
-    png(sub("\\.rds",
-            paste0("_", sub("\\*", "", colnames(pvalues)[i]), "_qqplot.png"),
-            f), width = 300, height = 450)
+    plot.name <- sub("\\.rds",
+            paste0("_", sub("\\*", "", colnames(pvalues)[i]), "_qqplot.png"), f)
+    png(plot.name, width = 300, height = 450)
     qqunif(pvalues[, i], ci = TRUE)
     dev.off()
+    print(plot.name)
   }
 }
 print("Finished qq-plots.")
