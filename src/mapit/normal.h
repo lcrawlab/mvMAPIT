@@ -3,5 +3,5 @@
 #include <RcppArmadillo.h>
 #include <string>
 
-arma::mat normal_pvalues(const arma::mat& variance_estimate,
-                                   const arma::mat& standard_error);
+arma::mat normal_pvalues(const arma::mat &variance_estimate,
+                         const arma::mat &standard_error);

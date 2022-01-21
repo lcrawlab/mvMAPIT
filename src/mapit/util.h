@@ -5,15 +5,15 @@
 #include <typeinfo>
 #include <vector>
 
-arma::mat compute_principal_components(const arma::mat& X, int top);
+arma::mat compute_principal_components(const arma::mat &X, int top);
 
-arma::vec remove_first_element(const arma::vec& vector);
+arma::vec remove_first_element(const arma::vec &vector);
 
-bool skip_variant(const arma::vec& ind, int i);
+bool skip_variant(const arma::vec &ind, int i);
 
-std::vector< arma::vec > matrix_to_vector_of_rows(const arma::mat& matrix);
+std::vector<arma::vec> matrix_to_vector_of_rows(const arma::mat &matrix);
 
-arma::mat vectorise_to_matrix(const arma::mat& matrix);
+arma::mat vectorise_to_matrix(const arma::mat &matrix);
 
 int factorial(int n);
 
@@ -22,4 +22,3 @@ int num_combinations_with_replacement(int num_available, int num_selected);
 arma::mat index_combinations(int num_available);
 
 int find_row_vector(arma::rowvec v, arma::mat A);
-

@@ -2,5 +2,5 @@
 #pragma once
 #include <RcppArmadillo.h>
 
-arma::rowvec compute_pve(const arma::mat& variance_components,
+arma::rowvec compute_pve(const arma::mat &variance_components,
                          int component_index);
