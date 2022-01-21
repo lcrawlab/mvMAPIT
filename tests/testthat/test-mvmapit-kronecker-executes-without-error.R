@@ -117,7 +117,7 @@ test_that("MvMapit executes without error when C is not NULL, test = hybrid.", {
   n <- 5
   d <- 1
   pvalues <- matrix(
-               c(0.7232093,
+             c(0.7232093,
                0.6617252,
                0.9164378,
                0.4307364,

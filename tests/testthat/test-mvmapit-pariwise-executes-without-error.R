@@ -126,7 +126,6 @@ test_that("C is not NULL. phenotypeCovariance = 'combinatorial'", {
                    phenotypeCovariance = 'combinatorial',
                    logLevel = "ERROR")
   # then
-  print(mapit$pvalues)
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-4)
 })
 

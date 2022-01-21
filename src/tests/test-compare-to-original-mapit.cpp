@@ -279,17 +279,17 @@ context("MAPIT1_Normal") {
         S_original(2, 0) = S_original(0, 2);
         S_original(2, 1) = S_original(1, 2);
         S_original(2, 2) = arma::as_scalar(arma::accu(trans(arma::eye<arma::mat>(n, n) - (b * btb_inv) * b.t()) % (arma::eye<arma::mat>(n, n) - (b * btb_inv) * b.t())));
-        arma::mat Sinv = arma::inv(S_original);
-        arma::mat q = compute_q_matrix(phenotypes, matrices);
-        arma::vec delta_original = Sinv * q_original;
-        arma::mat delta = Sinv * q;
-        double correct_answer = as_scalar(2*yc_original.t()*trans(Sinv(0,0)*Gc_original+Sinv(0,1)*Kc_original+Sinv(0,2)*(arma::eye<arma::mat>(n,n)-(b*btb_inv)*b.t()))*(delta_original(0)*Gc_original+delta_original(1)*Kc_original+delta_original(2)*(arma::eye<arma::mat>(n,n)-(b*btb_inv)*b.t()))*(Sinv(0,0)*Gc_original+Sinv(0,1)*Kc_original+Sinv(0,2)*(arma::eye<arma::mat>(n,n)-(b*btb_inv)*b.t()))*yc_original);
-        // when
-        arma::vec result = compute_variance_delta(phenotypes,
-                                                      Sinv,
-                                                      delta,
-                                                      matrices);
-        // then
+//         arma::mat Sinv = arma::inv(S_original);
+        // arma::mat q = compute_q_matrix(phenotypes, matrices);
+        // arma::vec delta_original = Sinv * q_original;
+        // arma::mat delta = Sinv * q;
+        // double correct_answer = as_scalar(2*yc_original.t()*trans(Sinv(0,0)*Gc_original+Sinv(0,1)*Kc_original+Sinv(0,2)*(arma::eye<arma::mat>(n,n)-(b*btb_inv)*b.t()))*(delta_original(0)*Gc_original+delta_original(1)*Kc_original+delta_original(2)*(arma::eye<arma::mat>(n,n)-(b*btb_inv)*b.t()))*(Sinv(0,0)*Gc_original+Sinv(0,1)*Kc_original+Sinv(0,2)*(arma::eye<arma::mat>(n,n)-(b*btb_inv)*b.t()))*yc_original);
+        // // when
+        // arma::vec result = compute_variance_delta(phenotypes,
+                                                      // Sinv,
+                                                      // delta,
+                                                      // matrices);
+//         // then
         // expect_true(result(0) == correct_answer);
     }
 
