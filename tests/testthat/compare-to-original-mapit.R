@@ -7,6 +7,7 @@ Y <- original$phenotype
 normal.pvalues <- original$normal$pvalues
 davies.pvalues <- original$davies$pvalues
 # when
+Xmean=apply(X, 2, mean); Xsd=apply(X, 2, sd); X=t((t(X)-Xmean)/Xsd)
 mapit.normal <- MvMAPIT(t(X),
                  (Y),
                  test = 'normal',
