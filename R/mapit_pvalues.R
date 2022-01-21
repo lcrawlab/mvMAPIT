@@ -17,6 +17,10 @@ hybrid_pvalues <- function(point_estimates, eigenvalues, acc) {
   hybrid.pvals <- c()
   for (i in seq_len(length(point_estimates))) {
     lambda <- sort(eigenvalues[, i], decreasing = T)
+    if (all(lambda == 0)) {
+      hybrid.pvals[i] <- NA
+      next
+    }
     Davies_Method <- suppressWarnings(davies(point_estimates[i], lambda = lambda, acc = acc, lim = 1e6))
     if (Davies_Method$ifault == 0) {
       hybrid.pvals[i] <- 2 * min(Davies_Method$Qq, 1 - Davies_Method$Qq)

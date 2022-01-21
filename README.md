@@ -8,7 +8,7 @@ However, because of the large combinatorial search space of interactions, most e
 Our method examines one variant at a time, and estimates and tests its "marginal epistatic effects" --- the combined pairwise interaction effects between a given variant and all other variants. By avoiding explicitly searching for interactions, our method avoids the large combinatorial search space and improves power.
 Our method is novel and relies on a recently developed variance component estimation method for efficient and robust parameter inference and p-value computation.
 
-While **MAPIT** only takes one phenotype of interest into account for the computation of variance components, **mvMAPIT** takes any number of phenotypes into account. It computes variance components for each individual phenotype, recovering the results of **MAPIT**, and additionally it computes variance components for each combination of phenotypes.  
+While **MAPIT** only takes one phenotype of interest into account for the computation of variance components, **mvMAPIT** takes any number of phenotypes into account. It computes variance components for each individual phenotype, recovering the results of **MAPIT**, and additionally it computes variance components for each combination of phenotypes.
 
 mvMAPIT is implemented as a set of R and C++ routines, which can be carried out within an R environment.
 
@@ -16,7 +16,7 @@ mvMAPIT is implemented as a set of R and C++ routines, which can be carried out 
 ## The R Environment
 R is a widely used, free, and open source software environment for statistical computing and graphics. The most recent version of R can be downloaded from the
 [Comprehensive R Archive Network (CRAN)](http://cran.r-project.org/)
-CRAN provides precompiled binary versions of R for Windows, MacOS, and select Linux distributions that are likely sufficient for many users' needs.  Users can also install R from source code;  however, this may require a significant amount of effort.  
+CRAN provides precompiled binary versions of R for Windows, MacOS, and select Linux distributions that are likely sufficient for many users' needs.  Users can also install R from source code;  however, this may require a significant amount of effort.
 For specific details on how to compile, install, and manage R and R-packages, refer to the manual [R Installation and Administration](http://cran.r-project.org/doc/manuals/r-release/R-admin.html).
 
 In its current construction, we recommend against running MAPIT while using R Studio.
@@ -38,7 +38,7 @@ The easiest method to install these packages is with the following example comma
 
     install.packages("doParallel", dependecies = TRUE)
 
-Alternatively, one can also [install R packages from the command line](http://cran.r-project.org/doc/manuals/r-release/R-admin.html#Installing-packages).
+Alternatively, one can also [install R packages from the command-line](http://cran.r-project.org/doc/manuals/r-release/R-admin.html#Installing-packages).
 
 ## C++ Functions Required for MAPIT
 The code in this repository assumes that basic C++ functions and applications are already set up on the running personal computer or cluster. If not, the MAPIT functions and necessary Rcpp packages will not work properly.
@@ -50,8 +50,8 @@ For extra tips on how to run C++ on macOS, please visit [here](http://seananders
 
 ## OpenMP
 
-Note that mvMAPIT takes advantage of [OpenMP](http://openmp.org/wp/), an API for multi-platform shared-memory parallel programming in C/C++. This is to speed up the computational time of the modeling algorithm. Unfortunately, OS X does not currently support OpenMP under the default compiler.
-A work around to use OpenMP in R on OS X can be found [here](http://thecoatlessprofessor.com/programming/openmp-in-r-on-os-x/). mvMAPIT can be compiled without OpenMP, but we recommend using it if applicable.
+Note that mvMAPIT takes advantage of [OpenMP](http://openmp.org/wp/), an API for multi-platform shared-memory parallel programming in C/C++. This is to speed up the computational time of the modeling algorithm. Unfortunately, macOS does not currently support OpenMP under the default compiler.
+A work around to use OpenMP in R on macOS can be found [here](http://thecoatlessprofessor.com/programming/openmp-in-r-on-os-x/). mvMAPIT can be compiled without OpenMP, but we recommend using it if applicable.
 
 ### Compiling for OpenMP
 In order to enable the OpenMP implementation of mvMAPIT, the required C++ libraries need to be installed and the `PKG_CXXFLAGS` compiler flag `src/Makevars.in` file needs to be changed to
