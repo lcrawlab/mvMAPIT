@@ -8,9 +8,6 @@ double product_trace(const arma::mat &a, const arma::mat &b);
 
 arma::mat compute_s_matrix(const std::vector<arma::mat> &matrices);
 
-arma::vec compute_q_vector(const arma::vec &y,
-                           const std::vector<arma::mat> &matrices);
-
 arma::vec compute_q_vector(const arma::vec &y1, const arma::vec &y2,
                            const std::vector<arma::mat> &matrices);
 
