@@ -140,6 +140,13 @@ MvMAPIT <- function(X,
   }
   colnames(pvals) <- column_names
   colnames(pves) <- column_names
+  if (!is.null(variantIndex)) {
+    log$debug('Set pve to NA if not in varianIndex.')
+    pves[!(c(1:nrow(pves)) %in% variantIndex)] <- NA
+  }
+  if (nrow(Y) > 1 && (phenotypeCovariance == 'combinatorial')) {
+      pves <- set_covariance_pves(Y, pves)
+  }
   return(list("pvalues" = pvals, "pves" = pves, "timings" = timings_mean))
 }
 
@@ -163,4 +170,17 @@ mapit_struct_names <- function (Y, phenotypeCovariance) {
     }
   }
   return(phenotype_combinations)
+}
+
+set_covariance_pves  <- function(Y, pves) {
+  counter <- 0
+  for (i in seq_len(nrow(Y))) {
+    for (j in seq_len(nrow(Y))) {
+      if (j <= i) {
+        counter <- counter + 1
+        if (j < i) pves[, counter] <- NA
+      }
+    }
+  }
+  return(pves)
 }
