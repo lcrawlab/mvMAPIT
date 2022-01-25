@@ -140,6 +140,10 @@ MvMAPIT <- function(X,
   }
   colnames(pvals) <- column_names
   colnames(pves) <- column_names
+  if (!is.null(variantIndex)) {
+    log$info('Set pve NA.')
+    pves[!(c(1:nrow(pves)) %in% variantIndex)] <- NA
+  }
   return(list("pvalues" = pvals, "pves" = pves, "timings" = timings_mean))
 }
 
