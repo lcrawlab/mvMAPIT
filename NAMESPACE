@@ -3,6 +3,7 @@
 export(MvMAPIT)
 export(simulate_phenotypes)
 import(CompQuadForm)
+import(Rcpp)
 import(foreach)
 import(parallel)
 useDynLib(mvMAPIT)

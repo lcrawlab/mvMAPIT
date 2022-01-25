@@ -45,7 +45,7 @@
 #' @useDynLib mvMAPIT
 #' @export
 #' @import CompQuadForm
-#'
+#' @import Rcpp
 MvMAPIT <- function(X,
                     Y,
                     Z = NULL,
