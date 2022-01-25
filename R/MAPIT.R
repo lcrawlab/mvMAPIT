@@ -91,6 +91,11 @@ MvMAPIT <- function(X,
   X <- remove_zero_variance(X) # operates on rows
   log$debug('Genotype matrix after removing zero variance variants: %d x %d', nrow(X), ncol(X))
 
+  log$debug('Scale X matrix appropriately.')
+  Xsd <- apply(X, 1, sd)
+  Xmean <- apply(X, 1, mean)
+  X <- (X - Xmean) / Xsd
+
   if (test == 'hybrid') {
     vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, NULL, phenotypeCovariance) # Normal Z-Test
     pvals <- vc.mod$pvalues
