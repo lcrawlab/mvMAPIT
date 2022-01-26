@@ -3,16 +3,18 @@ test_that("MvMapit executes without error when test = hybrid.", {
   p <- 10
   n <- 5
   d <- 1
-  pvalues <- matrix(c(0.6772546,
-               0.5690567,
-               0.3366181,
-               0.5523170,
-               0.6307954,
-               0.4436580,
-               0.7090439,
-               0.6147064,
-               0.7128274,
-               0.6088642), ncol = 1)
+  pvalues <- matrix(c(
+0.7315409,
+0.7961257,
+0.7607653,
+0.4380301,
+0.5265725,
+0.8722502,
+0.5097280,
+0.6620606,
+0.4780134,
+0.8188633
+), ncol = 1)
   set.seed(5)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
@@ -33,17 +35,18 @@ test_that("MvMapit executes without error when test = normal.", {
   p <- 10
   n <- 5
   d <- 3
-  pvalues <- matrix(
-              c(0.3409648,
-               0.5879707,
-               0.5973206,
-               0.2912437,
-               0.9626492,
-               0.9496355,
-               0.5612714,
-               0.9947883,
-               0.6359662,
-               0.8031088), ncol = 1)
+  pvalues <- matrix(c(
+0.5823842,
+0.4968245,
+0.9075542,
+0.8032449,
+0.6508556,
+0.6345080,
+0.2701859,
+0.7694585,
+0.8733472,
+0.7751935
+), ncol = 1)
   set.seed(6)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
@@ -63,17 +66,18 @@ test_that("MvMapit executes without error when test = davies.", {
   p <- 10
   n <- 5
   d <- 3
-  pvalues <- matrix(
-             c(0.4855840,
-               0.5042984,
-               0.6235571,
-               0.2560571,
-               0.9150943,
-               0.8862566,
-               0.6406932,
-               0.9294612,
-               0.5974704,
-               0.9704182), ncol = 1)
+  pvalues <- matrix(c(
+0.5649081,
+0.5902518,
+0.9844545,
+0.5968390,
+0.3404326,
+0.6872187,
+0.3451383,
+0.4676168,
+0.9013817,
+0.6097202
+), ncol = 1)
   set.seed(6)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
@@ -116,18 +120,19 @@ test_that("MvMapit executes without error when C is not NULL, test = hybrid.", {
   p <- 10
   n <- 5
   d <- 1
-  pvalues <- matrix(
-             c(0.7232093,
-               0.6617252,
-               0.9164378,
-               0.4307364,
-               0.3229174,
-               0.9567463,
-               0.4475755,
-               0.8482188,
-               0.7509159,
-               0.5552368), ncol = 1)
-  set.seed(1)
+  pvalues <- matrix(c(
+0.6627869,
+0.5757486,
+0.4161929,
+0.3638452,
+0.9156424,
+0.6960296,
+0.7774770,
+0.5700789,
+0.7186994,
+0.6525567
+), ncol = 1, byrow = TRUE)
+  set.seed(23)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
   C <- matrix(runif(n * n), ncol = n)
@@ -150,17 +155,18 @@ test_that("test = normal. phenotypeCovariance = identity", {
   p <- 10
   n <- 5
   d <- 3
-  pvalues <- matrix(
-             c(0.4985223,
-               0.1910987,
-               0.5213573,
-               0.1910409,
-               0.6327676,
-               0.6929403,
-               0.6225058,
-               0.8446667,
-               0.8911884,
-               0.2827703), ncol = 1)
+  pvalues <- matrix(c(
+0.4852139,
+0.5064176,
+0.8818390,
+0.4643340,
+0.5941437,
+0.7743915,
+0.2540507,
+0.8820358,
+0.3711353,
+0.2102760
+               ), ncol = 1)
   set.seed(6)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
@@ -179,17 +185,17 @@ test_that("test = normal. phenotypeCovariance = homogeneous", {
   p <- 10
   n <- 5
   d <- 3
-  pvalues <- matrix(
-             c(0.3591053,
-               0.3617570,
-               0.3562994,
-               0.1201573,
-               0.3377868,
-               0.8581513,
-               0.4901897,
-               0.4350181,
-               0.9916274,
-               0.5053453), ncol = 1)
+  pvalues <- matrix(c(
+0.8384163,
+0.8715925,
+0.7138586,
+0.7740888,
+0.5336523,
+0.4166844,
+0.8883106,
+0.9463360,
+0.4320256,
+0.4812932), ncol = 1, byrow = TRUE)
   set.seed(6)
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
