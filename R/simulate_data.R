@@ -6,7 +6,7 @@
 #'
 #' beta_i ~ MN(0, V_i, I), i in \{ additive, epistatic, residual\}
 #'
-#' The effect sizes follow a matrix normal distribution with no correlation between the samples but covariance matrix between phenotypes.
+#' The effect sizes follow a matrix normal distribution with no correlation between the samples but covariance between phenotypes.
 #'
 #'
 #'
@@ -29,6 +29,7 @@
 #' @export
 #' @import foreach
 #' @import parallel
+#' @import checkmate
 simulate_phenotypes <- function(genotype_matrix,
                                 causal_fraction = 0.2,
                                 epistatic_fraction = 0.1,
@@ -43,6 +44,19 @@ simulate_phenotypes <- function(genotype_matrix,
                                 logLevel = 'INFO',
                                 logFile = NULL) {
   set.seed(seed)
+  coll <- makeAssertCollection()
+  assertDouble(causal_fraction, lower = 0, upper = 1, add = coll)
+  assertDouble(epistatic_fraction, lower = 0, upper = 0.3, add = coll)
+  assertDouble(pleiotropic_fraction, lower = 0, upper = 0.5, add = coll)
+  assertDouble(H2, lower = 0, upper = 1, add = coll)
+  assertDouble(rho, lower = 0, upper = 1, add = coll)
+  assertDouble(marginal_correlation, lower = 0, upper = 1, add = coll)
+  assertDouble(epistatic_correlation, lower = 0, upper = 1, add = coll)
+  assertDouble(maf_threshold, lower = 0, upper = 1, add = coll)
+  assertInt(d, lower = 1, add = coll)
+  assertInt(seed, lower = 1, add = coll)
+  assertMatrix(genotype_matrix, all.missing = FALSE, add = coll)
+  reportAssertions(coll)
 
   logging::logReset()
   logging::basicConfig(level = logLevel)
@@ -53,21 +67,11 @@ simulate_phenotypes <- function(genotype_matrix,
     log$addHandler(logging::writeToFile, file=filePath)
   }
 
-
-  if(epistatic_fraction > 0.3) {
-    log$debug("Epistatic fraction too large.")
-    epistatic_fraction <- 0.3
-  }
-  if(pleiotropic_fraction > 0.3) {
-    log$debug("Pleitropic fraction too large.")
-    pleiotropic_fraction <- 0.3
-  }
-
   snp.ids <- 1:ncol(genotype_matrix)
   maf <- colMeans(genotype_matrix) / 2
   X <- scale(genotype_matrix) # produces NaN when the columns have zero variance
-  keep <- (maf > maf_threshold) & (maf < 1 - maf_threshold)
-  snp.ids.filtered <- snp.ids[complete.cases(t(X)) & keep]
+  maf_compliant <- (maf > maf_threshold) & (maf < 1 - maf_threshold)
+  snp.ids.filtered <- snp.ids[complete.cases(t(X)) & maf_compliant]
 
   n_samples <- nrow(X) # number of genotype samples
   n_snp <- ncol(X) # number of SNPs passing quality control
@@ -97,7 +101,6 @@ simulate_phenotypes <- function(genotype_matrix,
     epistatic_set_j_1 <- pleiotropic_set # the epistatic pleiotropic effects are included in epistatic interaction group 1
     epistatic_set_j_2 <- sample(causal_snps_j, n_causal_epi, replace = F)
 
-
     log$debug('Head of causal SNPs: %s', head(c(causal_snps_j, pleiotropic_set)))
     log$debug('Head of epistatic SNPs group 1: %s', head(epistatic_set_j_1))
     log$debug('Head of epistatic SNPs group 2: %s', head(epistatic_set_j_2))
@@ -120,14 +123,14 @@ simulate_phenotypes <- function(genotype_matrix,
     X_marginal <- X_causal_j
     beta <- rnorm(dim(X_marginal)[2])
     y_marginal <- X_marginal %*% beta
-    beta = beta * sqrt(H2 * rho / c(var(y_marginal)))
-    y_marginal=X_marginal %*% beta
+    beta <- beta * sqrt(H2 * rho / c(var(y_marginal)))
+    y_marginal <- X_marginal %*% beta
 
     # pairwise epistatic effects
     alpha <- rnorm(dim(X_epi)[2])
     y_epi <- X_epi %*% alpha
-    alpha = alpha * sqrt(H2 * (1 - rho) / c(var(y_epi)))
-    y_epi = X_epi %*% alpha
+    alpha <- alpha * sqrt(H2 * (1 - rho) / c(var(y_epi)))
+    y_epi <- X_epi %*% alpha
 
     # unexplained phenotypic variation
     y_err <- rnorm(n_samples)
@@ -168,7 +171,6 @@ simulate_phenotypes <- function(genotype_matrix,
   log$debug('Phenotype data: %s', head(Y))
   # return data
   simulated_pleiotropic_epistasis_data <- list(
-    number_snp = n_snp,
     number_samples = n_samples,
     pve = H2,
     rho = rho,
