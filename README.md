@@ -58,6 +58,9 @@ In order to enable the OpenMP implementation of mvMAPIT, the required C++ librar
 
     PKG_CXXFLAGS = @PKG_CXX11STD@  @CXXFLAGS@ -I. @BLAS_LIBS@
 
+### Installing mvMAPIT
+The easiest way to install the package from sources is to change into the directory of mvMAPIT and run `R CMD INSTALL . --preclean`. The `--preclean` flag makes sure that the latest state is run.
+
 ## Tutorial for Running MAPIT
 For the simulation tutorial provided here, we generate genotypes for 3,000 samples typed at 10,000 unrelated variants. We show in our example R code how to implement MAPIT (both the standard and parallelized versions) to perform a marginal epistasis association mapping test in order to find interacting causal variants of interest.
 
