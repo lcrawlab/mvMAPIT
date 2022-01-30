@@ -58,5 +58,5 @@ This function takes a genotype matrix and simulates phenotype data under the fol
 
 beta_i ~ MN(0, V_i, I), i in \{ additive, epistatic, residual\}
 
-The effect sizes follow a matrix normal distribution with no correlation between the samples but covariance matrix between phenotypes.
+The effect sizes follow a matrix normal distribution with no correlation between the samples but covariance between the effects for different phenotypes
 }

@@ -25,9 +25,10 @@ License: GPL (>= 3)
 Depends:
     R (>= 2.10)
 Imports:
-    CompQuadForm,
     checkmate,
+    CompQuadForm,
     doParallel,
+    dplyr,
     foreach,
     LaplacesDemon,
     logging,

@@ -6,7 +6,7 @@
 #'
 #' beta_i ~ MN(0, V_i, I), i in \{ additive, epistatic, residual\}
 #'
-#' The effect sizes follow a matrix normal distribution with no correlation between the samples but covariance between phenotypes.
+#' The effect sizes follow a matrix normal distribution with no correlation between the samples but covariance between the effects for different phenotypes
 #'
 #'
 #'
@@ -27,9 +27,11 @@
 #' @return A list object containing the phenotype data, the genotype data, as well as the causal SNPs and summary statistics.
 #' @useDynLib mvMAPIT
 #' @export
-#' @import foreach
-#' @import parallel
 #' @import checkmate
+#' @import dplyr
+#' @import foreach
+#' @import mvtnorm
+#' @import parallel
 simulate_phenotypes <- function(genotype_matrix,
                                 causal_fraction = 0.2,
                                 epistatic_fraction = 0.1,
@@ -88,11 +90,32 @@ simulate_phenotypes <- function(genotype_matrix,
   log$debug('NA in raw genotype matrix: %d', sum(is.na(genotype_matrix)))
   log$debug('NA in scaled genotype matrix: %d', sum(is.na(X)))
 
-  Y_marginal <- c()
-  Y_epistatic <- c()
-  Y_error <- c()
+  Y <- c()
   causal_snps <- list()
   pleiotropic_set <- sample(snp.ids.filtered, n_causal_pleio, replace = F) # declare peleiotropic SNPs before since they have to be present in every phenotype
+
+  log$debug('Draw effects from multivariate normal with desired correlation.')
+
+  C_marginal <- matrix(marginal_correlation, ncol = d, nrow = d)
+  diag(C_marginal) <- 1
+
+  C_epistatic <- matrix(epistatic_correlation, ncol = d, nrow = d)
+  diag(C_epistatic) <- 1
+
+  C_error <- matrix(0, ncol = d, nrow = d)
+  diag(C_error) <- 1
+
+  log$debug('Desired marginal correlation: %f', marginal_correlation)
+  beta <- mvtnorm::rmvnorm(n_causal, sigma = C_marginal)
+  log$debug('Correlation of simulated marginal effects: %s', cor(beta))
+
+  log$debug('Desired epistatic correlation: %f', epistatic_correlation)
+  alpha <- mvtnorm::rmvnorm(n_causal_epi * n_causal_pleio, sigma = C_epistatic)
+  log$debug('Correlation of simulated epistatic effects: %s', cor(alpha))
+
+  log$debug('Desired error correlation: %f', 0)
+  error <- mvtnorm::rmvnorm(n_samples, sigma = C_error)
+  log$debug('Correlation of simulated error: %s', cor(error))
 
   for (j in 1:d) {
     ## select causal SNPs
@@ -121,49 +144,30 @@ simulate_phenotypes <- function(genotype_matrix,
 
     # marginal effects
     X_marginal <- X_causal_j
-    beta <- rnorm(dim(X_marginal)[2])
-    y_marginal <- X_marginal %*% beta
-    beta <- beta * sqrt(H2 * rho / c(var(y_marginal)))
-    y_marginal <- X_marginal %*% beta
+    beta_j <- beta[, j]
+    y_marginal <- X_marginal %*% beta_j
+    y_marginal <- y_marginal * sqrt(H2 * rho / c(var(y_marginal)))
 
     # pairwise epistatic effects
-    alpha <- rnorm(dim(X_epi)[2])
-    y_epi <- X_epi %*% alpha
-    alpha <- alpha * sqrt(H2 * (1 - rho) / c(var(y_epi)))
-    y_epi <- X_epi %*% alpha
+    alpha_j <- alpha[, j]
+    y_epi <- X_epi %*% alpha_j
+    y_epi <- y_epi * sqrt(H2 * (1 - rho) / c(var(y_epi)))
 
     # unexplained phenotypic variation
-    y_err <- rnorm(n_samples)
+    y_err <- error[, j]
     y_err <- y_err * sqrt((1 - H2) / c(var(y_err)))
 
-    Y_marginal <- cbind(Y_marginal, y_marginal)
-    Y_epistatic <- cbind(Y_epistatic, y_epi)
-    Y_error <- cbind(Y_error, y_err)
+    y <- y_marginal + y_epi + y_err
+    Y <- cbind(Y, y)
     causal_snps[[paste0('phenotype_', j)]] <- list(
       'causal_snps' = c(causal_snps_j, pleiotropic_set),
       'epistatic_1' = epistatic_set_j_1,
       'epistatic_2' = epistatic_set_j_2,
-      'alpha' = alpha,
-      'beta' = beta
+      'alpha' = alpha_j,
+      'beta' = beta_j
     )
   }
 
-  # scale marginal data variance and correlation
-  C <- matrix(marginal_correlation, ncol = d, nrow = d)
-  diag(C) <- 1
-  Y_marginal <- Y_marginal %*% chol(C)
-
-  # scale epistatic data variance and correlation
-  C <- matrix(epistatic_correlation, ncol = d, nrow = d)
-  diag(C) <- 1
-  Y_epistatic <- Y_epistatic %*% chol(C)
-
-  # scale error variance
-  C <- matrix(0, ncol = d, nrow = d)
-  diag(C) <- 1
-  Y_error <- Y_error %*% chol(C)
-
-  Y <- Y_marginal + Y_epistatic + Y_error
 
   colnames(genotype_matrix) <- seq_len(ncol(genotype_matrix)) %>% sprintf(fmt = "snp_%05d") # column names names for SNPs
   colnames(Y) <- seq_len(ncol(Y)) %>% sprintf(fmt = "p_%02d") # column names names for phenotypes
