@@ -173,6 +173,7 @@ simulate_phenotypes <- function(genotype_matrix,
   colnames(Y) <- seq_len(ncol(Y)) %>% sprintf(fmt = "p_%02d") # column names names for phenotypes
 
   log$debug('Phenotype data: %s', head(Y))
+  log$debug('Phenotype correlation: %s', cor(Y))
   # return data
   simulated_pleiotropic_epistasis_data <- list(
     number_samples = n_samples,
