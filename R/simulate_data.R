@@ -52,8 +52,8 @@ simulate_phenotypes <- function(genotype_matrix,
   assertDouble(pleiotropic_fraction, lower = 0, upper = 0.5, add = coll)
   assertDouble(H2, lower = 0, upper = 1, add = coll)
   assertDouble(rho, lower = 0, upper = 1, add = coll)
-  assertDouble(marginal_correlation, lower = 0, upper = 1, add = coll)
-  assertDouble(epistatic_correlation, lower = 0, upper = 1, add = coll)
+  assertDouble(marginal_correlation, lower = -1, upper = 1, add = coll)
+  assertDouble(epistatic_correlation, lower = -1, upper = 1, add = coll)
   assertDouble(maf_threshold, lower = 0, upper = 1, add = coll)
   assertInt(d, lower = 1, add = coll)
   assertInt(seed, lower = 1, add = coll)
@@ -71,9 +71,10 @@ simulate_phenotypes <- function(genotype_matrix,
 
   snp.ids <- 1:ncol(genotype_matrix)
   maf <- colMeans(genotype_matrix) / 2
-  X <- scale(genotype_matrix) # produces NaN when the columns have zero variance
+  X <- genotype_matrix
   maf_compliant <- (maf > maf_threshold) & (maf < 1 - maf_threshold)
-  snp.ids.filtered <- snp.ids[complete.cases(t(X)) & maf_compliant]
+  # scale produces NaN when the columns have zero variance
+  snp.ids.filtered <- snp.ids[complete.cases(t(scale(X))) & maf_compliant]
 
   n_samples <- nrow(X) # number of genotype samples
   n_snp <- ncol(X) # number of SNPs passing quality control
@@ -92,7 +93,15 @@ simulate_phenotypes <- function(genotype_matrix,
 
   Y <- c()
   causal_snps <- list()
+
   pleiotropic_set <- sample(snp.ids.filtered, n_causal_pleio, replace = F) # declare peleiotropic SNPs before since they have to be present in every phenotype
+  pleio_split <- split(pleiotropic_set, f = c('a', 'b'))
+  X_pleio_a <- X[, pleio_split$a]
+  X_pleio_b <- X[, pleio_split$b]
+  X_epi_pleio <- foreach(i=seq_len(length(pleio_split$a)), .combine=cbind) %do% {
+    X_pleio_a[, i] * X_pleio_b
+  }
+  log$debug('Dimensions of pleiotropic interaction matrix: %d x %d', nrow(X_epi_pleio), ncol(X_epi_pleio))
 
   log$debug('Draw effects from multivariate normal with desired correlation.')
 
@@ -110,7 +119,8 @@ simulate_phenotypes <- function(genotype_matrix,
   log$debug('Correlation of simulated marginal effects: %s', cor(beta))
 
   log$debug('Desired epistatic correlation: %f', epistatic_correlation)
-  alpha <- mvtnorm::rmvnorm(n_causal_epi * n_causal_pleio, sigma = C_epistatic)
+  alpha <- mvtnorm::rmvnorm(n_causal_epi * n_causal_pleio + ncol(X_epi_pleio),
+                            sigma = C_epistatic)
   log$debug('Correlation of simulated epistatic effects: %s', cor(alpha))
 
   log$debug('Desired error correlation: %f', 0)
@@ -138,6 +148,8 @@ simulate_phenotypes <- function(genotype_matrix,
     X_epi <- foreach(i=seq_len(length(epistatic_set_j_1)), .combine=cbind) %do% {
       X_epistatic_j_1[, i] * X_epistatic_j_2
     }
+    X_epi <- cbind(X_epi_pleio, X_epi)
+
     time_interactions <- proc.time() - start_interactions
     log$debug('Interactions X_epi computed in %f', time_interactions[3])
     log$debug('Dimension of interaction matrix X_epi: %d x %d', nrow(X_epi), ncol(X_epi))
@@ -147,11 +159,13 @@ simulate_phenotypes <- function(genotype_matrix,
     beta_j <- beta[, j]
     y_marginal <- X_marginal %*% beta_j
     y_marginal <- y_marginal * sqrt(H2 * rho / c(var(y_marginal)))
+    log$debug('Variance scaled y: %f', var(y_marginal))
 
     # pairwise epistatic effects
     alpha_j <- alpha[, j]
     y_epi <- X_epi %*% alpha_j
     y_epi <- y_epi * sqrt(H2 * (1 - rho) / c(var(y_epi)))
+    log$debug('Variance scaled y_epi: %f', var(y_epi))
 
     # unexplained phenotypic variation
     y_err <- error[, j]
@@ -163,6 +177,7 @@ simulate_phenotypes <- function(genotype_matrix,
       'causal_snps' = c(causal_snps_j, pleiotropic_set),
       'epistatic_1' = epistatic_set_j_1,
       'epistatic_2' = epistatic_set_j_2,
+      'pleiotropic' = pleiotropic_set,
       'alpha' = alpha_j,
       'beta' = beta_j
     )
@@ -174,6 +189,8 @@ simulate_phenotypes <- function(genotype_matrix,
 
   log$debug('Phenotype data: %s', head(Y))
   log$debug('Phenotype correlation: %s', cor(Y))
+  log$debug('Correlation of simulated epistatic effects: %s', cor(alpha))
+
   # return data
   simulated_pleiotropic_epistasis_data <- list(
     number_samples = n_samples,
