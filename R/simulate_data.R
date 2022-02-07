@@ -99,6 +99,7 @@ simulate_phenotypes <- function(genotype_matrix,
   X_pleio_a <- X[, pleio_split$a]
   X_pleio_b <- X[, pleio_split$b]
   X_epi_pleio <- foreach(i=seq_len(length(pleio_split$a)), .combine=cbind) %do% {
+      # this step fails if there are too little pleiotropic SNPs; i.e. <= 3?
     X_pleio_a[, i] * X_pleio_b
   }
   log$debug('Dimensions of pleiotropic interaction matrix: %d x %d', nrow(X_epi_pleio), ncol(X_epi_pleio))
@@ -140,7 +141,7 @@ simulate_phenotypes <- function(genotype_matrix,
 
     # create epistatic interaction matrix
     X_causal_j <- X[, c(causal_snps_j, pleiotropic_set)] # all SNPs have additive effects
-    X_epistatic_j_1 <- as.matrix(X[, epistatic_set_j_1])
+    X_epistatic_j_1 <- X[, epistatic_set_j_1]
     X_epistatic_j_2 <- X[, epistatic_set_j_2]
 
     start_interactions <- proc.time()
