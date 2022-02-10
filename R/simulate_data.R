@@ -71,10 +71,10 @@ simulate_phenotypes <- function(genotype_matrix,
 
   snp.ids <- 1:ncol(genotype_matrix)
   maf <- colMeans(genotype_matrix) / 2
-  X <- genotype_matrix
+  X <- scale(genotype_matrix)
   maf_compliant <- (maf > maf_threshold) & (maf < 1 - maf_threshold)
   # scale produces NaN when the columns have zero variance
-  snp.ids.filtered <- snp.ids[complete.cases(t(scale(X))) & maf_compliant]
+  snp.ids.filtered <- snp.ids[complete.cases(t(X)) & maf_compliant]
 
   n_samples <- nrow(X) # number of genotype samples
   n_snp <- ncol(X) # number of SNPs passing quality control
@@ -85,6 +85,12 @@ simulate_phenotypes <- function(genotype_matrix,
   n_causal <- ceiling(n_snp * causal_fraction) # number of SNPs to be causal in every phenotype
   n_causal_epi <- ceiling(n_causal * epistatic_fraction) # number of epistatic causal SNPs slected per interaction group and phenotype
   n_causal_pleio <- ceiling(n_causal * pleiotropic_fraction) # number of SNPs to be involved in pleiotropic effects in every phenotype
+
+  if (n_causal_pleio < 2) { n_causal_pleio <- 2 }
+  if (n_causal_epi < 2) { n_causal_epi <- 2 }
+  if (n_causal < n_causal_pleio + 2 * n_causal_epi) {
+    log$debug('The number of SNPs in the data are insufficient for this simulation.')
+  }
   log$debug('Number of causal SNPs: %d', n_causal)
   log$debug('Number of epistatic SNPs: %d', n_causal_epi)
   log$debug('Number of pleiotropic SNPs: %d', n_causal_pleio)
@@ -120,7 +126,7 @@ simulate_phenotypes <- function(genotype_matrix,
   log$debug('Correlation of simulated marginal effects: %s', cor(beta))
 
   log$debug('Desired epistatic correlation: %f', epistatic_correlation)
-  alpha <- mvtnorm::rmvnorm(n_causal_epi * n_causal_pleio + ncol(X_epi_pleio),
+  alpha <- mvtnorm::rmvnorm(n_causal_epi * n_causal_epi + ncol(X_epi_pleio),
                             sigma = C_epistatic)
   log$debug('Correlation of simulated epistatic effects: %s', cor(alpha))
 
@@ -132,8 +138,12 @@ simulate_phenotypes <- function(genotype_matrix,
     ## select causal SNPs
     log$debug('Simulating phenotype %d', j)
     causal_snps_j <- sample(snp.ids.filtered[-pleiotropic_set], n_causal - n_causal_pleio, replace = F)
-    epistatic_set_j_1 <- pleiotropic_set # the epistatic pleiotropic effects are included in epistatic interaction group 1
-    epistatic_set_j_2 <- sample(causal_snps_j, n_causal_epi, replace = F)
+    epistatic_set_j_1 <- sample(causal_snps_j, n_causal_epi, replace = F)
+    epistatic_set_j_2 <- sample(causal_snps_j[-epistatic_set_j_1], n_causal_epi, replace = F)
+    log$debug('Length causal set: %d', length(causal_snps_j))
+    log$debug('Length pleiotropic set: %d', length(pleiotropic_set))
+    log$debug('Length epistatic set 1: %d', length(epistatic_set_j_1))
+    log$debug('Length epistatic set 2: %d', length(epistatic_set_j_2))
 
     log$debug('Head of causal SNPs: %s', head(c(causal_snps_j, pleiotropic_set)))
     log$debug('Head of epistatic SNPs group 1: %s', head(epistatic_set_j_1))
@@ -160,7 +170,7 @@ simulate_phenotypes <- function(genotype_matrix,
     beta_j <- beta[, j]
     y_marginal <- X_marginal %*% beta_j
     y_marginal <- y_marginal * sqrt(H2 * rho / c(var(y_marginal)))
-    log$debug('Variance scaled y: %f', var(y_marginal))
+    log$debug('Variance scaled y_marginal: %f', var(y_marginal))
 
     # pairwise epistatic effects
     alpha_j <- alpha[, j]
