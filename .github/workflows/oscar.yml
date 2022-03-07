@@ -1,0 +1,12 @@
+---
+name: Connect to oscar
+on:
+  push:
+    branches: [main]
+jobs:
+  ssh-action:
+    name: "Submit job to Oscar"
+    runs-on: self-hosted
+    steps:
+      - name: Pass repository name and commit hash
+        run: ssh oscar actions::run ${{ github.repository }} --git_ref=${{ github.event.after }}
