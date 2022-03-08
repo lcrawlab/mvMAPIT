@@ -4,9 +4,6 @@ import os
 import shutil
 from subprocess import run
 
-import git
-from jinja2 import Template
-
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("mvmapit-oscar-tasks")
 
