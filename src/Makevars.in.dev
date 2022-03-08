@@ -1,0 +1,12 @@
+PKG_CPPFLAGS = -DARMA_64BIT_WORD=1 -I.
+PKG_CXXFLAGS = @PKG_CXX11STD@  @CXXFLAGS@ -I. @BLAS_LIBS@
+CXX = @CXX@
+CXX11 = @CXX11@
+PKG_LIBS = @PKG_LIBS@ @LAPACK_LIBS@ @FLIBS@ @BLAS_LIBS@
+
+# Include all C++ files in src/ and its subdirectories. Configure in configure.ac
+SOURCES=@MAIN_SOURCES@ @SUBDIR_SOURCES@
+
+# To compile code in subdirectories of src/, each of the files contained
+# must be specified in the src/Makevars file OBJECTS variable
+OBJECTS=$(SOURCES:.cpp=.o)
