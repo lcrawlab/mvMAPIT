@@ -150,6 +150,8 @@ MvMAPIT <- function(X,
     pves[!(c(1:nrow(pves)) %in% variantIndex)] <- NA
   }
   if (nrow(Y) > 1 && (phenotypeCovariance == 'combinatorial')) {
+      fisherp <- apply(pvals, 1, sumlog)
+      pvals <- cbind(pvals, metap = fisherp)
       pves <- set_covariance_pves(Y, pves)
   }
   return(list("pvalues" = pvals, "pves" = pves, "timings" = timings_mean))
@@ -188,4 +190,10 @@ set_covariance_pves  <- function(Y, pves) {
     }
   }
   return(pves)
+}
+
+sumlog <- function(pvalues) {
+    df <- 2 * length(pvalues)
+    fisherp <- pchisq(-2 * sum(log(pvalues)), df, lower.tail = FALSE)
+    return(fisherp)
 }
