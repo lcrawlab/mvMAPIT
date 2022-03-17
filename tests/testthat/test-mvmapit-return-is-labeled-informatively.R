@@ -12,7 +12,7 @@ test_that("pairwise test with d = 3. test = 'normal'.", {
   Y <- matrix(runif(d * n), ncol = d)
   colnames(X) <- variants
   colnames(Y) <- phenotypes
-  resulting_colnames <- c("Q1*Q1", "Q2*Q1", "Q2*Q2", "Q3*Q1", "Q3*Q2", "Q3*Q3")
+  resulting_colnames <- c("Q1*Q1", "Q2*Q1", "Q2*Q2", "Q3*Q1", "Q3*Q2", "Q3*Q3", "metap")
   # when
   mapit <- MvMAPIT(t(X),
                    t(Y),
