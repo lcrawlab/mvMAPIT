@@ -12,9 +12,11 @@
 #'
 #'
 #' @param genotype_matrix Genotype matrix with samples as rows, and SNPs as columns.
-#' @param causal_fraction Fraction of the SNPs that are causal.
-#' @param epistatic_fraction Fraction of the causal SNPs with single trait epistatic effects.
-#' @param pleiotropic_fraction Fraction of SNPs with pleiotropic effects.
+#' @param n_causal Number of SNPs that are causal.
+#' @param n_trait_specific Number of causal SNPs with single trait epistatic effects.
+#' @param n_pleiotropic Number of SNPs with pleiotropic effects.
+#' @param group_ratio_trait Ratio of sizes of trait specific groups that interact, e.g. a ratio 1:3 would be value 3.
+#' @param group_ratio_pleiotropic Ratio of sizes of pleiotropic groups that interact, e.g. a ratio 1:3 would be value 3.
 #' @param H2 Broad-sense heritability.
 #' @param d Number of phenotypes.
 #' @param rho Proportion of heritability explained by additivity.
@@ -33,23 +35,27 @@
 #' @import mvtnorm
 #' @import parallel
 simulate_phenotypes <- function(genotype_matrix,
-                                causal_fraction = 0.2,
-                                epistatic_fraction = 0.1,
-                                pleiotropic_fraction = 0.1,
+                                n_causal = 1000,
+                                n_trait_specific = 10,
+                                n_pleiotropic = 10,
                                 H2 = 0.6,
                                 d = 2,
                                 rho = 0.8,
                                 marginal_correlation = 0.3,
                                 epistatic_correlation = 0.3,
+                                group_ratio_trait = 1,
+                                group_ratio_pleiotropic = 1,
                                 maf_threshold = 0.01,
                                 seed = 67132,
                                 logLevel = 'INFO',
                                 logFile = NULL) {
   set.seed(seed)
   coll <- makeAssertCollection()
-  assertDouble(causal_fraction, lower = 0, upper = 1, add = coll)
-  assertDouble(epistatic_fraction, lower = 0, upper = 0.3, add = coll)
-  assertDouble(pleiotropic_fraction, lower = 0, upper = 0.5, add = coll)
+  assertInt(n_causal, lower = 0, add = coll)
+  assertInt(n_trait_specific, lower = 0, add = coll)
+  assertInt(n_pleiotropic, lower = 0, add = coll)
+  assertDouble(group_ratio_trait, lower = 1, add = coll)
+  assertDouble(group_ratio_pleiotropic, lower = 1, add = coll)
   assertDouble(H2, lower = 0, upper = 1, add = coll)
   assertDouble(rho, lower = 0, upper = 1, add = coll)
   assertDouble(marginal_correlation, lower = -1, upper = 1, add = coll)
@@ -77,38 +83,48 @@ simulate_phenotypes <- function(genotype_matrix,
   snp.ids.filtered <- snp.ids[complete.cases(t(X)) & maf_compliant]
 
   n_samples <- nrow(X) # number of genotype samples
-  n_snp <- ncol(X) # number of SNPs passing quality control
+  n_snp <- length(snp.ids.filtered) # number of SNPs passing quality control
   log$debug('Scaled genotype matrix: %d x %d', n_samples, n_snp)
   log$debug('Disregard %d variants due to zero variance or small minor allele frequency.', ncol(genotype_matrix) - length(snp.ids.filtered))
   log$debug('Minor allele frequency threshold %f.', maf_threshold)
 
-  n_causal <- ceiling(n_snp * causal_fraction) # number of SNPs to be causal in every phenotype
-  n_causal_epi <- ceiling(n_causal * epistatic_fraction) # number of epistatic causal SNPs slected per interaction group and phenotype
-  n_causal_pleio <- ceiling(n_causal * pleiotropic_fraction) # number of SNPs to be involved in pleiotropic effects in every phenotype
+  # divide groups into ratios
+  n_group1_trait = ceiling(n_trait_specific / (1 + group_ratio_trait))
+  n_group1_pleiotropic = ceiling(n_pleiotropic / (1 + group_ratio_pleiotropic))
 
-  if (n_causal_pleio < 2) { n_causal_pleio <- 2 }
-  if (n_causal_epi < 2) { n_causal_epi <- 2 }
-  if (n_causal < n_causal_pleio + 2 * n_causal_epi) {
-    log$debug('The number of SNPs in the data are insufficient for this simulation.')
-  }
+  coll <- makeAssertCollection()
+  assertInt(n_causal, lower = 0, upper = n_snp, add = coll)
+  assertInt(n_pleiotropic + n_trait_specific, lower = 0, upper = n_causal, add = coll)
+  assertInt(n_group1_trait, lower = 0, upper = n_trait_specific, add = coll)
+  assertInt(n_group1_pleiotropic, lower = 0, upper = n_pleiotropic, add = coll)
+  reportAssertions(coll)
+
+  # factor vectors for splitting the groups
+  f_trait <- get_factors(n_group1_trait, n_trait_specific)
+  f_pleiotropic <- get_factors(n_group1_pleiotropic, n_pleiotropic)
+
+
   log$debug('Number of causal SNPs: %d', n_causal)
-  log$debug('Number of epistatic SNPs: %d', n_causal_epi)
-  log$debug('Number of pleiotropic SNPs: %d', n_causal_pleio)
+  log$debug('Number of trait specific SNPs: %d', n_trait_specific)
+  log$debug('Number of pleiotropic SNPs: %d', n_pleiotropic)
   log$debug('NA in raw genotype matrix: %d', sum(is.na(genotype_matrix)))
   log$debug('NA in scaled genotype matrix: %d', sum(is.na(X)))
 
   Y <- c()
   causal_snps <- list()
 
-  pleiotropic_set <- sample(snp.ids.filtered, n_causal_pleio, replace = F) # declare peleiotropic SNPs before since they have to be present in every phenotype
-  pleio_split <- split(pleiotropic_set, f = c('a', 'b'))
-  X_pleio_a <- X[, pleio_split$a]
-  X_pleio_b <- X[, pleio_split$b]
-  X_epi_pleio <- foreach(i=seq_len(length(pleio_split$a)), .combine=cbind) %do% {
+  pleiotropic_set <- sample(snp.ids.filtered, n_pleiotropic, replace = F) # declare peleiotropic SNPs before since they have to be present in every phenotype
+  pleio_split <- split(pleiotropic_set, f = f_pleiotropic)
+  X_pleio_group1 <- X[, pleio_split$group1]
+  X_pleio_group2 <- X[, pleio_split$group2]
+  X_epi_pleio <- foreach(i=seq_len(n_group1_pleiotropic), .combine=cbind) %do% {
       # this step fails if there are too little pleiotropic SNPs; i.e. <= 3?
-    X_pleio_a[, i] * X_pleio_b
+    X_pleio_group1[, i] * X_pleio_group2
   }
-  log$debug('Dimensions of pleiotropic interaction matrix: %d x %d', nrow(X_epi_pleio), ncol(X_epi_pleio))
+  if (!is.matrix(X_epi_pleio)) {
+    X_epi_pleio <- matrix(NA, nrow = nrow(X), ncol = 0)
+  }
+  log$debug('Dimensions of pleiotropic interaction matrix: %s x %s', nrow(X_epi_pleio), ncol(X_epi_pleio))
 
   log$debug('Draw effects from multivariate normal with desired correlation.')
 
@@ -126,38 +142,42 @@ simulate_phenotypes <- function(genotype_matrix,
   log$debug('Correlation of simulated marginal effects: %s', cor(beta))
 
   log$debug('Desired epistatic correlation: %f', epistatic_correlation)
-  alpha <- mvtnorm::rmvnorm(n_causal_epi * n_causal_epi + ncol(X_epi_pleio),
-                            sigma = C_epistatic)
+  alpha <- mvtnorm::rmvnorm(
+            n_group1_trait * (n_trait_specific - n_group1_trait)
+            + ncol(X_epi_pleio),
+            sigma = C_epistatic)
   log$debug('Correlation of simulated epistatic effects: %s', cor(alpha))
 
   log$debug('Desired error correlation: %f', 0)
   error <- mvtnorm::rmvnorm(n_samples, sigma = C_error)
   log$debug('Correlation of simulated error: %s', cor(error))
-
+  snp.ids.trait <- setdiff(snp.ids.filtered, pleiotropic_set)
   for (j in 1:d) {
     ## select causal SNPs
     log$debug('Simulating phenotype %d', j)
-    causal_snps_j <- sample(snp.ids.filtered[-pleiotropic_set], n_causal - n_causal_pleio, replace = F)
-    epistatic_set_j_1 <- sample(causal_snps_j, n_causal_epi, replace = F)
-    epistatic_set_j_2 <- sample(causal_snps_j[-epistatic_set_j_1], n_causal_epi, replace = F)
+    causal_snps_j <- sample(snp.ids.trait, n_causal - n_pleiotropic, replace = F)
+    trait_specific_snps <- sample(causal_snps_j, n_trait_specific, replace = F)
+    trait_grouped <- split(trait_specific_snps, f_trait)
+    trait_specific_j_1 <- trait_grouped$group1
+    trait_specific_j_2 <- trait_grouped$group2
     log$debug('Length causal set: %d', length(causal_snps_j))
     log$debug('Length pleiotropic set: %d', length(pleiotropic_set))
-    log$debug('Length epistatic set 1: %d', length(epistatic_set_j_1))
-    log$debug('Length epistatic set 2: %d', length(epistatic_set_j_2))
+    log$debug('Length trait specific set 1: %d', length(trait_specific_j_1))
+    log$debug('Length trait specific set 2: %d', length(trait_specific_j_2))
 
     log$debug('Head of causal SNPs: %s', head(c(causal_snps_j, pleiotropic_set)))
-    log$debug('Head of epistatic SNPs group 1: %s', head(epistatic_set_j_1))
-    log$debug('Head of epistatic SNPs group 2: %s', head(epistatic_set_j_2))
+    log$debug('Head of trait specific SNPs group 1: %s', head(trait_specific_j_1))
+    log$debug('Head of trait specific SNPs group 2: %s', head(trait_specific_j_2))
 
-    # create epistatic interaction matrix
+    # create trait_specific interaction matrix
     X_causal_j <- X[, c(causal_snps_j, pleiotropic_set)] # all SNPs have additive effects
-    X_epistatic_j_1 <- X[, epistatic_set_j_1]
-    X_epistatic_j_2 <- X[, epistatic_set_j_2]
+    X_trait_specific_j_1 <- X[, trait_specific_j_1]
+    X_trait_specific_j_2 <- X[, trait_specific_j_2]
 
     start_interactions <- proc.time()
     log$debug('Computing interactions. This may take a while.')
-    X_epi <- foreach(i=seq_len(length(epistatic_set_j_1)), .combine=cbind) %do% {
-      X_epistatic_j_1[, i] * X_epistatic_j_2
+    X_epi <- foreach(i=seq_len(length(trait_specific_j_1)), .combine=cbind) %do% {
+      X_trait_specific_j_1[, i] * X_trait_specific_j_2
     }
     X_epi <- cbind(X_epi_pleio, X_epi)
 
@@ -186,9 +206,8 @@ simulate_phenotypes <- function(genotype_matrix,
     Y <- cbind(Y, y)
     causal_snps[[paste0('phenotype_', j)]] <- list(
       'causal_snps' = c(causal_snps_j, pleiotropic_set),
-      'epistatic_1' = epistatic_set_j_1,
-      'epistatic_2' = epistatic_set_j_2,
-      'pleiotropic' = pleiotropic_set,
+      'pleiotropic_groups' = pleio_split,
+      'trait_specific_groups' = trait_grouped,
       'alpha' = alpha_j,
       'beta' = beta_j
     )
@@ -216,3 +235,8 @@ simulate_phenotypes <- function(genotype_matrix,
 
   return(simulated_pleiotropic_epistasis_data)
 }
+
+get_factors <- function(n1, n) {
+    return(c(rep("group1", n1), rep("group2", n - n1)))
+}
+
