@@ -6,14 +6,16 @@
 \usage{
 simulate_phenotypes(
   genotype_matrix,
-  causal_fraction = 0.2,
-  epistatic_fraction = 0.1,
-  pleiotropic_fraction = 0.1,
+  n_causal = 1000,
+  n_trait_specific = 10,
+  n_pleiotropic = 10,
   H2 = 0.6,
   d = 2,
   rho = 0.8,
   marginal_correlation = 0.3,
   epistatic_correlation = 0.3,
+  group_ratio_trait = 1,
+  group_ratio_pleiotropic = 1,
   maf_threshold = 0.01,
   seed = 67132,
   logLevel = "INFO",
@@ -23,11 +25,11 @@ simulate_phenotypes(
 \arguments{
 \item{genotype_matrix}{Genotype matrix with samples as rows, and SNPs as columns.}
 
-\item{causal_fraction}{Fraction of the SNPs that are causal.}
+\item{n_causal}{Number of SNPs that are causal.}
 
-\item{epistatic_fraction}{Fraction of the causal SNPs with single trait epistatic effects.}
+\item{n_trait_specific}{Number of causal SNPs with single trait epistatic effects.}
 
-\item{pleiotropic_fraction}{Fraction of SNPs with pleiotropic effects.}
+\item{n_pleiotropic}{Number of SNPs with pleiotropic effects.}
 
 \item{H2}{Broad-sense heritability.}
 
@@ -38,6 +40,10 @@ simulate_phenotypes(
 \item{marginal_correlation}{Correlation between the additive effects of the phenotype.}
 
 \item{epistatic_correlation}{Correlation between the epistatic effects of the phenotype.}
+
+\item{group_ratio_trait}{Ratio of sizes of trait specific groups that interact, e.g. a ratio 1:3 would be value 3.}
+
+\item{group_ratio_pleiotropic}{Ratio of sizes of pleiotropic groups that interact, e.g. a ratio 1:3 would be value 3.}
 
 \item{maf_threshold}{is a float parameter defining the threshold for the minor allele frequency not included in causal SNPs.}
 
