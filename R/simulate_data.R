@@ -141,13 +141,17 @@ simulate_phenotypes <- function(genotype_matrix,
   beta <- mvtnorm::rmvnorm(n_causal, sigma = C_marginal)
   log$debug('Correlation of simulated marginal effects: %s', cor(beta))
 
+  n_epistatic_effects <- n_group1_trait * (n_trait_specific - n_group1_trait) + ncol(X_epi_pleio)
+  log$debug('Number of epistatic effects: %s', n_epistatic_effects)
+  if (n_epistatic_effects > 0) {
   log$debug('Desired epistatic correlation: %f', epistatic_correlation)
-  alpha <- mvtnorm::rmvnorm(
-            n_group1_trait * (n_trait_specific - n_group1_trait)
-            + ncol(X_epi_pleio),
-            sigma = C_epistatic)
-  log$debug('Correlation of simulated epistatic effects: %s', cor(alpha))
-
+      alpha <- mvtnorm::rmvnorm(n_epistatic_effects,
+                                sigma = C_epistatic)
+      log$debug('Correlation of simulated epistatic effects: %s', cor(alpha))
+  } else {
+      log$debug('Return empty effect matrix.')
+      alpha <- matrix(0, ncol = d, nrow = 0)
+  }
   log$debug('Desired error correlation: %f', 0)
   error <- mvtnorm::rmvnorm(n_samples, sigma = C_error)
   log$debug('Correlation of simulated error: %s', cor(error))
@@ -194,9 +198,14 @@ simulate_phenotypes <- function(genotype_matrix,
 
     # pairwise epistatic effects
     alpha_j <- alpha[, j]
-    y_epi <- X_epi %*% alpha_j
-    y_epi <- y_epi * sqrt(H2 * (1 - rho) / c(var(y_epi)))
-    log$debug('Variance scaled y_epi: %f', var(y_epi))
+    if (n_epistatic_effects > 0) {
+        y_epi <- X_epi %*% alpha_j
+        y_epi <- y_epi * sqrt(H2 * (1 - rho) / c(var(y_epi)))
+        log$debug('Variance scaled y_epi: %f', var(y_epi))
+    } else {
+        y_epi <- 0 * y_marginal
+        log$debug('y_epi vector of zeros size y_marginal: %s', y_epi)
+    }
 
     # unexplained phenotypic variation
     y_err <- error[, j]

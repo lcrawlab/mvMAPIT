@@ -107,7 +107,7 @@ test_that("Simulation of groups with given ratio works as expected.", {
   expect_equal(length(data$snps$phenotype_1$pleiotropic_groups$group2), correct_4)
 })
 
-test_that("simulate_phenotypes can handle zero size bn_trait_specific groups.", {
+test_that("simulate_phenotypes can handle zero size n_trait_specific groups.", {
   # given
   p <- 50
   f <- 30
@@ -136,7 +136,7 @@ test_that("simulate_phenotypes can handle zero size bn_trait_specific groups.", 
   expect_equal(length(data$snps$phenotype_1$trait_specific_groups$group2), correct_1)
 })
 
-test_that("simulate_phenotypes can handle zero size bn_pleiotropic groups.", {
+test_that("simulate_phenotypes can handle zero size n_pleiotropic groups.", {
   # given
   p <- 50
   f <- 30
@@ -163,6 +163,35 @@ test_that("simulate_phenotypes can handle zero size bn_pleiotropic groups.", {
   # then
   expect_equal(length(data$snps$phenotype_1$pleiotropic_groups$group1), correct_1)
   expect_equal(length(data$snps$phenotype_1$pleiotropic_groups$group2), correct_2)
+})
+
+test_that("simulate_phenotypes can handle zero size n_pleiotropic AND n_trait_specific groups.", {
+  # given
+  p <- 50
+  f <- 30
+  g <- 0
+  h <- 0
+  n <- 5
+  d <- 3
+  X <- matrix(runif(p * n), ncol = p)
+  total_causal <- (f) # single trait SNPs plus pleiotropic SNPs
+  correct_1 <- 0
+  correct_2 <- 0
+
+  # when
+  data <- simulate_phenotypes(X,
+                              n_causal = f,
+                              n_trait_specific = g,
+                              n_pleiotropic = h,
+                              d = d,
+                              group_ratio_trait = 3,
+                              group_ratio_pleiotropic = 4,
+                              maf_threshold = 0.0,
+                              logLevel = 'DEBUG')
+
+  # then
+  expect_equal(length(data$snps$phenotype_1$alpha), correct_1)
+  expect_equal(length(data$snps$phenotype_2$alpha), correct_2)
 })
 
 test_that("test run", {
