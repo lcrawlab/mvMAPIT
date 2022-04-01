@@ -2,7 +2,7 @@ Type: Package
 Package: mvMAPIT
 Title: Implements the Multivariate MArginal ePIstasis Test (mvMAPIT) from
     Crawford et al. 2017
-Version: 1.0.0
+Version: 1.0.1
 Author: lcrawlab
 Maintainer: Lorin Crawford <lorin_crawford@brown.edu>
 Description: Epistasis, commonly defined as the interaction between
