@@ -173,8 +173,11 @@ Rcpp::List MAPITCpp(
     b.col(z + 1) = arma::trans(x_k);
 
     arma::mat M = compute_projection_matrix(n, b);
+    b.reset();
     arma::mat Kc = M * K * M;
+    K.reset();
     arma::mat Gc = M * G * M;
+    G.reset();
     arma::mat Cc;
     std::vector<arma::mat> matrices;
 
@@ -184,17 +187,14 @@ Rcpp::List MAPITCpp(
     } else {
       matrices = {Gc, Kc, M};
     }
-    const arma::mat Yc = Y * M;
-    end = steady_clock::now();
-    execution_t(i, 1) = duration_cast<microseconds>(end - start).count();
-
-    M.reset();
-    K.reset();
-    G.reset();
-    b.reset();
     Kc.reset();
     Gc.reset();
     Cc.reset();
+
+    const arma::mat Yc = Y * M;
+    M.reset();
+    end = steady_clock::now();
+    execution_t(i, 1) = duration_cast<microseconds>(end - start).count();
 
     arma::mat q;
     std::vector<arma::vec> phenotypes;
