@@ -1,8 +1,9 @@
-test_that("MvMapit can take a vector as phenotype input. hybrid = FALSE, test = normal", {
+test_that("MvMapit can take a vector as phenotype input. test = normal", {
   # given
   p <- 10
   n <- 4
   pvalues <- matrix(rep(0.48001, 10), ncol = 1)
+  colnames(pvalues) <- c("P1")
   set.seed(853)
   X <- matrix(runif(p * n), ncol = p)
   Y <- c(runif(n))
@@ -11,17 +12,17 @@ test_that("MvMapit can take a vector as phenotype input. hybrid = FALSE, test = 
                    Y,
                    accuracy = 1e-5,
                    cores = 1,
-                   phenotypeCovariance = 'identity',
                    logLevel = "ERROR")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-3)
 })
 
-test_that("MvMapit can take a vector as phenotype input. hybrid = FALSE, test = davies", {
+test_that("MvMapit can take a vector as phenotype input. test = davies", {
   # given
   p <- 10
   n <- 4
   pvalues <- matrix(rep(0.209, 10), ncol = 1)
+  colnames(pvalues) <- c("P1")
   set.seed(853)
   X <- matrix(runif(p * n), ncol = p)
   Y <- c(runif(n))
@@ -31,7 +32,6 @@ test_that("MvMapit can take a vector as phenotype input. hybrid = FALSE, test = 
                    test = 'davies',
                    accuracy = 1e-5,
                    cores = 1,
-                   phenotypeCovariance = 'identity',
                    logLevel = "ERROR")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-3)

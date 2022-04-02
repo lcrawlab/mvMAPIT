@@ -1,4 +1,4 @@
-test_that("test = 'normal'. phenotypeCovariance = 'combinatorial'", {
+test_that("test = 'normal'. ", {
   # given
   p <- 2
   n <- 10
@@ -16,13 +16,12 @@ test_that("test = 'normal'. phenotypeCovariance = 'combinatorial'", {
                    t(Y),
                    test = 'normal',
                    cores = 1,
-                   phenotypeCovariance = 'combinatorial',
                    logLevel = "DEBUG")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-4)
 })
 
-test_that("test = davies. phenotypeCovariance = 'combinatorial'", {
+test_that("test = davies. ", {
   # given
   p <- 2
   n <- 10
@@ -40,13 +39,12 @@ test_that("test = davies. phenotypeCovariance = 'combinatorial'", {
                    t(Y),
                    test = 'davies',
                    cores = 1,
-                   phenotypeCovariance = 'combinatorial',
                    logLevel = "ERROR")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-4)
 })
 
-test_that("phenotypeCovariance = 'combinatorial'", {
+test_that("test = hybrid", {
   # given
   p <- 2
   n <- 10
@@ -64,13 +62,12 @@ test_that("phenotypeCovariance = 'combinatorial'", {
                    t(Y),
                    test = 'hybrid',
                    cores = 1,
-                   phenotypeCovariance = 'combinatorial',
                    logLevel = "ERROR")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-4)
 })
 
-test_that("C is not NULL. phenotypeCovariance = 'combinatorial'", {
+test_that("C is not NULL. ", {
   # given
   p <- 4
   n <- 10
@@ -94,13 +91,12 @@ test_that("C is not NULL. phenotypeCovariance = 'combinatorial'", {
                    test = 'hybrid',
                    accuracy = 1e-5,
                    cores = 1,
-                   phenotypeCovariance = 'combinatorial',
                    logLevel = "ERROR")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-4)
 })
 
-test_that("test = 'normal', C is not NULL. phenotypeCovariance = 'combinatorial'", {
+test_that("test = 'normal', C is not NULL. ", {
   # given
   p <- 4
   n <- 10
@@ -123,13 +119,12 @@ test_that("test = 'normal', C is not NULL. phenotypeCovariance = 'combinatorial'
                    C = C,
                    test = 'normal',
                    cores = 1,
-                   phenotypeCovariance = 'combinatorial',
                    logLevel = "ERROR")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-4)
 })
 
-test_that("C is not NULL, test = 'davies'. phenotypeCovariance = 'combinatorial'", {
+test_that("C is not NULL, test = 'davies'. ", {
   # given
   p <- 4
   n <- 10
@@ -153,13 +148,12 @@ test_that("C is not NULL, test = 'davies'. phenotypeCovariance = 'combinatorial'
                    test = 'davies',
                    accuracy = 1e-5,
                    cores = 1,
-                   phenotypeCovariance = 'combinatorial',
                    logLevel = "ERROR")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-4)
 })
 
-test_that("test = 'davies'. phenotypeCovariance = 'combinatorial', d = 1", {
+test_that("test = 'davies'. , d = 1", {
   # given
   p <- 10
   n <- 4
@@ -176,6 +170,7 @@ test_that("test = 'davies'. phenotypeCovariance = 'combinatorial', d = 1", {
                 0.4871070),
                     nrow = p, ncol = 1, byrow = TRUE)
   set.seed(20)
+  colnames(pvalues) <- c("P1")
   X <- matrix(runif(p * n), ncol = p)
   Y <- matrix(runif(d * n), ncol = d)
   C <- matrix(runif(n * n), ncol = n)
@@ -186,7 +181,6 @@ test_that("test = 'davies'. phenotypeCovariance = 'combinatorial', d = 1", {
                    test = 'davies',
                    accuracy = 1e-5,
                    cores = 1,
-                   phenotypeCovariance = 'combinatorial',
                    logLevel = "ERROR")
   # then
   expect_equal(mapit$pvalues, pvalues, tolerance = 1e-4)

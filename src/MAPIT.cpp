@@ -4,7 +4,6 @@
 #include "gsm/gsm.h"
 #include "logging/log.h"
 #include "mapit/davies.h"
-#include "mapit/kronecker.h"
 #include "mapit/normal.h"
 #include "mapit/projection.h"
 #include "mapit/pve.h"
@@ -47,8 +46,7 @@ Rcpp::List MAPITCpp(
     Rcpp::Nullable<Rcpp::NumericMatrix> C = R_NilValue,
     Rcpp::Nullable<Rcpp::NumericVector> variantIndices = R_NilValue,
     std::string testMethod = "normal", int cores = 1,
-    Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix = R_NilValue,
-    std::string phenotypeCovariance = "identity") {
+    Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix = R_NilValue) {
   int i;
   const int n = X.n_cols;
   const int p = X.n_rows;
@@ -56,8 +54,7 @@ Rcpp::List MAPITCpp(
   int num_combinations = 1;
   int z = 0;
 
-  const bool combinatorial =
-      (phenotypeCovariance.compare("combinatorial") == 0 && d > 1);
+  const bool combinatorial = (d > 1);
   if (combinatorial) {
     num_combinations = num_combinations_with_replacement(d, 2);
   }
@@ -75,7 +72,6 @@ Rcpp::List MAPITCpp(
   logger->info("Number of SNPs: {}", p);
   logger->info("Number of phenotypes: {}", d);
   logger->info("Test method: {}", testMethod);
-  logger->info("Phenotype covariance model: {}", phenotypeCovariance);
 
 #ifdef _OPENMP
   logger->info("Execute c++ routine on {} cores.", cores);
@@ -115,21 +111,6 @@ Rcpp::List MAPITCpp(
   // check if we are provided variants of interest
   if (variantIndices.isNotNull()) {
     ind = Rcpp::as<arma::vec>(variantIndices.get());
-  }
-
-  // between phenotype variance
-  arma::mat V_error(d, d);
-  // effect of error uncorrelated
-  V_error.eye();
-  arma::mat V_phenotype(d, d);
-  // string.compare() returns '0' if equal
-  if (phenotypeCovariance.compare("covariance") == 0) {
-    V_phenotype = cov(Y.t());
-  } else if (phenotypeCovariance.compare("homogeneous") == 0) {
-    V_phenotype.ones();
-  } else {
-    // 'identity' as default
-    V_phenotype.eye();
   }
 
 #ifdef _OPENMP
@@ -205,7 +186,6 @@ Rcpp::List MAPITCpp(
     } else {
       arma::vec yc = vectorise(Yc);
       phenotypes = matrix_to_vector_of_rows(yc.as_row());
-      matrices = kronecker_products(matrices, V_phenotype, V_error);
     }
     end = steady_clock::now();
     execution_t(i, 2) = duration_cast<microseconds>(end - start).count();

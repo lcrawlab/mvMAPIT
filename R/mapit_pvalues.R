@@ -60,3 +60,4 @@ saddlepoint_approximation = function(x, lambda) {
     return( pnorm(w + log(v / w) / w, lower.tail=FALSE) )
   }
 }
+

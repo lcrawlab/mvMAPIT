@@ -14,7 +14,6 @@ test_that("pvalues and pve shows NA for variants not in variantIndex", {
                    test = 'normal',
                    cores = 1,
                    variantIndex = variantIndex,
-                   phenotypeCovariance = 'combinatorial',
                    logLevel = "DEBUG")
   # then
   expect_true(all(is.na(mapit$pves[otherIndex, ])))
@@ -34,7 +33,6 @@ test_that("pve shows NA for covariance interactions", {
                    t(Y),
                    test = 'normal',
                    cores = 1,
-                   phenotypeCovariance = 'combinatorial',
                    logLevel = "DEBUG")
   # then
   expect_true(all(is.na(mapit$pves[, 2])))

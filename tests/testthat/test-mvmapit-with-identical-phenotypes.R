@@ -11,7 +11,6 @@ test_that("test that all pvalues equal if phenotypes equal", {
                    t(Y),
                    test = 'normal',
                    cores = 1,
-                   phenotypeCovariance = 'combinatorial',
                    logLevel = "DEBUG")
   # then
   expect_equal(mapit$pvalues[, 1], mapit$pvalues[, 2], tolerance = 1e-8)

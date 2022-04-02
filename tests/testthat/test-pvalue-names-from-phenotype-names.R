@@ -1,31 +1,30 @@
 test_that("combinatorial test with d = 3. combinatorial.", {
   # given
-  phenotypeCovariance <- 'combinatorial'
   n <- 5
   d <- 3
   set.seed(853)
-  phenotypes <- sprintf("P%s", 1:d)
-  Y <- matrix(runif(d * n), ncol = d)
-  colnames(Y) <- phenotypes
-  correct_colnames <- c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3")
+  phenotypes <- sprintf("p%s", 1:d)
+  y <- matrix(runif(d * n), ncol = d)
+  colnames(y) <- phenotypes
+  correct_colnames <- c("p1*p1", "p2*p1", "p2*p2", "p3*p1", "p3*p2", "p3*p3")
   # when
-  result <- mapit_struct_names(t(Y), phenotypeCovariance)
+  result <- mapit_struct_names(t(y))
   # then
   expect_equal(result, correct_colnames)
 })
 
-test_that("combinatorial test with d = 3. Kronecker.", {
+test_that("combinatorial test with d = 1. combinatorial.", {
   # given
-  phenotypeCovariance <- 'identity'
   n <- 5
-  d <- 3
+  d <- 1
   set.seed(853)
-  phenotypes <- sprintf("P%s", 1:d)
-  Y <- matrix(runif(d * n), ncol = d)
-  colnames(Y) <- phenotypes
-  correct_colnames <- c("kronecker")
+  phenotypes <- sprintf("p%s", 1:d)
+  y <- matrix(runif(d * n), ncol = d)
+  colnames(y) <- phenotypes
+  correct_colnames <- c("p1")
   # when
-  result <- mapit_struct_names(t(Y), phenotypeCovariance)
+  result <- mapit_struct_names(t(y))
   # then
   expect_equal(result, correct_colnames)
 })
+

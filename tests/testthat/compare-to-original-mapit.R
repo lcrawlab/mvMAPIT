@@ -12,13 +12,11 @@ mapit.normal <- MvMAPIT(t(X),
                  (Y),
                  test = 'normal',
                  cores = 4,
-                 phenotypeCovariance = 'combinatorial',
                  logLevel = "INFO")
 mapit.davies <- MvMAPIT(t(X),
                  t(Y),
                  test = 'davies',
                  cores = 4,
-                 phenotypeCovariance = 'combinatorial',
                  logLevel = "INFO")
 # then
 normal <- as.vector(mapit.normal$pvalues)

@@ -158,7 +158,7 @@ test_that("simulate_phenotypes can handle zero size n_pleiotropic groups.", {
                               group_ratio_trait = 3,
                               group_ratio_pleiotropic = 4,
                               maf_threshold = 0.0,
-                              logLevel = 'DEBUG')
+                              logLevel = 'ERROR')
 
   # then
   expect_equal(length(data$snps$phenotype_1$pleiotropic_groups$group1), correct_1)
@@ -187,7 +187,7 @@ test_that("simulate_phenotypes can handle zero size n_pleiotropic AND n_trait_sp
                               group_ratio_trait = 3,
                               group_ratio_pleiotropic = 4,
                               maf_threshold = 0.0,
-                              logLevel = 'DEBUG')
+                              logLevel = 'ERROR')
 
   # then
   expect_equal(length(data$snps$phenotype_1$alpha), correct_1)
