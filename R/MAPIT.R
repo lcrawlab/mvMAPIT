@@ -120,6 +120,7 @@ MvMAPIT <- function(X,
     ind <- ifelse(variantIndex, variantIndex, 1:nrow(X))
     vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL)
     pvals <- mvmapit_pvalues(vc.mod, X, accuracy)
+    pvals <- set_covariance_components(variance_components_ind, pvals)
     pves <- vc.mod$PVE
     timings <- vc.mod$timings
   }
@@ -138,7 +139,7 @@ MvMAPIT <- function(X,
       fisherp <- apply(pvals, 1, sumlog)
       pvals <- cbind(pvals, metap = fisherp)
   }
-  pves <- set_covariance_pves(Y, pves)
+  pves <- set_covariance_components(variance_components_ind, pves)
   return(list("pvalues" = pvals, "pves" = pves, "timings" = timings_mean))
 }
 
@@ -167,17 +168,9 @@ mapit_struct_names <- function (Y) {
   return(phenotype_combinations)
 }
 
-set_covariance_pves  <- function(Y, pves) {
-  counter <- 0
-  for (i in seq_len(nrow(Y))) {
-    for (j in seq_len(nrow(Y))) {
-      if (j <= i) {
-        counter <- counter + 1
-        if (j < i) pves[, counter] <- NA
-      }
-    }
-  }
-  return(pves)
+set_covariance_components  <- function(variance_components_ind, X) {
+    X[, !variance_components_ind] <- NA
+    return(X)
 }
 
 get_variance_components_ind  <- function(Y) {
@@ -198,8 +191,3 @@ get_variance_components_ind  <- function(Y) {
   return(ind)
 }
 
-sumlog <- function(pvalues) {
-    df <- 2 * length(pvalues)
-    fisherp <- pchisq(-2 * sum(log(pvalues)), df, lower.tail = FALSE)
-    return(fisherp)
-}
