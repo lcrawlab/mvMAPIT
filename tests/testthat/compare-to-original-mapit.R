@@ -1,25 +1,27 @@
-library('mvMAPIT')
+library("mvMAPIT")
 # given
 original <- readRDS("original_MAPIT.rds")
 X <- original$genotype
 Y <- original$phenotype
 normal.pvalues <- original$normal$pvalues
 davies.pvalues <- original$davies$pvalues
-tolerance <- 0.0001
+tolerance <- 1e-04
 # when
-Xmean=apply(X, 2, mean); Xsd=apply(X, 2, sd); X=t((t(X)-Xmean)/Xsd)
-mapit.normal <- MvMAPIT(t(X),
-                 (Y),
-                 test = 'normal',
-                 cores = 4,
-                 phenotypeCovariance = 'combinatorial',
-                 logLevel = "INFO")
-mapit.davies <- MvMAPIT(t(X),
-                 t(Y),
-                 test = 'davies',
-                 cores = 4,
-                 phenotypeCovariance = 'combinatorial',
-                 logLevel = "INFO")
+Xmean = apply(X, 2, mean)
+Xsd = apply(X, 2, sd)
+X = t(
+    (t(X) -
+        Xmean)/Xsd
+)
+mapit.normal <- MvMAPIT(
+    t(X),
+    (Y), test = "normal", cores = 4, logLevel = "INFO"
+)
+mapit.davies <- MvMAPIT(
+    t(X),
+    t(Y),
+    test = "davies", cores = 4, logLevel = "INFO"
+)
 # then
 normal <- as.vector(mapit.normal$pvalues)
 names(normal.pvalues) <- NULL
@@ -35,17 +37,18 @@ normal.na.counter <- c()
 normal.diff.index <- c()
 
 # comparison necessary because all.equal returns string if FALSE
-if(normal.all.equal == TRUE) {
+if (normal.all.equal == TRUE) {
     message("Normal method p-values are equal for MAPIT and mvMAPIT.")
 } else {
     warning("Normal method p-values differ between MAPIT and mvMAPIT.")
     NORMAL <- cbind(normal.pvalues, normal)
-   for (i in seq_len(nrow(NORMAL))) {
-        if(any(is.na(NORMAL[i, ]))) {
+    for (i in seq_len(nrow(NORMAL))) {
+        if (any(is.na(NORMAL[i, ]))) {
             normal.na.counter <- rbind(normal.na.counter, NORMAL[i, ])
             normal.diff.index <- c(normal.diff.index, i)
-        } else if(abs(NORMAL[i, 1] - NORMAL[i, 2]) > tolerance) {
-            print(NORMAL[i,])
+        } else if (abs(NORMAL[i, 1] - NORMAL[i, 2]) >
+            tolerance) {
+            print(NORMAL[i, ])
             normal.diff.counter <- normal.diff.counter + 1
             normal.diff.index <- c(normal.diff.index, i)
         }
@@ -56,17 +59,18 @@ davies.diff.counter <- 0
 davies.na.counter <- c()
 davies.diff.index <- c()
 
-if(davies.all.equal == TRUE) {
+if (davies.all.equal == TRUE) {
     message("Davies method p-values are equal for MAPIT and mvMAPIT.")
 } else {
     warning("Davies method p-values differ between MAPIT and mvMAPIT.")
     DAVIES <- cbind(davies.pvalues, davies)
     for (i in seq_len(nrow(DAVIES))) {
-        if(any(is.na(DAVIES[i, ]))) {
+        if (any(is.na(DAVIES[i, ]))) {
             davies.na.counter <- rbind(davies.na.counter, DAVIES[i, ])
             davies.diff.index <- c(davies.diff.index, i)
-        } else if (abs(DAVIES[i, 1] - DAVIES[i, 2]) > tolerance) {
-            print(DAVIES[i,])
+        } else if (abs(DAVIES[i, 1] - DAVIES[i, 2]) >
+            tolerance) {
+            print(DAVIES[i, ])
             davies.diff.counter <- davies.diff.counter + 1
             davies.diff.index <- c(davies.diff.index, i)
         }

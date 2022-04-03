@@ -14,7 +14,6 @@ MvMAPIT(
   test = c("normal", "davies", "hybrid"),
   cores = 1,
   variantIndex = NULL,
-  phenotypeCovariance = c("identity", "covariance", "homogeneous", "combinatorial"),
   logLevel = "WARN",
   logFile = NULL
 )
@@ -37,8 +36,6 @@ MvMAPIT(
 \item{cores}{is a parameter detailing the number of cores to parallelize over. It is important to note that this value only matters when the user has implemented OPENMP on their operating system. If OPENMP is not installed, then please leave cores = 1 and use the standard version of this code and software.}
 
 \item{variantIndex}{is a vector containing indices of variants to be included in the computation.}
-
-\item{phenotypeCovariance}{is a string parameter defining how to model the covariance between phenotypes of effects. Possible values: 'identity', 'covariance', 'homogeneous', 'combinatorial'.}
 
 \item{logLevel}{is a string parameter defining the log level for the logging package.}
 

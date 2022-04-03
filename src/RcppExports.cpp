@@ -12,8 +12,8 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // MAPITCpp
-Rcpp::List MAPITCpp(const arma::mat X, const arma::mat Y, Rcpp::Nullable<Rcpp::NumericMatrix> Z, Rcpp::Nullable<Rcpp::NumericMatrix> C, Rcpp::Nullable<Rcpp::NumericVector> variantIndices, std::string testMethod, int cores, Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix, std::string phenotypeCovariance);
-RcppExport SEXP _mvMAPIT_MAPITCpp(SEXP XSEXP, SEXP YSEXP, SEXP ZSEXP, SEXP CSEXP, SEXP variantIndicesSEXP, SEXP testMethodSEXP, SEXP coresSEXP, SEXP GeneticSimilarityMatrixSEXP, SEXP phenotypeCovarianceSEXP) {
+Rcpp::List MAPITCpp(const arma::mat X, const arma::mat Y, Rcpp::Nullable<Rcpp::NumericMatrix> Z, Rcpp::Nullable<Rcpp::NumericMatrix> C, Rcpp::Nullable<Rcpp::NumericVector> variantIndices, std::string testMethod, int cores, Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix);
+RcppExport SEXP _mvMAPIT_MAPITCpp(SEXP XSEXP, SEXP YSEXP, SEXP ZSEXP, SEXP CSEXP, SEXP variantIndicesSEXP, SEXP testMethodSEXP, SEXP coresSEXP, SEXP GeneticSimilarityMatrixSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -25,8 +25,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::string >::type testMethod(testMethodSEXP);
     Rcpp::traits::input_parameter< int >::type cores(coresSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type GeneticSimilarityMatrix(GeneticSimilarityMatrixSEXP);
-    Rcpp::traits::input_parameter< std::string >::type phenotypeCovariance(phenotypeCovarianceSEXP);
-    rcpp_result_gen = Rcpp::wrap(MAPITCpp(X, Y, Z, C, variantIndices, testMethod, cores, GeneticSimilarityMatrix, phenotypeCovariance));
+    rcpp_result_gen = Rcpp::wrap(MAPITCpp(X, Y, Z, C, variantIndices, testMethod, cores, GeneticSimilarityMatrix));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -34,7 +33,7 @@ END_RCPP
 RcppExport SEXP run_testthat_tests();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_mvMAPIT_MAPITCpp", (DL_FUNC) &_mvMAPIT_MAPITCpp, 9},
+    {"_mvMAPIT_MAPITCpp", (DL_FUNC) &_mvMAPIT_MAPITCpp, 8},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},
     {NULL, NULL, 0}
 };

@@ -37,7 +37,6 @@
 #' @param test is a parameter defining what hypothesis test should be implemented. Takes on values 'normal', 'davies', and 'hybrid'. The 'hybrid' test runs first the 'normal' test and then the 'davies' test on the significant variants.
 #' @param cores is a parameter detailing the number of cores to parallelize over. It is important to note that this value only matters when the user has implemented OPENMP on their operating system. If OPENMP is not installed, then please leave cores = 1 and use the standard version of this code and software.
 #' @param variantIndex is a vector containing indices of variants to be included in the computation.
-#' @param phenotypeCovariance is a string parameter defining how to model the covariance between phenotypes of effects. Possible values: 'identity', 'covariance', 'homogeneous', 'combinatorial'.
 #' @param logLevel is a string parameter defining the log level for the logging package.
 #' @param logFile is a string parameter defining the name of the log file for the logging output.
 #'
@@ -46,154 +45,176 @@
 #' @export
 #' @import CompQuadForm
 #' @import Rcpp
-MvMAPIT <- function(X,
-                    Y,
-                    Z = NULL,
-                    C = NULL,
-                    threshold = 0.05,
-                    accuracy = 1e-8,
-                    test = c('normal', 'davies', 'hybrid'),
-                    cores = 1,
-                    variantIndex = NULL,
-                    phenotypeCovariance = c('identity', 'covariance', 'homogeneous', 'combinatorial'),
-                    logLevel = 'WARN',
-                    logFile = NULL) {
+MvMAPIT <- function(
+    X, Y, Z = NULL, C = NULL, threshold = 0.05, accuracy = 1e-08, test = c("normal", "davies", "hybrid"),
+    cores = 1, variantIndex = NULL, logLevel = "WARN", logFile = NULL
+) {
 
-  test <- match.arg(test)
-  phenotypeCovariance <- match.arg(phenotypeCovariance)
-  if (cores > 1) {
-    if (cores > detectCores()) {
-      warning("The number of cores you're setting is larger than detected cores!")
-      cores <- detectCores()
+    test <- match.arg(test)
+    if (cores > 1) {
+        if (cores > detectCores()) {
+            warning("The number of cores you're setting is larger than detected cores!")
+            cores <- detectCores()
+        }
     }
-  }
 
-  logging::logReset()
-  logging::basicConfig(level = logLevel)
-  log <- logging::getLogger('MvMAPIT')
-  if(!is.null(logFile)) {
-    filePath <- file.path(getwd(),logFile)
-    log$debug('Logging to file: %s', filePath)
-    log$addHandler(logging::writeToFile, file=filePath)
-  }
-
-  if (is.vector(Y)) {
-    Y <- t(Y)
-  }
-
-  log$debug('Running in %s test mode.', test)
-  log$debug('Phenotype covariance: %s', phenotypeCovariance)
-  log$debug('Genotype matrix: %d x %d', nrow(X), ncol(X))
-  log$debug('Phenotype matrix: %d x %d', nrow(Y), ncol(Y))
-  log$debug('Genotype matrix determinant: %f', det((X) %*% t(X)))
-  zero_var <- which(apply(X, 1, var) == 0)
-  log$debug('Number of zero variance variants: %d', length(zero_var))
-  X <- remove_zero_variance(X) # operates on rows
-  log$debug('Genotype matrix after removing zero variance variants: %d x %d', nrow(X), ncol(X))
-
-  log$debug('Scale X matrix appropriately.')
-  Xsd <- apply(X, 1, sd)
-  Xmean <- apply(X, 1, mean)
-  X <- (X - Xmean) / Xsd
-
-  if (test == 'hybrid') {
-    vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, NULL, phenotypeCovariance) # Normal Z-Test
-    pvals <- vc.mod$pvalues
-    #row.names(pvals) <- rownames(X)
-    pves <- vc.mod$PVE
-    #row.names(pves) <- rownames(X)
-    timings <- vc.mod$timings
-    ind <- which(pvals <= threshold) # Find the indices of the p-values that are below the threshold
-    if (phenotypeCovariance == 'combinatorial') {
-      any_significance <- apply(pvals, 1, function(r) any(r <= threshold))
-      ind_temp <- ind
-      ind <- which(any_significance == TRUE)
+    logging::logReset()
+    logging::basicConfig(level = logLevel)
+    log <- logging::getLogger("MvMAPIT")
+    if (!is.null(logFile)) {
+        filePath <- file.path(getwd(), logFile)
+        log$debug("Logging to file: %s", filePath)
+        log$addHandler(logging::writeToFile, file = filePath)
     }
-    log$info('%d p-values are significant with alpha = %f', length(ind), threshold)
 
-    log$info('Running davies method on selected SNPs.')
-    vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
-    davies.pvals <- mvmapit_pvalues(vc.mod, X, accuracy)
-    if (phenotypeCovariance == 'combinatorial') {
-      pvals[ind_temp] <- davies.pvals[ind_temp]
+    if (is.vector(Y)) {
+        Y <- t(Y)
+    }
+
+    log$debug("Running in %s test mode.", test)
+    log$debug(
+        "Genotype matrix: %d x %d", nrow(X),
+        ncol(X)
+    )
+    log$debug(
+        "Phenotype matrix: %d x %d", nrow(Y),
+        ncol(Y)
+    )
+    log$debug("Genotype matrix determinant: %f", det((X) %*% t(X)))
+    zero_var <- which(
+        apply(X, 1, var) ==
+            0
+    )
+    log$debug("Number of zero variance variants: %d", length(zero_var))
+    X <- remove_zero_variance(X)  # operates on rows
+    log$debug(
+        "Genotype matrix after removing zero variance variants: %d x %d", nrow(X),
+        ncol(X)
+    )
+
+    log$debug("Scale X matrix appropriately.")
+    Xsd <- apply(X, 1, sd)
+    Xmean <- apply(X, 1, mean)
+    X <- (X - Xmean)/Xsd
+
+    variance_components_ind <- get_variance_components_ind(Y)
+    if (test == "hybrid") {
+        vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, NULL)  # Normal Z-Test
+        pvals <- vc.mod$pvalues
+        # row.names(pvals) <- rownames(X)
+        pves <- vc.mod$PVE
+        # row.names(pves) <- rownames(X)
+        timings <- vc.mod$timings
+        ind_matrix <- which(pvals[, variance_components_ind] <= threshold)  # Find the variance component indices of the p-values that are below the threshold
+        log$info(
+            "%d p-values of variance components are significant with alpha = %f",
+            length(ind_matrix),
+            threshold
+        )
+        any_significance <- apply(pvals[, variance_components_ind], 1, function(r) any(r <= threshold))
+        ind <- which(any_significance == TRUE)
+        log$info(
+            "%d positions are significant with alpha = %f", length(ind),
+            threshold
+        )
+
+        log$info("Running davies method on selected SNPs.")
+        vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL)
+        davies.pvals <- mvmapit_pvalues(vc.mod, X, accuracy)
+        pvals[, variance_components_ind][ind_matrix] <- davies.pvals[, variance_components_ind][ind_matrix]
+    } else if (test == "normal") {
+        vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, NULL)
+        pvals <- vc.mod$pvalues
+        pves <- vc.mod$PVE
+        timings <- vc.mod$timings
     } else {
-      pvals[ind] <- davies.pvals[ind]
+        ind <- ifelse(variantIndex, variantIndex, 1:nrow(X))
+        vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL)
+        pvals <- mvmapit_pvalues(vc.mod, X, accuracy)
+        pvals <- set_covariance_components(variance_components_ind, pvals)
+        pves <- vc.mod$PVE
+        timings <- vc.mod$timings
     }
-  } else if (test == "normal") {
-    vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, NULL, phenotypeCovariance)
-    pvals <- vc.mod$pvalues
-    pves <- vc.mod$PVE
-    timings <- vc.mod$timings
-  } else {
-    ind <- ifelse(variantIndex, variantIndex, 1:nrow(X))
-    vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL, phenotypeCovariance)
-    pvals <- mvmapit_pvalues(vc.mod, X, accuracy)
-    pves <- vc.mod$PVE
-    timings <- vc.mod$timings
-  }
-  timings_mean <- apply(as.matrix(timings[rowSums(timings) != 0, ]), 2, mean)
-  log$info('Calculated mean time of execution. Return list.')
-  row.names(pvals) <- rownames(X)
-  row.names(pves) <- rownames(X)
-  if (length(rownames(Y)) > 0) {
-    column_names <- mapit_struct_names(Y, phenotypeCovariance)
-  } else if (nrow(Y) > 1 && (phenotypeCovariance == 'combinatorial')) {
-    row.names(Y) <- sprintf("P%s", 1:nrow(Y))
-    column_names <- mapit_struct_names(Y, phenotypeCovariance)
-  } else {
-    column_names <- NULL
-  }
-  colnames(pvals) <- column_names
-  colnames(pves) <- column_names
-  if (!is.null(variantIndex)) {
-    log$debug('Set pve to NA if not in varianIndex.')
-    pves[!(c(1:nrow(pves)) %in% variantIndex)] <- NA
-  }
-  if (nrow(Y) > 1 && (phenotypeCovariance == 'combinatorial')) {
-      fisherp <- apply(pvals, 1, sumlog)
-      pvals <- cbind(pvals, metap = fisherp)
-      pves <- set_covariance_pves(Y, pves)
-  }
-  return(list("pvalues" = pvals, "pves" = pves, "timings" = timings_mean))
+    timings_mean <- apply(
+        as.matrix(
+            timings[rowSums(timings) !=
+                0, ]
+        ),
+        2, mean
+    )
+    log$info("Calculated mean time of execution. Return list.")
+    row.names(pvals) <- rownames(X)
+    row.names(pves) <- rownames(X)
+    column_names <- mapit_struct_names(Y)
+    colnames(pvals) <- column_names
+    colnames(pves) <- column_names
+    if (!is.null(variantIndex)) {
+        log$debug("Set pve to NA if not in varianIndex.")
+        pves[!(c(1:nrow(pves)) %in%
+            variantIndex)] <- NA
+    }
+    if (ncol(pvals) >
+        1) {
+        fisherp <- apply(pvals, 1, sumlog)
+        pvals <- cbind(pvals, metap = fisherp)
+    }
+    pves <- set_covariance_components(variance_components_ind, pves)
+    return(list(pvalues = pvals, pves = pves, timings = timings_mean))
 }
 
 remove_zero_variance <- function(X) {
-  return(X[which(apply(X, 1, var) != 0),])
+    return(
+        X[which(
+            apply(X, 1, var) !=
+                0
+        ),
+            ]
+    )
 }
 
-# This naming sequence has to match the creation of the q-matrix in the C++ routine of mvMAPIT
-mapit_struct_names <- function (Y, phenotypeCovariance) {
-  if (length(phenotypeCovariance) > 0 && !(phenotypeCovariance == 'combinatorial')) {
-    return(c('kronecker'))
-  }
-  phenotype_names <- rownames(Y)
-  phenotype_combinations <- c()
-  for (i in seq_len(nrow(Y))) {
-    for (j in seq_len(nrow(Y))) {
-      if (j <= i) {
-        phenotype_combinations <- c(phenotype_combinations,
-                                    paste0(phenotype_names[i], "*", phenotype_names[j]))
-      }
+# This naming sequence has to match the creation of the q-matrix in the C++
+# routine of mvMAPIT
+mapit_struct_names <- function(Y) {
+    phenotype_names <- rownames(Y)
+    if (length(phenotype_names) ==
+        0) {
+        phenotype_names <- sprintf("P%s", 1:nrow(Y))
     }
-  }
-  return(phenotype_combinations)
-}
-
-set_covariance_pves  <- function(Y, pves) {
-  counter <- 0
-  for (i in seq_len(nrow(Y))) {
-    for (j in seq_len(nrow(Y))) {
-      if (j <= i) {
-        counter <- counter + 1
-        if (j < i) pves[, counter] <- NA
-      }
+    if (length(phenotype_names) ==
+        1) {
+        return(phenotype_names)
     }
-  }
-  return(pves)
+    phenotype_combinations <- c()
+    for (i in seq_len(nrow(Y))) {
+        for (j in seq_len(nrow(Y))) {
+            if (j <= i) {
+                phenotype_combinations <- c(phenotype_combinations, paste0(phenotype_names[i], "*", phenotype_names[j]))
+            }
+        }
+    }
+    return(phenotype_combinations)
 }
 
-sumlog <- function(pvalues) {
-    df <- 2 * length(pvalues)
-    fisherp <- pchisq(-2 * sum(log(pvalues)), df, lower.tail = FALSE)
-    return(fisherp)
+set_covariance_components <- function(variance_components_ind, X) {
+    X[, !variance_components_ind] <- NA
+    return(X)
 }
+
+get_variance_components_ind <- function(Y) {
+    ind <- c()
+    counter <- 0
+    for (i in seq_len(nrow(Y))) {
+        for (j in seq_len(nrow(Y))) {
+            if (j <= i) {
+                counter <- counter + 1
+                if (j == i) {
+                  ind[counter] <- TRUE
+                } else {
+                  ind[counter] <- FALSE
+                }
+            }
+        }
+    }
+    return(ind)
+}
+

@@ -46,5 +46,15 @@ def change_version(version):
     _cmd("autoconf")
 
 
+def autoformat():
+    directories = ["R", "tests/testthat"]
+
+    logger.info(f"Autoformat directories: {directories}")
+    for d in directories:
+        cmd = ["Rscript", "-e", f"formatR::tidy_dir('{d}', args.newline = TRUE)"]
+        logger.info(f"Run cmd: {cmd}")
+        run(cmd)
+
+
 if __name__ == "__main__":
     fire.Fire()
