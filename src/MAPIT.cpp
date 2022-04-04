@@ -160,25 +160,25 @@ Rcpp::List MAPITCpp(
     arma::mat Gc = M * G * M;
     G.reset();
     arma::mat Cc;
-    std::vector<arma::mat> matrices;
+    std::vector<arma::mat *> matrices;
 
     if (C.isNotNull()) {
       Cc = M * Rcpp::as<arma::mat>(C.get()) * M;
-      matrices = {Gc, Kc, Cc, M};
+      matrices = {&Gc, &Kc, &Cc, &M};
     } else {
-      matrices = {Gc, Kc, M};
+      matrices = {&Gc, &Kc, &M};
     }
 #ifdef WITH_LOGGER
     logger->info("Memory address for Gc: {}.", (void *)&Gc);
     logger->info("Memory address for Kc: {}.", (void *)&Kc);
     logger->info("Memory address for M: {}.", (void *)&M);
-    logger->info("Memory address for matrices.at(0): {}.", (void *)&matrices.at(0));
-    logger->info("Memory address for matrices.at(1): {}.", (void *)&matrices.at(1));
-    logger->info("Memory address for matrices.at(2): {}.", (void *)&matrices.at(2));
+    logger->info("Memory address for matrices.at(0): {}.", (void *)matrices.at(0));
+    logger->info("Memory address for matrices.at(1): {}.", (void *)matrices.at(1));
+    logger->info("Memory address for matrices.at(2): {}.", (void *)matrices.at(2));
 #endif
-    Kc.reset();
-    Gc.reset();
-    Cc.reset();
+    // Kc.reset();
+    // Gc.reset();
+    // Cc.reset();
 
     const arma::mat Yc = Y * M;
     M.reset();

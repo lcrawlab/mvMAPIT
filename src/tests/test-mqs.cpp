@@ -35,7 +35,7 @@ context("compute_q_matrix") {
     int num_variance_components = 3;
     int num_combinations = 6;
     std::vector<arma::vec> V(num_phenotypes);
-    std::vector<arma::mat> M(num_variance_components);
+    std::vector<arma::mat *> M(num_variance_components);
     arma::mat matrix(num_samples, num_samples);
     matrix.eye();
     arma::vec v1(num_samples, arma::fill::zeros);
@@ -47,7 +47,7 @@ context("compute_q_matrix") {
     V[0] = v1;
     V[1] = v2;
     V[2] = v3;
-    M = {matrix, matrix, matrix};
+    M = {&matrix, &matrix, &matrix};
     // when
     arma::mat result = compute_q_matrix(V, M);
     // then
@@ -61,7 +61,7 @@ context("compute_q_matrix") {
     int num_variance_components = 3;
     int num_combinations = 3;
     std::vector<arma::vec> V(num_phenotypes);
-    std::vector<arma::mat> M(num_variance_components);
+    std::vector<arma::mat *> M(num_variance_components);
     arma::mat matrix(num_samples, num_samples);
     matrix.eye();
     arma::vec v1(num_samples, arma::fill::zeros);
@@ -70,7 +70,7 @@ context("compute_q_matrix") {
     v2(1) = 1;
     V[0] = v1;
     V[1] = v2;
-    M = {matrix, matrix, matrix};
+    M = {&matrix, &matrix, &matrix};
     // when
     arma::mat result = compute_q_matrix(V, M);
     // then
@@ -85,12 +85,12 @@ context("compute_q_vector") {
     int num_samples = 3;
     int num_variance_components = 3;
     int num_combinations = 6;
-    std::vector<arma::mat> M(num_variance_components);
+    std::vector<arma::mat *> M(num_variance_components);
     arma::mat matrix(num_samples, num_samples);
     matrix.eye();
     arma::vec v1(num_samples, arma::fill::ones);
     arma::vec v2(num_samples, arma::fill::ones);
-    M = {matrix, 2 * matrix, 3 * matrix};
+    M = {&matrix, &(2 * matrix), &(3 * matrix)};
     arma::vec correct_answer(num_variance_components);
     correct_answer(0) = 3;
     correct_answer(1) = 6;
@@ -109,12 +109,12 @@ context("compute_q_vector") {
     int num_samples = 3;
     int num_variance_components = 3;
     int num_combinations = 6;
-    std::vector<arma::mat> M(num_variance_components);
+    std::vector<arma::mat *> M(num_variance_components);
     arma::mat matrix(num_samples, num_samples);
     matrix.ones();
     arma::vec v1(num_samples, arma::fill::ones);
     arma::vec v2(num_samples, arma::fill::ones);
-    M = {matrix, matrix, matrix};
+    M = {&matrix, &matrix, &matrix};
     arma::vec correct_answer(num_variance_components);
     correct_answer(0) = 9;
     correct_answer(1) = 9;

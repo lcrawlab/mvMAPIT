@@ -16,7 +16,7 @@ double product_trace(const arma::mat &a, const arma::mat &b) {
   return arma::as_scalar(accu(a.t() % b));
 }
 
-arma::mat compute_s_matrix(const std::vector<arma::mat> &matrices) {
+arma::mat compute_s_matrix(const std::vector<arma::mat *> &matrices) {
 #ifdef WITH_LOGGER
   std::string logname = "mqs::mqs::compute_s_matrix";
   auto logger = spdlog::get(logname);
@@ -30,7 +30,7 @@ arma::mat compute_s_matrix(const std::vector<arma::mat> &matrices) {
     for (int j = 0; j < num_variance_components; j++) {
       if (i <= j) {
         // create upper triangular matrix
-        S(i, j) = product_trace(matrices[i], matrices[j]);
+        S(i, j) = product_trace(*matrices[i], *matrices[j]);
         S(j, i) = S(i, j);
 #ifdef WITH_LOGGER
         logger->info("S({},{}) = {}", i, j, S(i, j));
@@ -45,7 +45,7 @@ arma::mat compute_s_matrix(const std::vector<arma::mat> &matrices) {
 }
 
 arma::vec compute_q_vector(const arma::vec &y1, const arma::vec &y2,
-                           const std::vector<arma::mat> &matrices) {
+                           const std::vector<arma::mat *> &matrices) {
 #ifdef WITH_LOGGER
   std::string logname = "mqs::mqs::compute_q_vector";
   auto logger = spdlog::get(logname);
@@ -56,7 +56,8 @@ arma::vec compute_q_vector(const arma::vec &y1, const arma::vec &y2,
   arma::vec q = arma::zeros(num_variance_components);
 
   for (int i = 0; i < num_variance_components; i++) {
-    q(i) = arma::as_scalar(y1.t() * matrices[i] * y2);
+    arma::mat A = *matrices[i];
+    q(i) = arma::as_scalar(y1.t() * A * y2);
 #ifdef WITH_LOGGER
     logger->info("q({}) = {}", i, q(i));
     if (q(i) < 0) {
@@ -68,7 +69,7 @@ arma::vec compute_q_vector(const arma::vec &y1, const arma::vec &y2,
 }
 
 arma::mat compute_q_matrix(const std::vector<arma::vec> &Y,
-                           const std::vector<arma::mat> &matrices) {
+                           const std::vector<arma::mat *> &matrices) {
 #ifdef WITH_LOGGER
   std::string logname = "mqs::mqs::compute_q_matrix";
   auto logger = spdlog::get(logname);
@@ -101,7 +102,7 @@ arma::mat compute_q_matrix(const std::vector<arma::vec> &Y,
 }
 
 arma::mat compute_h_matrix(const arma::mat &Sinv,
-                           const std::vector<arma::mat> &matrices) {
+                           const std::vector<arma::mat *> &matrices) {
 #ifdef WITH_LOGGER
   std::string logname = "mqs::mqs::compute_h_matrix";
   auto logger = spdlog::get(logname);
@@ -109,15 +110,16 @@ arma::mat compute_h_matrix(const arma::mat &Sinv,
     logger = spdlog::r_sink_mt(logname);
   logger->info("Computing H matrix");
 #endif
-  arma::mat H = arma::zeros(arma::size(matrices[0]));
+  arma::mat H = arma::zeros(arma::size(*matrices[0]));
   for (int i = 0; i < matrices.size(); i++) {
-    H = H + Sinv(0, i) * matrices[i];
+    arma::mat A = *matrices[i];
+    H = H + Sinv(0, i) * A;
   }
   return H;
 }
 
 arma::mat compute_v_matrix(const arma::vec &delta,
-                           const std::vector<arma::mat> &matrices) {
+                           const std::vector<arma::mat *> &matrices) {
 #ifdef WITH_LOGGER
   std::string logname = "mqs::mqs::compute_v_matrix";
   auto logger = spdlog::get(logname);
@@ -125,9 +127,10 @@ arma::mat compute_v_matrix(const arma::vec &delta,
     logger = spdlog::r_sink_mt(logname);
   logger->info("Computing V matrix");
 #endif
-  arma::mat V = arma::zeros(arma::size(matrices[0]));
+  arma::mat V = arma::zeros(arma::size(*matrices[0]));
   for (int i = 0; i < matrices.size(); i++) {
-    V = V + delta(i) * matrices[i];
+    arma::mat A = *matrices[i];
+    V = V + delta(i) * A;
   }
   return V;
 }
@@ -156,7 +159,7 @@ double compute_var_bilinear_approx(const arma::vec &y1, const arma::vec &y2,
 
 arma::vec compute_variance_delta(const std::vector<arma::vec> &Y,
                                  const arma::mat &Sinv, const arma::mat &delta,
-                                 const std::vector<arma::mat> &matrices) {
+                                 const std::vector<arma::mat *> &matrices) {
 #ifdef WITH_LOGGER
   std::string logname = "mqs.mqs.compute_variance_delta";
   auto logger = spdlog::get(logname);

@@ -174,7 +174,7 @@ context("MAPIT1_Normal") {
     correct_answer(2) = as_scalar(
         yc_original.t() * (arma::eye<arma::mat>(n, n) - (b * btb_inv) * b.t()) *
         yc_original);
-    std::vector<arma::mat> matrices = {Gc, Kc, M};
+    std::vector<arma::mat *> matrices = {&Gc, &Kc, &M};
     arma::vec yc = vectorise(Yc);
     std::vector<arma::vec> phenotypes = matrix_to_vector_of_rows(yc.as_row());
     // when
@@ -237,7 +237,7 @@ context("MAPIT1_Normal") {
     correct_answer(2, 2) = arma::as_scalar(
         arma::accu(trans(arma::eye<arma::mat>(n, n) - (b * btb_inv) * b.t()) %
                    (arma::eye<arma::mat>(n, n) - (b * btb_inv) * b.t())));
-    std::vector<arma::mat> matrices = {Gc, Kc, M};
+    std::vector<arma::mat *> matrices = {&Gc, &Kc, &M};
     // when
     arma::mat result = compute_s_matrix(matrices);
     // then
@@ -293,7 +293,7 @@ context("MAPIT1_Normal") {
     arma::mat Kc = M * K * M;
     arma::mat Gc = M * G * M;
     arma::mat Yc = Y * M;
-    std::vector<arma::mat> matrices = {Gc, Kc, M};
+    std::vector<arma::mat *> matrices = {&Gc, &Kc, &M};
     arma::vec yc = vectorise(Yc);
     std::vector<arma::vec> phenotypes = matrix_to_vector_of_rows(yc.as_row());
     arma::vec q_original = arma::zeros(3); // Create k-vector q to save

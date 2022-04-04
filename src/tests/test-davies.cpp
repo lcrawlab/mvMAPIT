@@ -12,12 +12,12 @@ context("davies_routine") {
     int num_variance_components = 3;
     arma::mat q(num_variance_components, num_combinations);
     q.ones();
-    std::vector<arma::mat> matrices(num_variance_components);
+    std::vector<arma::mat &> matrices(num_variance_components);
     arma::mat M(num_samples, num_samples);
     M.eye();
     arma::mat S(num_variance_components, num_variance_components);
     S.eye();
-    matrices = {M, M, M};
+    matrices = {&M, &M, &M};
     arma::mat correct_answer =
         arma::eye(num_combinations, num_variance_components);
     // when
