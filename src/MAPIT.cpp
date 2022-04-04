@@ -129,12 +129,24 @@ Rcpp::List MAPITCpp(
       continue;
     }
 
+    std::vector<arma::mat> matrices;
+    matrices.resize(4);
+    arma::mat &G = matrices[0];
+    arma::mat &K = matrices[1];
+    arma::mat &M = matrices[2];
+    arma::mat &Cc = matrices[3];
+    if (C.isNotNull()) {
+      Cc = Rcpp::as<arma::mat>(C.get());
+    } else {
+      matrices.resize(3);
+    }
+
     // Compute K and G covariance matrices
     auto start = steady_clock::now();
     // Create the linear kernel
     const arma::rowvec x_k = X(arma::span(i), arma::span::all);
-    arma::mat K = compute_k_matrix(GSM, x_k, p);
-    arma::mat G = compute_g_matrix(K, x_k);
+    K = compute_k_matrix(GSM, x_k, p);
+    G = compute_g_matrix(K, x_k);
 
     auto end = steady_clock::now();
     execution_t(i, 0) = duration_cast<microseconds>(end - start).count();
@@ -153,27 +165,16 @@ Rcpp::List MAPITCpp(
     }
     b.col(z + 1) = arma::trans(x_k);
 
-    arma::mat M = compute_projection_matrix(n, b);
+    M = compute_projection_matrix(n, b);
     b.reset();
-    arma::mat Kc = M * K * M;
-    K.reset();
-    arma::mat Gc = M * G * M;
-    G.reset();
-    arma::mat Cc;
-    std::vector<arma::mat> matrices;
+    K = M * K * M;
+    G = M * G * M;
 
     if (C.isNotNull()) {
-      Cc = M * Rcpp::as<arma::mat>(C.get()) * M;
-      matrices = {Gc, Kc, Cc, M};
-    } else {
-      matrices = {Gc, Kc, M};
+      Cc = M * Cc * M;
     }
-    Kc.reset();
-    Gc.reset();
-    Cc.reset();
 
     const arma::mat Yc = Y * M;
-    M.reset();
     end = steady_clock::now();
     execution_t(i, 1) = duration_cast<microseconds>(end - start).count();
 
