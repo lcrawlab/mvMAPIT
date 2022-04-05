@@ -27,22 +27,16 @@ arma::vec davies_routine_vec(const arma::mat &S, const arma::mat &Sinv,
   arma::vec eigval;
   arma::mat eigvec;
 
-  if (num_variance_components == 3) {
-    // C is NULL
-    arma::vec q_sub = q.subvec(1, 2);
-    arma::mat S_sub = S.submat(1, 1, 2, 2);
-    arma::vec delta_null = arma::inv(S_sub) * q_sub;
+  arma::vec q_sub = q.subvec(1, num_variance_components - 1);
+  arma::mat S_sub =
+      S.submat(1, 1, num_variance_components - 1, num_variance_components - 1);
+  arma::vec delta_null = arma::inv(S_sub) * q_sub;
 
-    arma::eig_sym(eigval, eigvec,
-                  delta_null(0) * matrices[1] + delta_null(1) * matrices[2]);
-  } else {
-    // C is not NULL
-    arma::vec delta_null = Sinv * q;
-
-    arma::eig_sym(eigval, eigvec,
-                  delta_null(0) * matrices[1] + delta_null(1) * matrices[2] +
-                      delta_null(2) * matrices[3]);
+  arma::mat A = arma::zeros(arma::size(matrices[0]));
+  for (int i = 0; i < q_sub.n_elem; i++) {
+    A = A + delta_null(i) * matrices[i + 1];
   }
+  arma::eig_sym(eigval, eigvec, A);
   arma::mat EV_mat = compute_positive_ev_matrix(eigvec, eigval);
   evals = arma::eig_sym(EV_mat * compute_h_matrix(Sinv, matrices) * EV_mat);
   return evals;
