@@ -81,10 +81,7 @@ MvMAPIT <- function(
         ncol(Y)
     )
     log$debug("Genotype matrix determinant: %f", det((X) %*% t(X)))
-    zero_var <- which(
-        apply(X, 1, var) ==
-            0
-    )
+    zero_var <- which(apply(X, 1, var) == 0)
     log$debug("Number of zero variance variants: %d", length(zero_var))
     X <- remove_zero_variance(X)  # operates on rows
     log$debug(
@@ -135,13 +132,7 @@ MvMAPIT <- function(
         pves <- vc.mod$PVE
         timings <- vc.mod$timings
     }
-    timings_mean <- apply(
-        as.matrix(
-            timings[rowSums(timings) !=
-                0, ]
-        ),
-        2, mean
-    )
+    timings_mean <- apply(as.matrix(timings[rowSums(timings) != 0, ]), 2, mean)
     log$info("Calculated mean time of execution. Return list.")
     row.names(pvals) <- rownames(X)
     row.names(pves) <- rownames(X)
@@ -153,13 +144,27 @@ MvMAPIT <- function(
         pves[!(c(1:nrow(pves)) %in%
             variantIndex)] <- NA
     }
-    if (ncol(pvals) >
-        1) {
+    if (ncol(pvals) > 1) {
         fisherp <- apply(pvals, 1, sumlog)
         pvals <- cbind(pvals, metap = fisherp)
     }
     pves <- set_covariance_components(variance_components_ind, pves)
-    return(list(pvalues = pvals, pves = pves, timings = timings_mean))
+    pvals <- as.data.frame(pvals) %>%
+        mutate(id = row.names(.)) %>%
+        pivot_longer(cols = !id,
+                     names_to = "trait", values_to = "p")
+    pves <- as.data.frame(pves) %>%
+        mutate(id = row.names(.)) %>%
+        pivot_longer(cols = !id,
+                     names_to = "trait", values_to = "PVE")
+    pves <- as.data.frame(pves) %>%
+        mutate(id = row.names(.)) %>%
+        pivot_longer(cols = !id,
+                     names_to = "trait", values_to = "PVE")
+    duration_ms <- timings_mean
+    process <- c("cov", "projections", "vectorize", "q", "S", "vc")
+    timings_mean <- data.frame(process, duration_ms)
+    return(list(pvalues = pvals, pves = pves, duration = timings_mean))
 }
 
 remove_zero_variance <- function(X) {

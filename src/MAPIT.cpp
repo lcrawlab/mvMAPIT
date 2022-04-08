@@ -11,7 +11,7 @@
 #include "mqs/mqs.h"
 
 using std::chrono::duration_cast;
-using std::chrono::microseconds;
+using std::chrono::milliseconds;
 using std::chrono::steady_clock;
 
 // [[Rcpp::depends(RcppArmadillo)]]
@@ -149,7 +149,7 @@ Rcpp::List MAPITCpp(
     G = compute_g_matrix(K, x_k);
 
     auto end = steady_clock::now();
-    execution_t(i, 0) = duration_cast<microseconds>(end - start).count();
+    execution_t(i, 0) = duration_cast<milliseconds>(end - start).count();
 
 #ifdef WITH_LOGGER_FINE
     logger->info("Dimensions of polygenic background: {} x {}.", K.n_cols,
@@ -176,7 +176,7 @@ Rcpp::List MAPITCpp(
 
     const arma::mat Yc = Y * M;
     end = steady_clock::now();
-    execution_t(i, 1) = duration_cast<microseconds>(end - start).count();
+    execution_t(i, 1) = duration_cast<milliseconds>(end - start).count();
 
     arma::mat q;
     std::vector<arma::vec> phenotypes;
@@ -189,17 +189,17 @@ Rcpp::List MAPITCpp(
       phenotypes = matrix_to_vector_of_rows(yc.as_row());
     }
     end = steady_clock::now();
-    execution_t(i, 2) = duration_cast<microseconds>(end - start).count();
+    execution_t(i, 2) = duration_cast<milliseconds>(end - start).count();
 
     start = steady_clock::now();
     q = compute_q_matrix(phenotypes, matrices);
     end = steady_clock::now();
-    execution_t(i, 3) = duration_cast<microseconds>(end - start).count();
+    execution_t(i, 3) = duration_cast<milliseconds>(end - start).count();
 
     start = steady_clock::now();
     arma::mat S = compute_s_matrix(matrices);
     end = steady_clock::now();
-    execution_t(i, 4) = duration_cast<microseconds>(end - start).count();
+    execution_t(i, 4) = duration_cast<milliseconds>(end - start).count();
 
     // Compute delta and Sinv
     const float det_S = arma::det(S);
@@ -248,7 +248,7 @@ Rcpp::List MAPITCpp(
       }
     }
     end = ::steady_clock::now();
-    execution_t(i, 5) = duration_cast<microseconds>(end - start).count();
+    execution_t(i, 5) = duration_cast<milliseconds>(end - start).count();
     // Compute the PVE
     pve.row(i) = compute_pve(delta, 0);
 #ifdef WITH_LOGGER_FINE
