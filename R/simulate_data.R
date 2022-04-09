@@ -245,8 +245,39 @@ simulate_phenotypes <- function(
     log$debug("Correlation of simulated epistatic effects: %s", cor(alpha))
 
     # return data
+    parameter_names <- c("number_samples",
+                         "number_snps",
+                         "number_phenotypes",
+                         "number_causal_snps",
+                         "number_epistatic_effects",
+                         "number_pleiotropic_snps",
+                         "number_trait_specific_snps",
+                         "pve",
+                         "rho",
+                         "epistatic_correlation",
+                         "marginal_correlation",
+                         "group_ratio_pleiotropic",
+                         "group_ratio_trait",
+                         "seed"
+    )
+    parameter_values <- c(n_samples,
+                          n_snp,
+                          d,
+                          n_causal,
+                          n_epistatic_effects,
+                          n_pleiotropic,
+                          n_trait_specific,
+                          H2,
+                          rho,
+                          epistatic_correlation,
+                          marginal_correlation,
+                          group_ratio_pleiotropic,
+                          group_ratio_trait,
+                          seed)
+    parameters <- tidyr::tibble(name = parameter_names,
+                                value = parameter_values)
     simulated_pleiotropic_epistasis_data <- list(
-        number_samples = n_samples, pve = H2, rho = rho, phenotype = Y, genotype = genotype_matrix,
+        parameters = parameters, phenotype = Y, genotype = genotype_matrix,
         snps = causal_snps, snps.filtered = snp.ids.filtered, seed = seed
     )
 
