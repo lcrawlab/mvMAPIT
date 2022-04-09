@@ -166,13 +166,13 @@ Rcpp::List MAPITCpp(
     b.col(z + 1) = arma::trans(x_k);
 
     M = compute_projection_matrix(n, b);
-    b.reset();
-    K = M * K * M;
-    G = M * G * M;
+    K = project_matrix(K, b);
+    G = project_matrix(G, b);
 
     if (C.isNotNull()) {
-      Cc = M * Cc * M;
+      Cc = project_matrix(Cc, b);
     }
+    b.reset();
 
     const arma::mat Yc = Y * M;
     end = steady_clock::now();
