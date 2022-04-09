@@ -70,6 +70,7 @@ MvMAPIT <- function(
     if (is.vector(Y)) {
         Y <- t(Y)
     }
+    row.names(Y) <- make.unique(as.character(row.names(Y)))
 
     log$debug("Running in %s test mode.", test)
     log$debug(
@@ -92,7 +93,7 @@ MvMAPIT <- function(
     log$debug("Scale X matrix appropriately.")
     Xsd <- apply(X, 1, sd)
     Xmean <- apply(X, 1, mean)
-    X <- (X - Xmean)/Xsd
+    X <- (X - Xmean) / Xsd
 
     variance_components_ind <- get_variance_components_ind(Y)
     if (test == "hybrid") {
@@ -151,15 +152,11 @@ MvMAPIT <- function(
     pves <- set_covariance_components(variance_components_ind, pves)
     pvals <- as.data.frame(pvals) %>%
         mutate(id = row.names(.)) %>%
-        pivot_longer(cols = !id,
+        tidyr::pivot_longer(cols = !id,
                      names_to = "trait", values_to = "p")
     pves <- as.data.frame(pves) %>%
         mutate(id = row.names(.)) %>%
-        pivot_longer(cols = !id,
-                     names_to = "trait", values_to = "PVE")
-    pves <- as.data.frame(pves) %>%
-        mutate(id = row.names(.)) %>%
-        pivot_longer(cols = !id,
+        tidyr::pivot_longer(cols = !id,
                      names_to = "trait", values_to = "PVE")
     duration_ms <- timings_mean
     process <- c("cov", "projections", "vectorize", "q", "S", "vc")
@@ -168,32 +165,30 @@ MvMAPIT <- function(
 }
 
 remove_zero_variance <- function(X) {
-    return(
-        X[which(
-            apply(X, 1, var) !=
-                0
-        ),
-            ]
-    )
+    return(X[which(apply(X, 1, var) != 0), ])
 }
 
 # This naming sequence has to match the creation of the q-matrix in the C++
 # routine of mvMAPIT
 mapit_struct_names <- function(Y) {
     phenotype_names <- rownames(Y)
-    if (length(phenotype_names) ==
-        0) {
+    if (length(phenotype_names) == 0) {
         phenotype_names <- sprintf("P%s", 1:nrow(Y))
     }
-    if (length(phenotype_names) ==
-        1) {
+    if (length(phenotype_names) == 1) {
         return(phenotype_names)
     }
     phenotype_combinations <- c()
     for (i in seq_len(nrow(Y))) {
         for (j in seq_len(nrow(Y))) {
             if (j <= i) {
-                phenotype_combinations <- c(phenotype_combinations, paste0(phenotype_names[i], "*", phenotype_names[j]))
+                phenotype_combinations <- c(phenotype_combinations,
+                                            sprintf(
+                                                "%s*%s",
+                                                phenotype_names[i],
+                                                phenotype_names[j]
+                                            )
+                )
             }
         }
     }

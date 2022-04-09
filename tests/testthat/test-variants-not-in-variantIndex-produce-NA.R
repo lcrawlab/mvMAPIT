@@ -22,8 +22,12 @@ test_that(
             test = "normal", cores = 1, variantIndex = variantIndex, logLevel = "DEBUG"
         )
         # then
-        expect_true(all(is.na(mapit$pves[otherIndex, ])))
-        expect_true(all(is.na(mapit$pvalues[otherIndex, ])))
+        otherp <- mapit$pvalues %>%
+            filter(id == otherIndex)
+        otherpve <- mapit$pves %>%
+            filter(id == otherIndex)
+        expect_true(all(is.na(otherp[, "p", drop = TRUE])))
+        expect_true(all(is.na(otherpve[,"PVE", drop = TRUE])))
     }
 )
 
@@ -49,9 +53,9 @@ test_that(
             test = "normal", cores = 1, logLevel = "DEBUG"
         )
         # then
-        expect_true(all(is.na(mapit$pves[, 2])))
-        expect_true(all(is.na(mapit$pves[, 4])))
-        expect_true(all(is.na(mapit$pves[, 5])))
+        covint <- mapit$pves %>%
+            filter(trait %in% c("P2*P1", "P3*P1", "P3*P2"))
+        expect_true(all(is.na(covint[, "PVE", drop = TRUE])))
     }
 )
 

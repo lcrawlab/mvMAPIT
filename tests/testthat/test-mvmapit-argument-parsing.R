@@ -3,11 +3,11 @@ test_that(
         # given
         p <- 10
         n <- 4
-        pvalues <- matrix(
-            rep(0.48001, 10),
-            ncol = 1
+        pvalues <- tidyr::tibble(
+           id = as.character(c(1:p)),
+           trait = rep("P1", p),
+           p =  rep(0.48001, p)
         )
-        colnames(pvalues) <- c("P1")
         set.seed(853)
         X <- matrix(
             runif(p * n),
@@ -20,7 +20,7 @@ test_that(
             Y, accuracy = 1e-05, cores = 1, logLevel = "ERROR"
         )
         # then
-        expect_equal(mapit$pvalues, pvalues, tolerance = 0.001)
+        expect_equal(mapit$pvalues, pvalues, tolerance = 0.01)
     }
 )
 
@@ -29,11 +29,11 @@ test_that(
         # given
         p <- 10
         n <- 4
-        pvalues <- matrix(
-            rep(0.209, 10),
-            ncol = 1
+        pvalues <- tidyr::tibble(
+           id = as.character(c(1:p)),
+           trait = rep("P1", p),
+           p =  rep(0.209, p)
         )
-        colnames(pvalues) <- c("P1")
         set.seed(853)
         X <- matrix(
             runif(p * n),

@@ -4,15 +4,13 @@ test_that(
         p <- 2
         n <- 10
         d <- 3
-        pvalues <- matrix(
-            c(
-                0.4990573, 0.4478648, 0.9574136, 0.4662016, 0.4782672, 0.1381317,
-                0.612, 0.5015375, 0.4619467, 0.1347061, 0.450717, 0.640529, 0.2410251,
-                0.425
-            ),
-            nrow = p, ncol = 7, byrow = TRUE
+        pvalues <- tidyr::tibble(
+           id = rep(as.character(c(1:p)), each = 7),
+           trait = rep(c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3", "metap"), p),
+           p =  c(0.4990573, 0.4478648, 0.9574136, 0.4662016, 0.4782672,
+                  0.1381317, 0.612, 0.5015375, 0.4619467, 0.1347061,
+                  0.450717, 0.640529, 0.2410251, 0.425 )
         )
-        colnames(pvalues) <- c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3", "metap")
         set.seed(853)
         X <- matrix(
             runif(p * n),
@@ -39,14 +37,12 @@ test_that(
         p <- 2
         n <- 10
         d <- 3
-        pvalues <- matrix(
-            c(
-                0.01624319, NA, 0.6531582, NA, NA, 0.419213, NA, 0.02694842, NA,
-                0.3977345, NA, NA, 0.490887, NA
-            ),
-            nrow = p, ncol = 7, byrow = TRUE
+        pvalues <- tidyr::tibble(
+           id = rep(as.character(c(1:p)), each = 7),
+           trait = rep(c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3", "metap"), p),
+           p = c(0.01624319, NA, 0.6531582, NA, NA, 0.419213, NA,
+                 0.02694842, NA, 0.3977345, NA, NA, 0.490887, NA)
         )
-        colnames(pvalues) <- c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3", "metap")
         set.seed(853)
         X <- matrix(
             runif(p * n),
@@ -73,15 +69,13 @@ test_that(
         p <- 2
         n <- 10
         d <- 3
-        pvalues <- matrix(
-            c(
-                0.4990573, 0.4478648, 0.9574136, 0.4662016, 0.4782672, 0.1381317,
-                0.612, 0.5015375, 0.4619467, 0.1347061, 0.450717, 0.640529, 0.2410251,
-                0.425
-            ),
-            nrow = p, ncol = 7, byrow = TRUE
+        pvalues <- tidyr::tibble(
+           id = rep(as.character(c(1:p)), each = 7),
+           trait = rep(c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3", "metap"), p),
+           p =  c(0.4990573, 0.4478648, 0.9574136, 0.4662016, 0.4782672,
+                  0.1381317, 0.612, 0.5015375, 0.4619467, 0.1347061,
+                  0.450717, 0.640529, 0.2410251, 0.425 )
         )
-        colnames(pvalues) <- c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3", "metap")
         set.seed(853)
         X <- matrix(
             runif(p * n),
@@ -108,17 +102,17 @@ test_that(
         p <- 4
         n <- 10
         d <- 3
-        pvalues <- matrix(
-            c(
+        pvalues <- tidyr::tibble(
+           id = rep(as.character(c(1:p)), each = 7),
+           trait = rep(c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3", "metap"), p),
+           p =  c(
                 0.6876487, 0.2148062, 0.5640931, 0.1657485, 0.2837563, 0.5020969,
                 0.409, 0.8920097, 0.9107812, 0.9787608, 0.6248188, 0.275113, 0.4994958,
                 0.945, 0.5868067, 0.5128342, 0.3823134, 0.874728, 0.2352273, 0.688964,
                 0.767, 0.3184337, 0.5047131, 0.6774045, 0.307193, 0.8257162, 0.5527816,
                 0.756
-            ),
-            nrow = p, ncol = 7, byrow = TRUE
+           )
         )
-        colnames(pvalues) <- c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3", "metap")
         set.seed(29)
         X <- matrix(
             runif(p * n),
@@ -149,17 +143,17 @@ test_that(
         p <- 4
         n <- 10
         d <- 3
-        pvalues <- matrix(
-            c(
+        pvalues <- tidyr::tibble(
+           id = rep(as.character(c(1:p)), each = 7),
+           trait = rep(c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3", "metap"), p),
+           p =  c(
                 0.6876487, 0.2148062, 0.5640931, 0.1657485, 0.2837563, 0.5020969,
                 0.409, 0.8920097, 0.9107812, 0.9787608, 0.6248188, 0.275113, 0.4994958,
                 0.945, 0.5868067, 0.5128342, 0.3823134, 0.874728, 0.2352273, 0.688964,
                 0.767, 0.3184337, 0.5047131, 0.6774045, 0.307193, 0.8257162, 0.5527816,
                 0.756
-            ),
-            nrow = p, ncol = 7, byrow = TRUE
+           )
         )
-        colnames(pvalues) <- c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3", "metap")
         set.seed(29)
         X <- matrix(
             runif(p * n),
@@ -190,17 +184,16 @@ test_that(
         p <- 4
         n <- 10
         d <- 3
-
-        pvalues <- matrix(
-            c(
+        pvalues <- tidyr::tibble(
+           id = rep(as.character(c(1:p)), each = 7),
+           trait = rep(c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3", "metap"), p),
+           p =  c(
                 0.6977266, NA,0.4000627, NA, NA,0.3035032, NA,
                 0.4784944, NA,0.2936015, NA, NA,0.4665585, NA,
                 0.9274069, NA,0.1260672, NA, NA,0.1060084, NA,
                 0.4216691, NA,0.1615168, NA, NA,0.1526920, NA
-            ),
-            nrow = p, ncol = 7, byrow = TRUE
+           )
         )
-        colnames(pvalues) <- c("P1*P1", "P2*P1", "P2*P2", "P3*P1", "P3*P2", "P3*P3", "metap")
         set.seed(853)
         X <- matrix(
             runif(p * n),
@@ -231,8 +224,10 @@ test_that(
         p <- 10
         n <- 4
         d <- 1
-        pvalues <- matrix(
-            c(
+        pvalues <- tidyr::tibble(
+           id = as.character(c(1:p)),
+           trait = rep("P1", p),
+           p =  c(
                 0.7080633,
                 0.0000000,
                 0.0000000,
@@ -243,11 +238,9 @@ test_that(
                 0.1372735,
                 0.1017353,
                 0.2053481
-            ),
-            nrow = p, ncol = 1, byrow = TRUE
+           )
         )
         set.seed(20)
-        colnames(pvalues) <- c("P1")
         X <- matrix(
             runif(p * n),
             ncol = p

@@ -40,7 +40,8 @@ Imports:
     RcppArmadillo,
     RcppParallel,
     RcppSpdlog,
-    testthat
+    testthat,
+    tidyr
 Suggests:
     knitr,
     markdown,
