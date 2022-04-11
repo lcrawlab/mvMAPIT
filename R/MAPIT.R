@@ -70,6 +70,7 @@ MvMAPIT <- function(
     if (is.vector(Y)) {
         Y <- t(Y)
     }
+    row.names(Y) <- make.unique(as.character(row.names(Y)))
 
     log$debug("Running in %s test mode.", test)
     log$debug(
@@ -81,10 +82,7 @@ MvMAPIT <- function(
         ncol(Y)
     )
     log$debug("Genotype matrix determinant: %f", det((X) %*% t(X)))
-    zero_var <- which(
-        apply(X, 1, var) ==
-            0
-    )
+    zero_var <- which(apply(X, 1, var) == 0)
     log$debug("Number of zero variance variants: %d", length(zero_var))
     X <- remove_zero_variance(X)  # operates on rows
     log$debug(
@@ -95,7 +93,7 @@ MvMAPIT <- function(
     log$debug("Scale X matrix appropriately.")
     Xsd <- apply(X, 1, sd)
     Xmean <- apply(X, 1, mean)
-    X <- (X - Xmean)/Xsd
+    X <- (X - Xmean) / Xsd
 
     variance_components_ind <- get_variance_components_ind(Y)
     if (test == "hybrid") {
@@ -135,13 +133,7 @@ MvMAPIT <- function(
         pves <- vc.mod$PVE
         timings <- vc.mod$timings
     }
-    timings_mean <- apply(
-        as.matrix(
-            timings[rowSums(timings) !=
-                0, ]
-        ),
-        2, mean
-    )
+    timings_mean <- apply(as.matrix(timings[rowSums(timings) != 0, ]), 2, mean)
     log$info("Calculated mean time of execution. Return list.")
     row.names(pvals) <- rownames(X)
     row.names(pves) <- rownames(X)
@@ -153,42 +145,50 @@ MvMAPIT <- function(
         pves[!(c(1:nrow(pves)) %in%
             variantIndex)] <- NA
     }
-    if (ncol(pvals) >
-        1) {
+    if (ncol(pvals) > 1) {
         fisherp <- apply(pvals, 1, sumlog)
         pvals <- cbind(pvals, metap = fisherp)
     }
     pves <- set_covariance_components(variance_components_ind, pves)
-    return(list(pvalues = pvals, pves = pves, timings = timings_mean))
+    pvals <- as.data.frame(pvals) %>%
+        mutate(id = row.names(.)) %>%
+        tidyr::pivot_longer(cols = !id,
+                     names_to = "trait", values_to = "p")
+    pves <- as.data.frame(pves) %>%
+        mutate(id = row.names(.)) %>%
+        tidyr::pivot_longer(cols = !id,
+                     names_to = "trait", values_to = "PVE")
+    duration_ms <- timings_mean
+    process <- c("cov", "projections", "vectorize", "q", "S", "vc")
+    timings_mean <- data.frame(process, duration_ms)
+    return(list(pvalues = pvals, pves = pves, duration = timings_mean))
 }
 
 remove_zero_variance <- function(X) {
-    return(
-        X[which(
-            apply(X, 1, var) !=
-                0
-        ),
-            ]
-    )
+    return(X[which(apply(X, 1, var) != 0), ])
 }
 
 # This naming sequence has to match the creation of the q-matrix in the C++
 # routine of mvMAPIT
 mapit_struct_names <- function(Y) {
     phenotype_names <- rownames(Y)
-    if (length(phenotype_names) ==
-        0) {
+    if (length(phenotype_names) == 0) {
         phenotype_names <- sprintf("P%s", 1:nrow(Y))
     }
-    if (length(phenotype_names) ==
-        1) {
+    if (length(phenotype_names) == 1) {
         return(phenotype_names)
     }
     phenotype_combinations <- c()
     for (i in seq_len(nrow(Y))) {
         for (j in seq_len(nrow(Y))) {
             if (j <= i) {
-                phenotype_combinations <- c(phenotype_combinations, paste0(phenotype_names[i], "*", phenotype_names[j]))
+                phenotype_combinations <- c(phenotype_combinations,
+                                            sprintf(
+                                                "%s*%s",
+                                                phenotype_names[i],
+                                                phenotype_names[j]
+                                            )
+                )
             }
         }
     }

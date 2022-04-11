@@ -17,8 +17,17 @@ test_that(
             test = "normal", cores = 1, logLevel = "DEBUG"
         )
         # then
-        expect_equal(mapit$pvalues[, 1], mapit$pvalues[, 2], tolerance = 1e-08)
-        expect_equal(mapit$pvalues[, 1], mapit$pvalues[, 3], tolerance = 1e-08)
+        p1p1 <- mapit$pvalues %>%
+            filter(trait == "y*y") %>%
+            select(-trait)
+        p2p1 <- mapit$pvalues %>%
+            filter(trait == "y.1*y") %>%
+            select(-trait)
+        p2p2 <- mapit$pvalues %>%
+            filter(trait == "y.1*y.1") %>%
+            select(-trait)
+        expect_equal(p1p1, p2p1, tolerance = 1e-08)
+        expect_equal(p1p1, p2p2, tolerance = 1e-08)
     }
 )
 

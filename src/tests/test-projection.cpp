@@ -55,36 +55,37 @@ context("projection as vector multiplication") {
   }
 }
 
-context("speed test projection") {
-  test_that("matrix multiplication vs project_matrix") {
-    // given
-    int l = 2;
-    int k = 100;
-    int N[] = {1000, 2000};
-    arma::mat execution_t(k, 2);
-    arma::mat mean_time(l, 2);
-    for (int i = 0; i < l; i++) {
+// Uncomment if want to run speed test.
+// context("speed test projection") {
+  // test_that("matrix multiplication vs project_matrix") {
+    // // given
+    // int l = 2;
+    // int k = 100;
+    // int N[] = {1000, 2000};
+    // arma::mat execution_t(k, 2);
+    // arma::mat mean_time(l, 2);
+    // for (int i = 0; i < l; i++) {
       // std::cout << N[i] << "\n";
-      arma::mat X;
-      X.randu(N[i], N[i]);
-      arma::mat b = arma::zeros(N[i], 2);
-      b.col(0) = arma::ones<arma::vec>(N[i]);
-      b.col(1) = arma::vec(N[i], arma::fill::randu);
-    // when
-      for (int j = 0; j < k; j++) {
-        auto start = high_resolution_clock::now();
-        arma::mat R = X * X * X;
-        auto end = high_resolution_clock::now();
-        execution_t(j, 0) = duration_cast<milliseconds>(end - start).count();
-        start = high_resolution_clock::now();
-        R = project_matrix(X, b);
-        end = high_resolution_clock::now();
-        execution_t(j, 1) = duration_cast<milliseconds>(end - start).count();
-      }
-      mean_time.row(i) = arma::mean(execution_t, 0);
+      // arma::mat X;
+      // X.randu(N[i], N[i]);
+      // arma::mat b = arma::zeros(N[i], 2);
+      // b.col(0) = arma::ones<arma::vec>(N[i]);
+      // b.col(1) = arma::vec(N[i], arma::fill::randu);
+    // // when
+      // for (int j = 0; j < k; j++) {
+        // auto start = high_resolution_clock::now();
+        // arma::mat R = X * X * X;
+        // auto end = high_resolution_clock::now();
+        // execution_t(j, 0) = duration_cast<milliseconds>(end - start).count();
+        // start = high_resolution_clock::now();
+        // R = project_matrix(X, b);
+        // end = high_resolution_clock::now();
+        // execution_t(j, 1) = duration_cast<milliseconds>(end - start).count();
+      // }
+      // mean_time.row(i) = arma::mean(execution_t, 0);
       // std::cout << mean_time.row(i) << "\n";
-    // then
-      expect_true(mean_time(i, 0) > mean_time(i, 1));
-    }
-  }
-}
+    // // then
+      // expect_true(mean_time(i, 0) > mean_time(i, 1));
+    // }
+  // }
+// }
