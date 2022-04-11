@@ -32,7 +32,7 @@ test_that(
         )  # no NA values in phenotype
         expect_equal(
             length(data),
-            8
+            7
         )
     }
 )
@@ -59,8 +59,8 @@ test_that(
 
         # then
         expect_equal(
-            length(data$snps$phenotype_1$causal_snps),
-            total_causal
+            nrow(data$additive),
+            total_causal * d
         )
     }
 )
@@ -122,22 +122,23 @@ test_that(
         )
 
         # then
-        expect_equal(
-            length(data$snps$phenotype_1$trait_specific_groups$group1),
-            correct_1
-        )
-        expect_equal(
-            length(data$snps$phenotype_1$trait_specific_groups$group2),
-            correct_2
-        )
-        expect_equal(
-            length(data$snps$phenotype_1$pleiotropic_groups$group1),
-            correct_3
-        )
-        expect_equal(
-            length(data$snps$phenotype_1$pleiotropic_groups$group2),
-            correct_4
-        )
+        trait1 <- select(data$interactions, c("trait", "group1", "group2")) %>%
+            filter(trait == 1) %>%
+            ungroup() %>%
+            tidyr::pivot_longer(col = c("group1", "group2")) %>%
+            distinct()
+        pleiotropic <- data$epistatic %>%
+            filter(pleiotropic)
+        t1g1 <- trait1 %>% filter(name == "group1")
+        t1g2 <- trait1 %>% filter(name == "group2")
+        result_1 <- length(setdiff(t1g1$value, pleiotropic$id))
+        result_2 <- length(setdiff(t1g2$value, pleiotropic$id))
+        result_3 <- length(intersect(t1g1$value, pleiotropic$id))
+        result_4 <- length(intersect(t1g2$value, pleiotropic$id))
+        expect_equal(result_1, correct_1)
+        expect_equal(result_2, correct_2)
+        expect_equal(result_3, correct_3)
+        expect_equal(result_4, correct_4)
     }
 )
 
@@ -165,14 +166,19 @@ test_that(
         )
 
         # then
-        expect_equal(
-            length(data$snps$phenotype_1$trait_specific_groups$group1),
-            correct_1
-        )
-        expect_equal(
-            length(data$snps$phenotype_1$trait_specific_groups$group2),
-            correct_1
-        )
+        trait1 <- select(data$interactions, c("trait", "group1", "group2")) %>%
+            filter(trait == 1) %>%
+            ungroup() %>%
+            tidyr::pivot_longer(col = c("group1", "group2")) %>%
+            distinct()
+        pleiotropic <- data$epistatic %>%
+            filter(pleiotropic)
+        t1g1 <- trait1 %>% filter(name == "group1")
+        t1g2 <- trait1 %>% filter(name == "group2")
+        result_1 <- length(setdiff(t1g1$value, pleiotropic$id))
+        result_2 <- length(setdiff(t1g2$value, pleiotropic$id))
+        expect_equal(result_1, correct_1)
+        expect_equal(result_2, correct_2)
     }
 )
 
@@ -198,16 +204,21 @@ test_that(
             X, n_causal = f, n_trait_specific = g, n_pleiotropic = h, d = d, group_ratio_trait = 3,
             group_ratio_pleiotropic = 4, maf_threshold = 0, logLevel = "ERROR"
         )
+        pleiotropic <- data$epistatic %>%
+            filter(pleiotropic)
 
         # then
-        expect_equal(
-            length(data$snps$phenotype_1$pleiotropic_groups$group1),
-            correct_1
-        )
-        expect_equal(
-            length(data$snps$phenotype_1$pleiotropic_groups$group2),
-            correct_2
-        )
+        trait1 <- select(data$interactions, c("trait", "group1", "group2")) %>%
+            filter(trait == 1) %>%
+            ungroup() %>%
+            tidyr::pivot_longer(col = c("group1", "group2")) %>%
+            distinct()
+        t1g1 <- trait1 %>% filter(name == "group1")
+        t1g2 <- trait1 %>% filter(name == "group2")
+        result_1 <- length(intersect(t1g1$value, pleiotropic$id))
+        result_2 <- length(intersect(t1g2$value, pleiotropic$id))
+        expect_equal(result_1, correct_1)
+        expect_equal(result_2, correct_2)
     }
 )
 
@@ -226,8 +237,8 @@ test_that(
             ncol = p
         )
         total_causal <- (f)  # single trait SNPs plus pleiotropic SNPs
-        correct_1 <- 0
-        correct_2 <- 0
+        correct_1 <- NULL
+        correct_2 <- NULL
 
         # when
         data <- simulate_phenotypes(
@@ -236,14 +247,8 @@ test_that(
         )
 
         # then
-        expect_equal(
-            length(data$snps$phenotype_1$alpha),
-            correct_1
-        )
-        expect_equal(
-            length(data$snps$phenotype_2$alpha),
-            correct_2
-        )
+        expect_true(is.null(data$interactions))
+        expect_true(is.null(data$epistatic))
     }
 )
 

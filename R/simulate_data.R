@@ -67,26 +67,24 @@ simulate_phenotypes <- function(
     }
 
     snp.ids <- 1:ncol(genotype_matrix)
-    maf <- colMeans(genotype_matrix)/2
+    maf <- colMeans(genotype_matrix) / 2
     X <- scale(genotype_matrix)
     maf_compliant <- (maf > maf_threshold) & (maf < 1 - maf_threshold)
     # scale produces NaN when the columns have zero variance
-    snp.ids.filtered <- snp.ids[complete.cases(t(X)) &
-        maf_compliant]
+    snp.ids.filtered <- snp.ids[complete.cases(t(X)) & maf_compliant]
 
     n_samples <- nrow(X)  # number of genotype samples
     n_snp <- length(snp.ids.filtered)  # number of SNPs passing quality control
     log$debug("Scaled genotype matrix: %d x %d", n_samples, n_snp)
     log$debug(
         "Disregard %d variants due to zero variance or small minor allele frequency.",
-        ncol(genotype_matrix) -
-            length(snp.ids.filtered)
+        ncol(genotype_matrix) - length(snp.ids.filtered)
     )
     log$debug("Minor allele frequency threshold %f.", maf_threshold)
 
     # divide groups into ratios
-    n_group1_trait = ceiling(n_trait_specific/(1 + group_ratio_trait))
-    n_group1_pleiotropic = ceiling(n_pleiotropic/(1 + group_ratio_pleiotropic))
+    n_group1_trait = ceiling(n_trait_specific / (1 + group_ratio_trait))
+    n_group1_pleiotropic = ceiling(n_pleiotropic / (1 + group_ratio_pleiotropic))
 
     coll <- makeAssertCollection()
     assertInt(n_causal, lower = 0, upper = n_snp, add = coll)
@@ -113,15 +111,11 @@ simulate_phenotypes <- function(
     pleio_split <- split(pleiotropic_set, f = f_pleiotropic)
     X_pleio_group1 <- X[, pleio_split$group1]
     X_pleio_group2 <- X[, pleio_split$group2]
-    X_epi_pleio <- foreach(
-        i = seq_len(n_group1_pleiotropic),
-        .combine = cbind
-    ) %do%
-        {
+    X_epi_pleio <- foreach(i = seq_len(n_group1_pleiotropic), .combine = cbind) %do% {
             # this step fails if there are too little pleiotropic SNPs; i.e. <=
             # 3?
             X_pleio_group1[, i] * X_pleio_group2
-        }
+    }
     if (!is.matrix(X_epi_pleio)) {
         X_epi_pleio <- matrix(
             NA, nrow = nrow(X),
@@ -163,10 +157,20 @@ simulate_phenotypes <- function(
     error <- mvtnorm::rmvnorm(n_samples, sigma = C_error)
     log$debug("Correlation of simulated error: %s", cor(error))
     snp.ids.trait <- setdiff(snp.ids.filtered, pleiotropic_set)
+
+    pleiotropic_interactions <- tibble(
+        group1 = rep(pleio_split$group1, each = length(pleio_split$group2)),
+        group2 = rep(pleio_split$group2, times = length(pleio_split$group1))
+    )
+
+    interactions <- tibble()
+    additive <- tibble()
+
     for (j in 1:d) {
         ## select causal SNPs
         log$debug("Simulating phenotype %d", j)
         causal_snps_j <- sample(snp.ids.trait, n_causal - n_pleiotropic, replace = F)
+        trait_specific_additive <- c(causal_snps_j, pleiotropic_set)
         trait_specific_snps <- sample(causal_snps_j, n_trait_specific, replace = F)
         trait_grouped <- split(trait_specific_snps, f_trait)
         trait_specific_j_1 <- trait_grouped$group1
@@ -176,7 +180,7 @@ simulate_phenotypes <- function(
         log$debug("Length trait specific set 1: %d", length(trait_specific_j_1))
         log$debug("Length trait specific set 2: %d", length(trait_specific_j_2))
 
-        log$debug("Head of causal SNPs: %s", head(c(causal_snps_j, pleiotropic_set)))
+        log$debug("Head of causal SNPs: %s", head(trait_specific_additive))
         log$debug("Head of trait specific SNPs group 1: %s", head(trait_specific_j_1))
         log$debug("Head of trait specific SNPs group 2: %s", head(trait_specific_j_2))
 
@@ -185,15 +189,16 @@ simulate_phenotypes <- function(
         X_trait_specific_j_1 <- X[, trait_specific_j_1]
         X_trait_specific_j_2 <- X[, trait_specific_j_2]
 
+        trait_specific_interactions <- tibble(
+            group1 = rep(trait_specific_j_1, each = length(trait_specific_j_2)),
+            group2 = rep(trait_specific_j_2, times = length(trait_specific_j_1))
+        )
+
         start_interactions <- proc.time()
         log$debug("Computing interactions. This may take a while.")
-        X_epi <- foreach(
-            i = seq_len(length(trait_specific_j_1)),
-            .combine = cbind
-        ) %do%
-            {
+        X_epi <- foreach(i = seq_len(length(trait_specific_j_1)), .combine = cbind) %do% {
                 X_trait_specific_j_1[, i] * X_trait_specific_j_2
-            }
+        }
         X_epi <- cbind(X_epi_pleio, X_epi)
 
         time_interactions <- proc.time() - start_interactions
@@ -216,10 +221,21 @@ simulate_phenotypes <- function(
             y_epi <- X_epi %*% alpha_j
             y_epi <- y_epi * sqrt(H2 * (1 - rho)/c(var(y_epi)))
             log$debug("Variance scaled y_epi: %f", var(y_epi))
+            trait_interactions <- bind_rows(pleiotropic_interactions,
+                                            trait_specific_interactions) %>%
+                mutate(effect_size = alpha_j) %>%
+                mutate(trait = j)
+            interactions <- bind_rows(interactions, trait_interactions)
         } else {
             y_epi <- 0 * y_marginal
             log$debug("y_epi vector of zeros size y_marginal: %s", y_epi)
         }
+        trait_additive <- tibble(
+            id = trait_specific_additive,
+            effect_size = beta_j,
+            trait = j
+        )
+        additive <- bind_rows(additive, trait_additive)
 
         # unexplained phenotypic variation
         y_err <- error[, j]
@@ -234,6 +250,22 @@ simulate_phenotypes <- function(
         )
     }
 
+    if (n_epistatic_effects > 0) {
+        epistatic <- tidyr::pivot_longer(
+                        interactions,
+                        cols = c("group1", "group2"),
+                        names_to = "group",
+                        names_prefix = "group",
+                        values_to = "id"
+                        ) %>%
+                     mutate(name = sprintf("snp_%05d", id)) %>%
+                     dplyr::group_by(trait, id, name) %>%
+                     summarise(total_effect = sum(abs(effect_size))) %>%
+                     mutate(pleiotropic = (id  %in% pleiotropic_set))
+    } else {
+        epistatic <- NULL
+        interactions <- NULL
+    }
 
     colnames(genotype_matrix) <- seq_len(ncol(genotype_matrix)) %>%
         sprintf(fmt = "snp_%05d")  # column names names for SNPs
@@ -278,7 +310,8 @@ simulate_phenotypes <- function(
                                 value = parameter_values)
     simulated_pleiotropic_epistasis_data <- list(
         parameters = parameters, phenotype = Y, genotype = genotype_matrix,
-        snps = causal_snps, snps.filtered = snp.ids.filtered, seed = seed
+        additive = additive, epistatic = epistatic, interactions = interactions,
+        snps.filtered = snp.ids.filtered
     )
 
     return(simulated_pleiotropic_epistasis_data)
