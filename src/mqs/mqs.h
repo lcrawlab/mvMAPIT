@@ -12,7 +12,8 @@ arma::vec compute_q_vector(const arma::vec &y1, const arma::vec &y2,
                            const std::vector<arma::mat> &matrices);
 
 arma::mat compute_q_matrix(const std::vector<arma::vec> &Y,
-                           const std::vector<arma::mat> &matrices);
+                           const std::vector<arma::mat> &matrices,
+                           const int &thread);
 
 arma::mat compute_h_matrix(const arma::mat &Sinv,
                            const std::vector<arma::mat> &matrices);

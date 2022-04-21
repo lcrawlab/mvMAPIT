@@ -178,7 +178,7 @@ context("MAPIT1_Normal") {
     arma::vec yc = vectorise(Yc);
     std::vector<arma::vec> phenotypes = matrix_to_vector_of_rows(yc.as_row());
     // when
-    arma::mat result = compute_q_matrix(phenotypes, matrices);
+    arma::mat result = compute_q_matrix(phenotypes, matrices, 1);
     // then
     expect_true(result(0, 0) == correct_answer(0));
     expect_true(result(1, 0) == correct_answer(1));

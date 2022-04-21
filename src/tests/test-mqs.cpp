@@ -49,7 +49,7 @@ context("compute_q_matrix") {
     V[2] = v3;
     M = {matrix, matrix, matrix};
     // when
-    arma::mat result = compute_q_matrix(V, M);
+    arma::mat result = compute_q_matrix(V, M, 1);
     // then
     expect_true(result.n_rows == num_variance_components);
     expect_true(result.n_cols == num_combinations);
@@ -72,7 +72,7 @@ context("compute_q_matrix") {
     V[1] = v2;
     M = {matrix, matrix, matrix};
     // when
-    arma::mat result = compute_q_matrix(V, M);
+    arma::mat result = compute_q_matrix(V, M, 1);
     // then
     expect_true(result.n_rows == num_variance_components);
     expect_true(result.n_cols == num_combinations);

@@ -1,7 +1,7 @@
 // Copyright 2021 Lorin Crawford.
 #include "mapit/normal.h"
 
-// #define WITH_LOGGER 1  // uncomment for logging during development
+#define WITH_LOGGER 1  // uncomment for logging during development
 
 #ifdef WITH_LOGGER
 #define SPDLOG_DISABLE_DEFAULT_LOGGER 1

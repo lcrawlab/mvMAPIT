@@ -135,6 +135,7 @@ Rcpp::List MAPITCpp(
     arma::mat &K = matrices[1];
     arma::mat &M = matrices[2];
     arma::mat &Cc = matrices[3];
+//  These matrices are allocated on the heap as they should be.
     if (C.isNotNull()) {
       Cc = Rcpp::as<arma::mat>(C.get());
     } else {
@@ -192,7 +193,7 @@ Rcpp::List MAPITCpp(
     execution_t(i, 2) = duration_cast<milliseconds>(end - start).count();
 
     start = steady_clock::now();
-    q = compute_q_matrix(phenotypes, matrices);
+    q = compute_q_matrix(phenotypes, matrices, i + 1);
     end = steady_clock::now();
     execution_t(i, 3) = duration_cast<milliseconds>(end - start).count();
 
