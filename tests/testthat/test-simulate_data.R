@@ -253,6 +253,36 @@ test_that(
 )
 
 test_that(
+    "test varying heiritability", {
+        # given
+        ind <- 100
+        nsnp <- 100
+        H2 <- c(0.6, 0.8, 0.1)
+        rho <- 0.5
+        maf <- 0.05 + 0.45 * runif(nsnp)
+        X <- (runif(ind * nsnp) <
+            maf) + (runif(ind * nsnp) <
+            maf)
+        X <- matrix(
+            as.double(X),
+            ind, nsnp, byrow = TRUE
+        )
+        s <- 95345  # sample.int(10000, 1)
+
+        # when
+        sim <- simulate_phenotypes(
+            X, d = 3, n_causal = 30, n_pleiotropic = 6, n_trait_specific = 4, epistatic_correlation = 0.8,
+            H2 = H2, rho = rho, logLevel = "ERROR", seed = s
+        )
+        res <- sim$parameters %>%
+            filter(name == "heritability")
+
+        # then
+        expect_equal(res$value, H2)
+    }
+)
+
+test_that(
     "test run", {
         ind <- 100
         nsnp <- 100
