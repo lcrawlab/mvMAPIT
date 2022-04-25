@@ -17,7 +17,7 @@
 #' @param n_pleiotropic Number of SNPs with pleiotropic effects.
 #' @param group_ratio_trait Ratio of sizes of trait specific groups that interact, e.g. a ratio 1:3 would be value 3.
 #' @param group_ratio_pleiotropic Ratio of sizes of pleiotropic groups that interact, e.g. a ratio 1:3 would be value 3.
-#' @param H2 Broad-sense heritability.
+#' @param H2 Broad-sense heritability. Can be vector.
 #' @param d Number of phenotypes.
 #' @param rho Proportion of heritability explained by additivity.
 #' @param marginal_correlation Correlation between the additive effects of the phenotype.
@@ -40,6 +40,8 @@ simulate_phenotypes <- function(
     group_ratio_trait = 1, group_ratio_pleiotropic = 1, maf_threshold = 0.01, seed = 67132,
     logLevel = "INFO", logFile = NULL
 ) {
+
+    heritability <- rep(H2, d)[1:d]
     set.seed(seed)
     coll <- makeAssertCollection()
     assertInt(n_causal, lower = 0, add = coll)
@@ -47,7 +49,7 @@ simulate_phenotypes <- function(
     assertInt(n_pleiotropic, lower = 0, add = coll)
     assertDouble(group_ratio_trait, lower = 1, add = coll)
     assertDouble(group_ratio_pleiotropic, lower = 1, add = coll)
-    assertDouble(H2, lower = 0, upper = 1, add = coll)
+    assertDouble(heritability, lower = 0, upper = 1, add = coll)
     assertDouble(rho, lower = 0, upper = 1, add = coll)
     assertDouble(marginal_correlation, lower = -1, upper = 1, add = coll)
     assertDouble(epistatic_correlation, lower = -1, upper = 1, add = coll)
@@ -212,14 +214,14 @@ simulate_phenotypes <- function(
         X_marginal <- X_causal_j
         beta_j <- beta[, j]
         y_marginal <- X_marginal %*% beta_j
-        y_marginal <- y_marginal * sqrt(H2 * rho/c(var(y_marginal)))
+        y_marginal <- y_marginal * sqrt(heritability[j] * rho/c(var(y_marginal)))
         log$debug("Variance scaled y_marginal: %f", var(y_marginal))
 
         # pairwise epistatic effects
         alpha_j <- alpha[, j]
         if (n_epistatic_effects > 0) {
             y_epi <- X_epi %*% alpha_j
-            y_epi <- y_epi * sqrt(H2 * (1 - rho)/c(var(y_epi)))
+            y_epi <- y_epi * sqrt(heritability[j] * (1 - rho)/c(var(y_epi)))
             log$debug("Variance scaled y_epi: %f", var(y_epi))
             trait_interactions <- bind_rows(pleiotropic_interactions,
                                             trait_specific_interactions) %>%
@@ -239,7 +241,7 @@ simulate_phenotypes <- function(
 
         # unexplained phenotypic variation
         y_err <- error[, j]
-        y_err <- y_err * sqrt((1 - H2)/c(var(y_err)))
+        y_err <- y_err * sqrt((1 - heritability[j])/c(var(y_err)))
 
         y <- y_marginal + y_epi + y_err
         Y <- cbind(Y, y)
@@ -284,7 +286,7 @@ simulate_phenotypes <- function(
                          "number_epistatic_effects",
                          "number_pleiotropic_snps",
                          "number_trait_specific_snps",
-                         "pve",
+                         "heritability",
                          "rho",
                          "epistatic_correlation",
                          "marginal_correlation",
@@ -292,22 +294,29 @@ simulate_phenotypes <- function(
                          "group_ratio_trait",
                          "seed"
     )
-    parameter_values <- c(n_samples,
-                          n_snp,
-                          d,
-                          n_causal,
-                          n_epistatic_effects,
-                          n_pleiotropic,
-                          n_trait_specific,
-                          H2,
-                          rho,
-                          epistatic_correlation,
-                          marginal_correlation,
-                          group_ratio_pleiotropic,
-                          group_ratio_trait,
-                          seed)
-    parameters <- tidyr::tibble(name = parameter_names,
-                                value = parameter_values)
+    parameters <- tibble()
+    for (j in seq_len(d)) {
+        parameter_values <- c(n_samples,
+                              n_snp,
+                              d,
+                              n_causal,
+                              n_epistatic_effects,
+                              n_pleiotropic,
+                              n_trait_specific,
+                              heritability[j],
+                              rho,
+                              epistatic_correlation,
+                              marginal_correlation,
+                              group_ratio_pleiotropic,
+                              group_ratio_trait,
+                              seed)
+        parameters <- bind_rows(parameters,
+                                tidyr::tibble(name = parameter_names,
+                                    value = parameter_values)
+                                )
+    }
+    parameters <- parameters %>%
+        mutate(trait = rep(colnames(Y), each = length(parameter_names)))
     simulated_pleiotropic_epistasis_data <- list(
         parameters = parameters, phenotype = Y, genotype = genotype_matrix,
         additive = additive, epistatic = epistatic, interactions = interactions,
