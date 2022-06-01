@@ -253,6 +253,30 @@ test_that(
 )
 
 test_that(
+    "test vector of heritability H2 <- c(0.6, 0.3)", {
+        ind <- 100
+        nsnp <- 100
+        H2 <- c(0.6, 0.3)
+        rho <- 0.5
+        maf <- 0.05 + 0.45 * runif(nsnp)
+        X <- (runif(ind * nsnp) <
+            maf) + (runif(ind * nsnp) <
+            maf)
+        X <- matrix(
+            as.double(X),
+            ind, nsnp, byrow = TRUE
+        )
+        s <- 95345  # sample.int(10000, 1)
+        sim <- simulate_phenotypes(
+            X, n_causal = 30, n_pleiotropic = 6, n_trait_specific = 4, epistatic_correlation = 0.8,
+            H2 = H2, rho = rho, logLevel = "ERROR", seed = s
+        )
+        expect_equal(length(sim$parameters$value), 16)
+
+    }
+)
+
+test_that(
     "test run", {
         ind <- 100
         nsnp <- 100
