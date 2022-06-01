@@ -81,7 +81,6 @@ MvMAPIT <- function(
         "Phenotype matrix: %d x %d", nrow(Y),
         ncol(Y)
     )
-    log$debug("Genotype matrix determinant: %f", det((X) %*% t(X)))
     zero_var <- which(apply(X, 1, var) == 0)
     log$debug("Number of zero variance variants: %d", length(zero_var))
     X <- remove_zero_variance(X)  # operates on rows
@@ -143,6 +142,8 @@ MvMAPIT <- function(
     if (!is.null(variantIndex)) {
         log$debug("Set pve to NA if not in varianIndex.")
         pves[!(c(1:nrow(pves)) %in%
+            variantIndex)] <- NA
+        pvals[!(c(1:nrow(pvals)) %in%
             variantIndex)] <- NA
     }
     if (ncol(pvals) > 1) {
