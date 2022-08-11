@@ -108,7 +108,11 @@ MvMAPIT <- function(
             length(ind_matrix),
             threshold
         )
-        any_significance <- apply(pvals[, variance_components_ind], 1, function(r) any(r <= threshold))
+        if (nrow(Y)) {
+            any_significance <- apply(pvals, 1, function(r) any(r <= threshold))
+        } else {
+            any_significance <- apply(pvals[, variance_components_ind], 1, function(r) any(r <= threshold))
+        }
         ind <- which(any_significance == TRUE)
         log$info(
             "%d positions are significant with alpha = %f", length(ind),

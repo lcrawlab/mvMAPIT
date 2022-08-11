@@ -56,7 +56,7 @@ test_that(
         mapit <- MvMAPIT(
             t(X),
             t(Y),
-            test = "davies", cores = 1, logLevel = "ERROR"
+            test = "davies", cores = 1, logLevel = "INFO"
         )
         # then
         expect_equal(mapit$pvalues, pvalues, tolerance = 1e-04)
@@ -89,7 +89,7 @@ test_that(
         mapit <- MvMAPIT(
             t(X),
             t(Y),
-            test = "hybrid", cores = 1, logLevel = "ERROR"
+            test = "hybrid", cores = 1, logLevel = "INFO"
         )
         # then
         expect_equal(mapit$pvalues, pvalues, tolerance = 1e-04)
@@ -263,3 +263,36 @@ test_that(
         expect_equal(mapit$pvalues, pvalues, tolerance = 1e-04)
     }
 )
+
+test_that(
+    "test = 'hybrid'., d = 1 ", {
+        # given
+        p <- 2
+        n <- 10
+        d <- 1
+        pvalues <- tidyr::tibble(
+           id = rep(as.character(c(1:p))),
+           trait = rep(c("P1"), p),
+           p =  c(0.499, 0.502 )
+        )
+        set.seed(853)
+        X <- matrix(
+            runif(p * n),
+            ncol = p
+        )
+        Y <- matrix(
+            runif(d * n),
+            ncol = d
+        )
+        # when
+        mapit <- MvMAPIT(
+            t(X),
+            t(Y),
+            test = "hybrid", cores = 1, logLevel = "DEBUG"
+        )
+        # then
+        print((mapit$pvalues))
+        expect_equal(mapit$pvalues, pvalues, tolerance = 1e-03)
+    }
+)
+
