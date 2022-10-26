@@ -31,7 +31,7 @@ simulate_phenotypes(
 
 \item{n_pleiotropic}{Number of SNPs with pleiotropic effects.}
 
-\item{H2}{Broad-sense heritability.}
+\item{H2}{Broad-sense heritability. Can be vector.}
 
 \item{d}{Number of phenotypes.}
 

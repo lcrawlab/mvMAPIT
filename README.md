@@ -16,7 +16,7 @@ mvMAPIT is implemented as a set of R and C++ routines, which can be carried out 
 ## The R Environment
 R is a widely used, free, and open source software environment for statistical computing and graphics. The most recent version of R can be downloaded from the
 [Comprehensive R Archive Network (CRAN)](http://cran.r-project.org/)
-CRAN provides precompiled binary versions of R for Windows, MacOS, and select Linux distributions that are likely sufficient for many users' needs.  Users can also install R from source code;  however, this may require a significant amount of effort.
+CRAN provides precompiled binary versions of R for Windows, macOS, and select Linux distributions that are likely sufficient for many users' needs.  Users can also install R from source code;  however, this may require a significant amount of effort.
 For specific details on how to compile, install, and manage R and R-packages, refer to the manual [R Installation and Administration](http://cran.r-project.org/doc/manuals/r-release/R-admin.html).
 
 In its current construction, we recommend against running MAPIT while using R Studio.

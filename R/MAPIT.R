@@ -154,7 +154,6 @@ MvMAPIT <- function(
         fisherp <- apply(pvals, 1, sumlog)
         pvals <- cbind(pvals, metap = fisherp)
     }
-    pves <- set_covariance_components(variance_components_ind, pves)
     pvals <- as.data.frame(pvals) %>%
         mutate(id = row.names(.)) %>%
         tidyr::pivot_longer(cols = !id,
