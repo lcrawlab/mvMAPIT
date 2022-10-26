@@ -74,11 +74,3 @@ saddlepoint_approximation = function(x, lambda) {
     }
 }
 
-sumlog <- function(pvalues) {
-    df <- 2 * length(pvalues)
-    fisherp <- pchisq(
-        -2 * sum(log(pvalues)),
-        df, lower.tail = FALSE
-    )
-    return(fisherp)
-}

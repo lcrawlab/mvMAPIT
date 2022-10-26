@@ -150,10 +150,6 @@ MvMAPIT <- function(
         pvals[!(c(1:nrow(pvals)) %in%
             variantIndex)] <- NA
     }
-    if (ncol(pvals) > 1) {
-        fisherp <- apply(pvals, 1, sumlog)
-        pvals <- cbind(pvals, metap = fisherp)
-    }
     pvals <- as.data.frame(pvals) %>%
         mutate(id = row.names(.)) %>%
         tidyr::pivot_longer(cols = !id,
