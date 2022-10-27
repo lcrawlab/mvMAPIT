@@ -30,6 +30,7 @@ Imports:
     doParallel,
     dplyr,
     foreach,
+    harmonicmeanp,
     LaplacesDemon,
     logging,
     Matrix,

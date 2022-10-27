@@ -1,29 +1,34 @@
 #' Multivariate MArginal ePIstasis Test (mvMAPIT)
 #'
-#' \code{MvMAPIT} will run a version of the MArginal ePIstasis Test (MAPIT) under the following model variations:
+#' \code{MvMAPIT} will run a multivariate version of the MArginal ePIstasis
+#' Test (mvMAPIT) under the following model variations:
 #'
-#' This function will run a multivariate version of the MArginal ePIstasis Test (mvMAPIT).
+#' (1) Standard Model: y = m+g+e
+#' where m ~ MVN(0,omega^2K), g ~ MVN(0,sigma^2G), e ~ MVN(0,tau^2M).
+#' Recall from Crawford et al. (2017) that m is the combined additive effects
+#' from all other variants, represents the additive effect of the k-th variant
+#' under the polygenic background of all other variants; K is the genetic
+#' relatedness matrix computed using genotypes from all variants other than the
+#' k-th; g is the summation of all pairwise interaction effects between the
+#' k-th variant and all other variants; G represents a relatedness matrix
+#' computed based on pairwise interaction terms between the k-th variant and all
+#' other variants. Here, we also denote D = diag(x_k) to be an n × n diagonal
+#' matrix with the genotype vector x_k as its diagonal elements. It is important
+#' to note that both K and G change with every new marker k that is considered.
+#' Lastly; M is a variant specific projection matrix onto both the null space of
+#' the intercept and the corresponding genotypic vector x_k.
 #'
-#' (1) Standard Model: y = m+g+e where m ~ MVN(0,omega^2K), g ~ MVN(0,sigma^2G), e ~ MVN(0,tau^2M).
-#' Recall from Crawford et al. (2017) that m is the combined additive effects from all other variants,
-#' and effectively represents the additive effect of the k-th variant under the polygenic background
-#' of all other variants; K is the genetic relatedness matrix computed using
-#' genotypes from all variants other than the k-th; g is the summation of all pairwise interaction
-#' effects between the k-th variant and all other variants; G represents a relatedness matrix
-#' computed based on pairwise interaction terms between the k-th variant and all other variants. Here,
-#' we also denote D = diag(x_k) to be an n × n diagonal matrix with the genotype vector x_k as its
-#' diagonal elements. It is important to note that both K and G change with every new marker k that is
-#' considered. Lastly; M is a variant specific projection matrix onto both the null space of the intercept
-#' and the corresponding genotypic vector x_k.
+#' (2) Standard + Covariate Model: y = Wa+m+g+e
+#' where W is a matrix of covariates with effect sizes a.
 #'
-#' (2) Standard + Covariate Model: y = Wa+m+g+e where W is a matrix of covariates with effect sizes a.
-#'
-#' (3) Standard + Common Environment Model: y = m+g+c+e where c ~ MVN(0,eta^2C) controls for extra
-#' environmental effects and population structure with covariance matrix C.
+#' (3) Standard + Common Environment Model: y = m+g+c+e i
+#' where c ~ MVN(0,eta^2C) controls for extra environmental effects and
+#' population structure with covariance matrix C.
 #'
 #' (4) Standard + Covariate + Common Environment Model: y = Wa+m+g+c+e
 #'
-#' This function will consider the following three hypothesis testing strategies which are featured in Crawford et al. (2017):
+#' This function will consider the following three hypothesis testing strategies
+#' which are featured in Crawford et al. (2017):
 #' (1) The Normal or Z test
 #' (2) Davies Method
 #' (3) Hybrid Method (Z test + Davies Method)
@@ -150,10 +155,6 @@ MvMAPIT <- function(
         pvals[!(c(1:nrow(pvals)) %in%
             variantIndex)] <- NA
     }
-    if (ncol(pvals) > 1) {
-        fisherp <- apply(pvals, 1, sumlog)
-        pvals <- cbind(pvals, metap = fisherp)
-    }
     pvals <- as.data.frame(pvals) %>%
         mutate(id = row.names(.)) %>%
         tidyr::pivot_longer(cols = !id,
@@ -168,12 +169,28 @@ MvMAPIT <- function(
     return(list(pvalues = pvals, pves = pves, duration = timings_mean))
 }
 
+#' Remove variants that don't vary accross the genotype data.
+#'
+#' This function takes in the genotype matrix and reomces the varaints with zero
+#' variance.
+#'
+#' @param X Genotype matrix.
+#' @return Genotype matrix X without zero variance variants.
+#' @noRd
 remove_zero_variance <- function(X) {
     return(X[which(apply(X, 1, var) != 0), ])
 }
 
-# This naming sequence has to match the creation of the q-matrix in the C++
-# routine of mvMAPIT
+#' Create names for the columns of the mvMAPIT return object.
+#'
+#' This function takes in the traits matrix and creates names for the p-values
+#' and PVEs for all variance and covariance components.
+#' This naming sequence has to match the creation of the q-matrix in the C++
+#' routine of mvMAPIT.
+#'
+#' @param Y Trait matrix.
+#' @return Vector of strings for all trait combinations.
+#' @noRd
 mapit_struct_names <- function(Y) {
     phenotype_names <- rownames(Y)
     if (length(phenotype_names) == 0) {
@@ -199,11 +216,32 @@ mapit_struct_names <- function(Y) {
     return(phenotype_combinations)
 }
 
+#' Set covariance components as "NA".
+#'
+#' This function takes in the column indices for the covariance components and
+#' a matrix with data for both variance and covariance components and sets the
+#' covariance components to NA. This is needed for the davies method version of
+#' the p-values computation since there is no Davies method implementation for
+#' p-values currently.
+#'
+#' @param variance_components_ind Column index vector for variance components.
+#' @param X Data with both variance and covariance components.
+#' @return Vector of strings for all trait combinations.
+#' @noRd
 set_covariance_components <- function(variance_components_ind, X) {
     X[, !variance_components_ind] <- NA
     return(X)
 }
 
+#' Compute index vector for columns containing data for variance components.
+#'
+#' This function takes in the trait matrix and computes the column indices that
+#' contain the variance component portion in the return data from the C++
+#' method.
+#'
+#' @param Y Trait matrix.
+#' @return Vector of indices for all variance components.
+#' @noRd
 get_variance_components_ind <- function(Y) {
     ind <- c()
     counter <- 0

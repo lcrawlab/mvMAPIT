@@ -45,31 +45,36 @@ MvMAPIT(
 A list of P values and PVEs
 }
 \description{
-\code{MvMAPIT} will run a version of the MArginal ePIstasis Test (MAPIT) under the following model variations:
+\code{MvMAPIT} will run a multivariate version of the MArginal ePIstasis
+Test (mvMAPIT) under the following model variations:
 }
 \details{
-This function will run a multivariate version of the MArginal ePIstasis Test (mvMAPIT).
+(1) Standard Model: y = m+g+e
+where m ~ MVN(0,omega^2K), g ~ MVN(0,sigma^2G), e ~ MVN(0,tau^2M).
+Recall from Crawford et al. (2017) that m is the combined additive effects
+from all other variants, represents the additive effect of the k-th variant
+under the polygenic background of all other variants; K is the genetic
+relatedness matrix computed using genotypes from all variants other than the
+k-th; g is the summation of all pairwise interaction effects between the
+k-th variant and all other variants; G represents a relatedness matrix
+computed based on pairwise interaction terms between the k-th variant and all
+other variants. Here, we also denote D = diag(x_k) to be an n × n diagonal
+matrix with the genotype vector x_k as its diagonal elements. It is important
+to note that both K and G change with every new marker k that is considered.
+Lastly; M is a variant specific projection matrix onto both the null space of
+the intercept and the corresponding genotypic vector x_k.
 
-(1) Standard Model: y = m+g+e where m ~ MVN(0,omega^2K), g ~ MVN(0,sigma^2G), e ~ MVN(0,tau^2M).
-Recall from Crawford et al. (2017) that m is the combined additive effects from all other variants,
-and effectively represents the additive effect of the k-th variant under the polygenic background
-of all other variants; K is the genetic relatedness matrix computed using
-genotypes from all variants other than the k-th; g is the summation of all pairwise interaction
-effects between the k-th variant and all other variants; G represents a relatedness matrix
-computed based on pairwise interaction terms between the k-th variant and all other variants. Here,
-we also denote D = diag(x_k) to be an n × n diagonal matrix with the genotype vector x_k as its
-diagonal elements. It is important to note that both K and G change with every new marker k that is
-considered. Lastly; M is a variant specific projection matrix onto both the null space of the intercept
-and the corresponding genotypic vector x_k.
+(2) Standard + Covariate Model: y = Wa+m+g+e
+where W is a matrix of covariates with effect sizes a.
 
-(2) Standard + Covariate Model: y = Wa+m+g+e where W is a matrix of covariates with effect sizes a.
-
-(3) Standard + Common Environment Model: y = m+g+c+e where c ~ MVN(0,eta^2C) controls for extra
-environmental effects and population structure with covariance matrix C.
+(3) Standard + Common Environment Model: y = m+g+c+e i
+where c ~ MVN(0,eta^2C) controls for extra environmental effects and
+population structure with covariance matrix C.
 
 (4) Standard + Covariate + Common Environment Model: y = Wa+m+g+c+e
 
-This function will consider the following three hypothesis testing strategies which are featured in Crawford et al. (2017):
+This function will consider the following three hypothesis testing strategies
+which are featured in Crawford et al. (2017):
 (1) The Normal or Z test
 (2) Davies Method
 (3) Hybrid Method (Z test + Davies Method)

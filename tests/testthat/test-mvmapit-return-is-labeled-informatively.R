@@ -6,13 +6,13 @@ test_that(
         d <- 3
         variants <- sprintf("SNP%s", 1:p)
         phenotypes <- sprintf("Q%s", 1:d)
-        traits <- c("Q1*Q1", "Q2*Q1", "Q2*Q2", "Q3*Q1", "Q3*Q2", "Q3*Q3", "metap")
-        ids <- rep(as.character(variants), each = 7)
+        traits <- c("Q1*Q1", "Q2*Q1", "Q2*Q2", "Q3*Q1", "Q3*Q2", "Q3*Q3")
+        ids <- rep(as.character(variants), each = 6)
         trait_values <- rep(traits, p)
         pvalues <- tidyr::tibble(
            id = ids,
            trait = trait_values,
-           p = rep(1, 70)
+           p = rep(1, 60)
         )
         set.seed(853)
         X <- matrix(
