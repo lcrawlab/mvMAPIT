@@ -23,7 +23,11 @@ author = "lcrawlab"
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["sphinx_immaterial"]
+extensions = [
+    "m2r2",
+    "sphinx_immaterial",
+    "sphinx.ext.todo",
+]
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
@@ -41,13 +45,13 @@ html_static_path = ["_static"]
 html_last_updated_fmt = ""
 html_title = "mvMAPIT"
 html_favicon = "_static/images/favicon.ico"
-html_logo = "_static/images/CrawfordLab.png"
+html_logo = "_static/images/favicon-w.png"
 
 html_theme_options = {
     "icon": {
         "repo": "fontawesome/brands/github",
     },
-    "site_url": "https://lcrawlab.github.io/susiepca/",
+    "site_url": "https://lcrawlab.github.io/mvMAPIT/",
     "repo_url": "https://github.com/lcrawlab/mvMAPIT/",
     "repo_name": "mvMAPIT",
     "repo_type": "github",
@@ -71,8 +75,8 @@ html_theme_options = {
         {
             "media": "(prefers-color-scheme: light)",
             "scheme": "default",
-            "primary": "teal",
-            "accent": "light-blue",
+            "primary": "indigo",
+            "accent": "green",
             "toggle": {
                 "icon": "material/lightbulb-outline",
                 "name": "Switch to dark mode",
@@ -81,8 +85,8 @@ html_theme_options = {
         {
             "media": "(prefers-color-scheme: dark)",
             "scheme": "slate",
-            "primary": "teal",
-            "accent": "lime",
+            "primary": "grey",
+            "accent": "green",
             "toggle": {
                 "icon": "material/lightbulb",
                 "name": "Switch to light mode",

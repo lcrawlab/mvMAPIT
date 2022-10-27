@@ -1,20 +1,30 @@
-.. mvMAPIT documentation master file, created by
-   sphinx-quickstart on Wed Oct 26 13:48:37 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+==================
+Multivariate MAPIT
+==================
 
-Welcome to mvMAPIT's documentation!
-===================================
+Abstract for the project here.
+
+Contents
+========
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: User Guide
 
+   Readme <readme>
 
+.. toctree::
+   :maxdepth: 2
+   :caption: API
 
-Indices and tables
-==================
+   mvMAPIT API Reference <mvmapit>
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. toctree::
+   :maxdepth: 2
+   :caption: Development
+
+   Questions & Feedback <contributing>
+   Changelog <changelog>
+   Contact <authors>
+   License <license>
+
