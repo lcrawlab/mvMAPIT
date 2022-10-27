@@ -4,7 +4,6 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 import os
-import shutil
 import sys
 
 # -- Path setup --------------------------------------------------------------
