@@ -6,12 +6,21 @@ Multivariate MAPIT
     :alt: R CMD check
     :target: https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml
 
+.. _Documentation: https://lcrawlab.github.io/mvMAPIT/
+.. |Documentation| replace:: **Documentation**
+
+
+
+|Documentation|_ | |Installation|_ | |Examples|_ | |References|_
+
+-----
 
 ==================================================
 The multivariate MArginal ePIstasis Test (mvMAPIT)
 ==================================================
 
 This R package is a generalization of the `MAPIT implementation <https://github.com/lorinanthony/MAPIT>`_ by Crawford et al. (2017) [1]_ for any number of phenotypes.
+
 
 Introduction
 ============
@@ -24,6 +33,15 @@ While **MAPIT** only takes one phenotype of interest into account for the comput
 
 mvMAPIT is implemented as a set of R and C++ routines, which can be carried out within an R environment.
 
+The Model
+=========
+Add text.
+
+.. _Installation:
+.. |Installation| replace:: **Installation**
+============
+Installation
+============
 
 The R Environment
 =================
@@ -85,12 +103,16 @@ Installing mvMAPIT
 ------------------
 The easiest way to install the package from sources is to change into the directory of mvMAPIT and run ``R CMD INSTALL . --preclean``. The ``--preclean`` flag makes sure that the latest state is run.
 
+.. _Examples:
+.. |Examples| replace:: **Examples**
 Tutorial for Running MAPIT
 ==========================
 For the simulation tutorial provided here, we generate genotypes for 3,000 samples typed at 10,000 unrelated variants. We show in our example R code how to implement MAPIT (both the standard and parallelized versions) to perform a marginal epistasis association mapping test in order to find interacting causal variants of interest.
 
 -----------------------
 
+.. _References:
+.. |References| replace:: **References**
 References
 ==========
 .. [1] L Crawford, P Zeng, S Mukherjee, X Zhou (2017). Detecting epistasis with the marginal epistasis test in genetic mapping studies of quantitative traits. *PLoS Genet*. **13** (7): e1006869. http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869
