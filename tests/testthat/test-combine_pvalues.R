@@ -26,7 +26,7 @@ test_that(
             ncol = d
         )
         # when
-        mapit <- MvMAPIT(
+        mapit <- mvmapit(
             t(X),
             t(Y),
             test = "normal", cores = 1, logLevel = "DEBUG"
@@ -65,7 +65,7 @@ test_that(
             ncol = d
         )
         # when
-        mapit <- MvMAPIT(
+        mapit <- mvmapit(
             t(X),
             t(Y),
             test = "normal", cores = 1, logLevel = "DEBUG"

@@ -26,7 +26,7 @@ test_that(
         colnames(X) <- variants
         colnames(Y) <- phenotypes
         # when
-        mapit <- MvMAPIT(
+        mapit <- mvmapit(
             t(X),
             t(Y),
             test = "normal", cores = 1, logLevel = "ERROR"

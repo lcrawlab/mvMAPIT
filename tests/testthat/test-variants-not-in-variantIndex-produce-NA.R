@@ -16,7 +16,7 @@ test_that(
         variantIndex <- c(1, 3)
         otherIndex <- 2
         # when
-        mapit <- MvMAPIT(
+        mapit <- mvmapit(
             t(X),
             t(Y),
             test = "normal", cores = 1, variantIndex = variantIndex, logLevel = "DEBUG"

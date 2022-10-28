@@ -16,4 +16,4 @@ sim <- simulate_phenotypes(X,
                            seed = s)
 Xmean<-apply(X, 2, mean); Xsd<-apply(X, 2, sd); X<-t((t(X)-Xmean)/Xsd)
 
-mapit <- MvMAPIT(t(X), t(sim$phenotype), cores = 32, logLevel = 'DEBUG')
+mapit <- mvmapit(t(X), t(sim$phenotype), cores = 32, logLevel = 'DEBUG')

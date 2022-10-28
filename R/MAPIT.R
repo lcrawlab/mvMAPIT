@@ -84,7 +84,7 @@ mvmapit <- function(
 
     logging::logReset()
     logging::basicConfig(level = logLevel)
-    log <- logging::getLogger("MvMAPIT")
+    log <- logging::getLogger("mvmapit")
     if (!is.null(logFile)) {
         filePath <- file.path(getwd(), logFile)
         log$debug("Logging to file: %s", filePath)

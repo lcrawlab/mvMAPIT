@@ -14,12 +14,12 @@ sumlog <- function(pvalues) {
     return(fisherp)
 }
 
-#' Fisher's combine method on MvMAPIT return
+#' Fisher's combine method on mvmapit return
 #'
-#' This function takes in the p-values tibble that MvMAPIT returned. It then
+#' This function takes in the p-values tibble that mvmapit returned. It then
 #' computes the combined p-values grouped by variant id.
 #'
-#' @param pvalues Tibble with p-values from MvMAPIT function call. Grouping is
+#' @param pvalues Tibble with p-values from mvmapit function call. Grouping is
 #' based on the column named "id"
 #' @return A Tibble with the combined p-values.
 #' @examples
@@ -51,12 +51,12 @@ fishers_combined <- function(pvalues) {
 }
 
 
-#' Harmonic mean p combine method on MvMAPIT return
+#' Harmonic mean p combine method on mvmapit return
 #'
-#' This function takes in the p-values tibble that MvMAPIT returned. It then
+#' This function takes in the p-values tibble that mvmapit returned. It then
 #' computes the combined p-values grouped by variant id.
 #'
-#' @param pvalues Tibble with p-values from MvMAPIT function call. Grouping is
+#' @param pvalues Tibble with p-values from mvmapit function call. Grouping is
 #' based on the column named "id"
 #' @return A Tibble with the combined p-values.
 #' @examples

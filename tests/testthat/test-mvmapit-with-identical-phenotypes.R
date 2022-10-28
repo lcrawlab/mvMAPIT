@@ -11,7 +11,7 @@ test_that(
         y <- runif(n)
         Y <- as.matrix(cbind(y, y))
         # when
-        mapit <- MvMAPIT(
+        mapit <- mvmapit(
             t(X),
             t(Y),
             test = "normal", cores = 1, logLevel = "DEBUG"

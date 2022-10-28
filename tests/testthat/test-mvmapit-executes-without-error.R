@@ -21,7 +21,7 @@ test_that(
             ncol = d
         )
         # when
-        mapit <- MvMAPIT(
+        mapit <- mvmapit(
             t(X),
             t(Y),
             test = "normal", cores = 1, logLevel = "DEBUG"
@@ -53,7 +53,7 @@ test_that(
             ncol = d
         )
         # when
-        mapit <- MvMAPIT(
+        mapit <- mvmapit(
             t(X),
             t(Y),
             test = "davies", cores = 1, logLevel = "INFO"
@@ -86,7 +86,7 @@ test_that(
             ncol = d
         )
         # when
-        mapit <- MvMAPIT(
+        mapit <- mvmapit(
             t(X),
             t(Y),
             test = "hybrid", cores = 1, logLevel = "INFO"
@@ -126,7 +126,7 @@ test_that(
             ncol = n
         )
         # when
-        mapit <- MvMAPIT(
+        mapit <- mvmapit(
             t(X),
             t(Y),
             C = C, test = "hybrid", accuracy = 1e-05, cores = 1, logLevel = "ERROR"
@@ -166,7 +166,7 @@ test_that(
             ncol = n
         )
         # when
-        mapit <- MvMAPIT(
+        mapit <- mvmapit(
             t(X),
             t(Y),
             C = C, test = "normal", cores = 1, logLevel = "ERROR"
@@ -206,7 +206,7 @@ test_that(
             ncol = n
         )
         # when
-        mapit <- MvMAPIT(
+        mapit <- mvmapit(
             t(X),
             t(Y),
             C = C, test = "davies", accuracy = 1e-05, cores = 1, logLevel = "ERROR"
@@ -252,7 +252,7 @@ test_that(
             ncol = n
         )
         # when
-        mapit <- MvMAPIT(
+        mapit <- mvmapit(
             t(X),
             t(Y),
             C = C, test = "davies", accuracy = 1e-05, cores = 1, logLevel = "ERROR"
@@ -283,7 +283,7 @@ test_that(
             ncol = d
         )
         # when
-        mapit <- MvMAPIT(
+        mapit <- mvmapit(
             t(X),
             t(Y),
             test = "hybrid", cores = 1, logLevel = "DEBUG"
