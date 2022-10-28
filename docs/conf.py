@@ -4,8 +4,8 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 import os
-import sys
 import re
+import sys
 
 # -- Path setup --------------------------------------------------------------
 # If extensions (or modules to document with autodoc) are in another directory,
