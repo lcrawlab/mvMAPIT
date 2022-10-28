@@ -1,6 +1,6 @@
 #' Simulate phenotye data
 #'
-#' \code{simulate_phenotype} simulates phenotype data from a genotype matrix.
+#' This function simulates phenotype data from a genotype matrix.
 #'
 #' This function takes a genotype matrix and simulates phenotype data under the following model:
 #'

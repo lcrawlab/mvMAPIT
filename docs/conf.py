@@ -4,6 +4,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 import os
+import re
 import sys
 
 # -- Path setup --------------------------------------------------------------
@@ -26,7 +27,73 @@ extensions = [
     "m2r2",
     "sphinx_immaterial",
     "sphinx.ext.todo",
+    "sphinx_jinja",
 ]
+
+# Get the list of all files and directories
+path = "../man"
+dir_list = os.listdir(path)
+files = {}
+for f in dir_list:
+    fp = os.path.join(path, f)
+    with open(fp, "r") as rd:
+        doc = rd.read()
+
+        doctype_search = re.search("docType{(.*)}", doc, re.IGNORECASE)
+        if doctype_search:
+            continue
+
+        title_search = re.search("title{([^}]*)}", doc, re.IGNORECASE)
+        if title_search:
+            title = title_search.group(1)
+        else:
+            title = f
+
+        name_search = re.search("name{(.*)}", doc, re.IGNORECASE)
+        if name_search:
+            name = name_search.group(1)
+        else:
+            name = f
+
+        parameter_search = re.findall(r"item{([^}]*)}{([^}]*)}", doc)
+        if parameter_search:
+            parameters = {}
+            parameters = dict(parameter_search)
+            for key, value in parameters.items():
+                parameters[key] = value.replace("\n", " ")
+
+        usage_search = re.search(r"usage{([^}]*)}", doc, re.MULTILINE)
+        if usage_search:
+            usage = usage_search.group(1)
+        else:
+            continue
+
+        value_search = re.search(r"value{([^}]*)}", doc, re.MULTILINE)
+        if value_search:
+            value = value_search.group(1)
+        else:
+            continue
+
+        description_search = re.search(r"description{([^}]*)}", doc, re.MULTILINE)
+        if description_search:
+            description = description_search.group(1)
+        else:
+            continue
+
+        files[f] = {
+            "name": name,
+            "usage": usage,
+            "name_len": len(name),
+            "parameters": parameters,
+            "title": title,
+            "value": value,
+            "description": description,
+        }
+
+jinja_contexts = {
+    "file_list": {"rd": files},
+}
+
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]

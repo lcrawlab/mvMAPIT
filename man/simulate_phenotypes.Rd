@@ -57,7 +57,7 @@ simulate_phenotypes(
 A list object containing the phenotype data, the genotype data, as well as the causal SNPs and summary statistics.
 }
 \description{
-\code{simulate_phenotype} simulates phenotype data from a genotype matrix.
+This function simulates phenotype data from a genotype matrix.
 }
 \details{
 This function takes a genotype matrix and simulates phenotype data under the following model:
