@@ -1,6 +1,6 @@
 #' Multivariate MArginal ePIstasis Test (mvMAPIT)
 #'
-#' \code{MvMAPIT} will run a multivariate version of the MArginal ePIstasis
+#' This function will run a multivariate version of the MArginal ePIstasis
 #' Test (mvMAPIT) under the following model variations:
 #'
 #' (1) Standard Model: y = m+g+e
