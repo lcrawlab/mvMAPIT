@@ -12,7 +12,7 @@ test_that(
         )
 
         # when
-        data <- simulate_phenotypes(
+        data <- simulate_traits(
             X, n_causal = f, n_trait_specific = g, n_pleiotropic = g, d = d, maf_threshold = 0,
             logLevel = "ERROR"
         )
@@ -52,7 +52,7 @@ test_that(
         total_causal <- (f)  # single trait SNPs plus pleiotropic SNPs
 
         # when
-        data <- simulate_phenotypes(
+        data <- simulate_traits(
             X, n_causal = f, n_trait_specific = g, n_pleiotropic = g, d = d, maf_threshold = 0,
             logLevel = "ERROR"
         )
@@ -85,7 +85,7 @@ test_that(
         total_causal <- (f * p)  # single trait SNPs plus pleiotropic SNPs
 
         # when
-        data <- simulate_phenotypes(
+        data <- simulate_traits(
             X, n_causal = f, n_trait_specific = g, n_pleiotropic = g, d = d, maf_threshold = 0.05,
             logLevel = "ERROR"
         )
@@ -116,7 +116,7 @@ test_that(
         correct_4 <- 8
 
         # when
-        data <- simulate_phenotypes(
+        data <- simulate_traits(
             X, n_causal = f, n_trait_specific = g, n_pleiotropic = h, d = d, group_ratio_trait = 3,
             group_ratio_pleiotropic = 4, maf_threshold = 0, logLevel = "ERROR"
         )
@@ -143,7 +143,7 @@ test_that(
 )
 
 test_that(
-    "simulate_phenotypes can handle zero size n_trait_specific groups.", {
+    "simulate_traits can handle zero size n_trait_specific groups.", {
         # given
         p <- 50
         f <- 30
@@ -160,7 +160,7 @@ test_that(
         correct_2 <- 0
 
         # when
-        data <- simulate_phenotypes(
+        data <- simulate_traits(
             X, n_causal = f, n_trait_specific = g, n_pleiotropic = h, d = d, group_ratio_trait = 3,
             group_ratio_pleiotropic = 4, maf_threshold = 0, logLevel = "ERROR"
         )
@@ -183,7 +183,7 @@ test_that(
 )
 
 test_that(
-    "simulate_phenotypes can handle zero size n_pleiotropic groups.", {
+    "simulate_traits can handle zero size n_pleiotropic groups.", {
         # given
         p <- 50
         f <- 30
@@ -200,7 +200,7 @@ test_that(
         correct_2 <- 0
 
         # when
-        data <- simulate_phenotypes(
+        data <- simulate_traits(
             X, n_causal = f, n_trait_specific = g, n_pleiotropic = h, d = d, group_ratio_trait = 3,
             group_ratio_pleiotropic = 4, maf_threshold = 0, logLevel = "ERROR"
         )
@@ -223,7 +223,7 @@ test_that(
 )
 
 test_that(
-    "simulate_phenotypes can handle zero size n_pleiotropic AND n_trait_specific groups.",
+    "simulate_traits can handle zero size n_pleiotropic AND n_trait_specific groups.",
     {
         # given
         p <- 50
@@ -241,7 +241,7 @@ test_that(
         correct_2 <- NULL
 
         # when
-        data <- simulate_phenotypes(
+        data <- simulate_traits(
             X, n_causal = f, n_trait_specific = g, n_pleiotropic = h, d = d, group_ratio_trait = 3,
             group_ratio_pleiotropic = 4, maf_threshold = 0, logLevel = "ERROR"
         )
@@ -270,7 +270,7 @@ test_that(
         s <- 95345  # sample.int(10000, 1)
 
         # when
-        sim <- simulate_phenotypes(
+        sim <- simulate_traits(
             X, d = 3, n_causal = 30, n_pleiotropic = 6, n_trait_specific = 4, epistatic_correlation = 0.8,
             H2 = H2, rho = rho, logLevel = "ERROR", seed = s
         )
@@ -297,7 +297,7 @@ test_that(
             ind, nsnp, byrow = TRUE
         )
         s <- 95345  # sample.int(10000, 1)
-        sim <- simulate_phenotypes(
+        sim <- simulate_traits(
             X, n_causal = 30, n_pleiotropic = 6, n_trait_specific = 4, epistatic_correlation = 0.8,
             H2 = H2, rho = rho, logLevel = "ERROR", seed = s
         )
