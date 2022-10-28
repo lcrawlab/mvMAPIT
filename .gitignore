@@ -44,6 +44,7 @@ vignettes/*.pdf
 
 # pkgdown site
 # docs/
+docs/_build/
 
 # translation temp files
 po/*~
