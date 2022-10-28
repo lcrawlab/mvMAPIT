@@ -17,3 +17,23 @@ A Tibble with the combined p-values.
 This function takes in the p-values tibble that MvMAPIT returned. It then
 computes the combined p-values grouped by variant id.
 }
+\examples{
+set.seed(837)
+p <- 200
+n <- 100
+d <- 2
+X <- matrix(
+    runif(p * n),
+    ncol = p
+)
+Y <- matrix(
+    runif(d * n),
+    ncol = d
+)
+mapit <- mvmapit(
+    t(X),
+    t(Y),
+    test = "normal", cores = 1, logLevel = "INFO"
+)
+fisher <- fishers_combined(mapit$pvalues)
+}

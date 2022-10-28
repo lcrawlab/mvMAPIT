@@ -22,6 +22,25 @@ sumlog <- function(pvalues) {
 #' @param pvalues Tibble with p-values from MvMAPIT function call. Grouping is
 #' based on the column named "id"
 #' @return A Tibble with the combined p-values.
+#' @examples
+#' set.seed(837)
+#' p <- 200
+#' n <- 100
+#' d <- 2
+#' X <- matrix(
+#'     runif(p * n),
+#'     ncol = p
+#' )
+#' Y <- matrix(
+#'     runif(d * n),
+#'     ncol = d
+#' )
+#' mapit <- mvmapit(
+#'     t(X),
+#'     t(Y),
+#'     test = "normal", cores = 1, logLevel = "INFO"
+#' )
+#' fisher <- fishers_combined(mapit$pvalues)
 #' @export
 fishers_combined <- function(pvalues) {
     pvalues %>%
@@ -40,6 +59,25 @@ fishers_combined <- function(pvalues) {
 #' @param pvalues Tibble with p-values from MvMAPIT function call. Grouping is
 #' based on the column named "id"
 #' @return A Tibble with the combined p-values.
+#' @examples
+#' set.seed(837)
+#' p <- 200
+#' n <- 100
+#' d <- 2
+#' X <- matrix(
+#'     runif(p * n),
+#'     ncol = p
+#' )
+#' Y <- matrix(
+#'     runif(d * n),
+#'     ncol = d
+#' )
+#' mapit <- mvmapit(
+#'     t(X),
+#'     t(Y),
+#'     test = "normal", cores = 1, logLevel = "INFO"
+#' )
+#' harmonic <- harmonic_combined(mapit$pvalues)
 #' @export
 #' @import harmonicmeanp
 harmonic_combined <- function(pvalues) {

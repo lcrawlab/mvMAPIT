@@ -3,13 +3,9 @@
 #' This function simulates phenotype data from a genotype matrix.
 #'
 #' This function takes a genotype matrix and simulates phenotype data under the following model:
-#'
 #' beta_i ~ MN(0, V_i, I), i in \{ additive, epistatic, residual\}
 #'
 #' The effect sizes follow a matrix normal distribution with no correlation between the samples but covariance between the effects for different phenotypes
-#'
-#'
-#'
 #'
 #' @param genotype_matrix Genotype matrix with samples as rows, and SNPs as columns.
 #' @param n_causal Number of SNPs that are causal.
@@ -27,14 +23,28 @@
 #' @param logFile is a string parameter defining the name of the log file for the logging output.
 #' @param maf_threshold is a float parameter defining the threshold for the minor allele frequency not included in causal SNPs.
 #' @return A list object containing the phenotype data, the genotype data, as well as the causal SNPs and summary statistics.
-#' @useDynLib mvMAPIT
+#' @examples
+#' p <- 200
+#' f <- 10
+#' g <- 4
+#' n <- 100
+#' d <- 3
+#' X <- matrix(
+#'     runif(p * n),
+#'     ncol = p
+#' )
+#' data <- simulate_phenotypes(
+#'     X, n_causal = f, n_trait_specific = g, n_pleiotropic = g, d = d, maf_threshold = 0,
+#'     logLevel = "ERROR"
+#' ) #' @useDynLib mvMAPIT
 #' @export
+#' @name simulate_traits
 #' @import checkmate
 #' @import dplyr
 #' @import foreach
 #' @import mvtnorm
 #' @import parallel
-simulate_phenotypes <- function(
+simulate_traits <- function(
     genotype_matrix, n_causal = 1000, n_trait_specific = 10, n_pleiotropic = 10,
     H2 = 0.6, d = 2, rho = 0.8, marginal_correlation = 0.3, epistatic_correlation = 0.3,
     group_ratio_trait = 1, group_ratio_pleiotropic = 1, maf_threshold = 0.01, seed = 67132,
@@ -335,3 +345,7 @@ get_factors <- function(n1, n) {
     )
 }
 
+
+#' @noRd
+#' @export
+simulate_phenotypes <- simulate_traits
