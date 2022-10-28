@@ -16,7 +16,7 @@ jobs:
       - name: Tools for docs build
         run: |
           pip install --upgrade pip
-          pip install sphinx sphinx_immaterial
+          pip install sphinx sphinx_immaterial m2r2
       - name: make docs
         run: |
           make -C docs html
