@@ -29,17 +29,17 @@ simulate_traits(
 
 \item{n_trait_specific}{Number of causal SNPs with single trait epistatic effects.}
 
-\item{n_pleiotropic}{Number of SNPs with pleiotropic effects.}
+\item{n_pleiotropic}{Number of SNPs with epistatic effects on all traits.}
 
 \item{H2}{Broad-sense heritability. Can be vector.}
 
-\item{d}{Number of phenotypes.}
+\item{d}{Number of traits.}
 
 \item{rho}{Proportion of heritability explained by additivity.}
 
-\item{marginal_correlation}{Correlation between the additive effects of the phenotype.}
+\item{marginal_correlation}{Correlation between the additive effects of the trait.}
 
-\item{epistatic_correlation}{Correlation between the epistatic effects of the phenotype.}
+\item{epistatic_correlation}{Correlation between the epistatic effects of the trait.}
 
 \item{group_ratio_trait}{Ratio of sizes of trait specific groups that interact, e.g. a ratio 1:3 would be value 3.}
 
@@ -54,16 +54,16 @@ simulate_traits(
 \item{logFile}{is a string parameter defining the name of the log file for the logging output.}
 }
 \value{
-A list object containing the phenotype data, the genotype data, as well as the causal SNPs and summary statistics.
+A list object containing the trait data, the genotype data, as well as the causal SNPs and summary statistics.
 }
 \description{
-This function simulates phenotype data from a genotype matrix.
+This function simulates trait data from a genotype matrix.
 }
 \details{
-This function takes a genotype matrix and simulates phenotype data under the following model:
+This function takes a genotype matrix and simulates trait data under the following model:
 beta_i ~ MN(0, V_i, I), i in \{ additive, epistatic, residual\}
 
-The effect sizes follow a matrix normal distribution with no correlation between the samples but covariance between the effects for different phenotypes
+The effect sizes follow a matrix normal distribution with no correlation between the samples but covariance between the effects for different traits
 }
 \examples{
 p <- 200
@@ -75,8 +75,8 @@ X <- matrix(
     runif(p * n),
     ncol = p
 )
-data <- simulate_phenotypes(
+data <- simulate_traits(
     X, n_causal = f, n_trait_specific = g, n_pleiotropic = g, d = d, maf_threshold = 0,
     logLevel = "ERROR"
-) #' @useDynLib mvMAPIT
+) #'
 }

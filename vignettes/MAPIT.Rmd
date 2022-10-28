@@ -1,6 +1,6 @@
 ---
 title: "Illustrating the multivariate MArginal ePIstasis Test (MAPIT) with Simulations"
-author: "Lorin Crawford, Alan DenAdel, and Julian Stamp"
+author: "Julian Stamp"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -20,7 +20,7 @@ library(knitr)
 # Standard workflow
 
 > **_NOTE:_** if you use MAPIT in published research, please cite:
-> placeholder 
+> placeholder
 
 ## Getting Started
 
@@ -32,66 +32,57 @@ This code assumes that the basic C++ functions are set up on the computer in use
 > Mac users please refer to the homebrew applications and install the `gcc` commands listed in the `README.md` file.
 
 ```{r load_dependencies, eval = FALSE}
-library(doParallel)
-library(Rcpp)
-library(RcppAlgos)
-library(RcppArmadillo)
-library(RcppParallel)
-library(CompQuadForm)
 library(mvMAPIT)
 ```
-
-```{r plotting_function, echo = FALSE}
-# Define a function to make QQ-plots
-ggd.qqplot <- function(pvector, main = NULL, ...) {
-  o <- -log10(sort(pvector, decreasing = F))
-  e <- -log10(1:length(o) / length(o))
-  plot(
-    e,
-    o,
-    pch = 19,
-    cex = 1,
-    main = main,
-    ...,
-    xlab = expression(Expected ~ ~ -log[10](italic(p))),
-    ylab = expression(Observed ~ ~ -log[10](italic(p))),
-    xlim = c(0, max(e)),
-    ylim = c(0, max(o))
-  )
-  lines(e, e, col = "red")
-}
-```
-
-
 ## Simulating Data
-
-Set a random seed for reproducible simulated data.
-```{r random_seed, eval = FALSE}
-set.seed(11151990)
-```
 
 Data are $p$ single nucleotide polymorphisms (SNPs) and $n$ simulated sample genotypes.
 
 Simulation Parameters:
 
-1. `ind`: number of samples $n$
-1. `nsnp`: number of SNPs or variants $p$
+1. `n`: number of samples
+1. `p`: number of SNPs or variants
+1. `d`: number of traits
 1. `PVE`: phenotypic variance explained/broad-sense heritability ($H^2$)
 1. `rho`: measures the portion of $H^2$ that is contributed by the marignal (additive) effects
-1. Number of SNPs that are causing variation in the phenotype:
-    * `ncausal1`: number epistatic SNPs in group 1
-    * `ncausal2`: number epistatic SNPs in group 2
-    * `ncausal3`: number purely non-epistatic SNPs in group 3
+1. Number of SNPs that are causing variation in the trait:
+    * `n_causal`: total number of SNPs with any effects on traits.
+    * `n_trait_specific`: number of epistatic SNPs that affect a single trait.
+    * `n_pleiotropic`: number of epistatic SNPs that affect all traits.
+    * `group_ratio_pleiotropic`: ratio by which to split the epistatic SNPs into groups.
+1. `epistatic_correlation`: correlation between the epistatic effects.
 
 ```{r simulation_parameters, eval = FALSE}
-ind <- 3e2
-nsnp <- 1e3
-pve <- 0.6
-rho <- 0.5
-ncausal <- 1e2
-ncausal1 <- 10 # Set 1 of causal SNPs
-ncausal2 <- 10 # Set 2 of Causal SNPs
-ncausal3 <- ncausal - ncausal1 - ncausal2 # Set 3 of Causal SNPs with only marginal effects
+seed <- 67132
+n <- 100
+p <- 2000
+d <- 2
+PVE <- 0.6
+rho <- 0.8
+n_causal <- 1000
+n_trait_specific <- 10
+n_pleiotropic <- 10
+group_ratio_pleiotropic <- 1
+epistatic_correlation <- 0.9
+maf <- 0.05
+X <- matrix(
+    runif(p * n),
+    ncol = p
+)
+data <- simulate_traits(
+    X,
+    n_causal = n_causal,
+    n_trait_specific = n_trait_specific,
+    n_pleiotropic = n_pleiotropic,
+    d = d,
+    H2 = PVE,
+    rho = rho,
+    epistatic_correlation = epistatic_correlation,
+    group_ratio_pleiotropic = group_ratio_pleiotropic,
+    maf_threshold = maf,
+    seed = seed,
+    logLevel = "ERROR"
+)
 ```
 The entries in the genotype matrix are:
 
@@ -110,127 +101,33 @@ An example genotype matrix could look like this:
 
 As in the paper, the genotype matrix will be scaled and centered such that the data at every SNP has mean $\mu = 0$ and standard deviation $\sigma = 1$. The genotypes are simulated such that all variants have minor allele frequency $\mathrm{MAF} > 0.05$. For each SNP a minor allele frequency is drawn at random from a uniform distribution $\mathrm{MAF} \sim \mathrm{Uniform}(0.05, 0.5)$. Then, haplotypes for each SNP are simulated by drawing from a $\mathrm{Uniform}(0, 1)$ distribution and comparing the drawn value to the minor allele frequency. The values less than the minor allele frequency are mapped to 1, the ones above to zero. The genotype is simulated by adding the haplotype vectors.
 
-```{r genotype_data, eval = FALSE}
-maf <- 0.05 + 0.45 * runif(nsnp)
-# simulation of genotypes: adding two haplotypes
-X <- (runif(ind * nsnp) < maf) + (runif(ind * nsnp) < maf)
-X <- matrix(as.double(X),
-  nrow = ind,
-  ncol = nsnp,
-  byrow = TRUE
-)
-Xmean <- apply(X, 2, mean)
-Xsd <- apply(X, 2, sd)
-X <- t((t(X) - Xmean) / Xsd)
-```
-
 As in the paper, we randomly choose causal variants that classify into three groups:
 
-1. a small set of interaction SNPs,
-1. a larger set of interaction SNPs, and
+1. set 1 of interaction SNPs,
+1. set 2 of interaction SNPs, and
 1. a large set of additive SNPs.
 
 In the simulations carried out in this study, SNPs interact between sets. SNPs in the first group interact with SNPs in the second group, but do not interact with variants in their own group, and vice versa. One may view the SNPs in the first set as the “hubs” in an interaction map. We are reminded that interaction (epistatic) effects are different from additive effects.
 
 > **NOTE**: All causal SNPs in both the first and second groups have additive effects and are involved in pairwise interactions, while causal SNPs in the third set only have additive effects.
 
-Select causal SNPs in groups 1, 2, and 3.
-
-```{r simulation_samples, eval = FALSE}
-snp.ids <- 1:nsnp
-s1 <- sample(snp.ids, ncausal1, replace = F)
-s2 <- sample(snp.ids[-s1], ncausal2, replace = F)
-s3 <- sample(snp.ids[-c(s1, s2)], ncausal3, replace = F)
-
-Xcausal1 <- X[, s1]
-Xcausal2 <- X[, s2]
-Xcausal3 <- X[, s3]
-```
-
-Create the epistatic design matrix $W$. Within one sample, each SNP in group one is multiplied with each SNP in group 2.
-```{r epistatic_design_matrix, eval = FALSE}
-W <- c()
-for (i in 1:ncausal1) {
-  # row and element wise multiplicaiton
-  W <- cbind(W, Xcausal1[, i] * Xcausal2)
-  # matrix dim (n sample) x (group1 * group2)
-}
-dim(W)
-```
-
-Simulate marginal (additive) effects by drawing effect sizes $\beta_i$ for all causal SNPs from a normal distribution $\beta_i \sim \mathcal{N}(0, 1)$. These effect sizes are then used to calculate the phenotype contribution of additive effects. The variance of the phenotype vector is then used to scale the effect size such that the additive effect contributes to the desired fraction of the phenotypic variance explained. The resulting overall phenotype $y$ satisfies:
-
-\begin{align}
-\mathrm{Var}(y) = & \frac{\rho \cdot \mathrm{PVE}}{\sigma^2_{\mathrm{marg}}} \cdot \mathrm{Var}(y_{\mathrm{marg}}) \\
-& + \frac{(1 - \rho) \cdot \mathrm{PVE}}{\sigma^2_{\mathrm{epi}}} \cdot \mathrm{Var}(y_{\mathrm{epi}}) \\
-& + \frac{1 - \mathrm{PVE}}{\sigma^2_{\mathrm{err}}} \cdot \mathrm{Var}(y_{\mathrm{err}})
-\end{align}
-
-
-```{r simulate_additive_effects, eval = FALSE}
-Xmarginal <- cbind(Xcausal1, Xcausal2, Xcausal3)
-beta <- rnorm(dim(Xmarginal)[2])
-y_marginal <- Xmarginal %*% beta
-beta <- beta * sqrt(pve * rho / var(y_marginal))
-y_marginal <- Xmarginal %*% beta
-```
-
-Simulate the epistatic effects and phenotypic variance unexplained following the same process.
-
-```{r simulate_epistatic_effects, eval = FALSE}
-alpha <- rnorm(dim(W)[2])
-y_epi <- W %*% alpha
-alpha <- alpha * sqrt(pve * (1 - rho) / var(y_epi))
-y_epi <- W %*% alpha
-```
-
 To summarize, each effect size for the marginal, epistatic, and random error effects are drawn from a standard normal distribution. Meaning $\beta$ ~ MVN(0,I), $\alpha$ ~ MVN(0,I), and $\epsilon$ ~ MVN(0,I). We then scale both the additive and pairwise genetic effects so that collectively they explain a fixed proportion of genetic variance. Namely, the additive effects make up $\rho$%, while the pairwise interactions make up the remaining $(1 − \rho)$% of the explained heritability. Once we obtain the final effect sizes for all causal SNPs, we draw errors to achieve the target $H^2$ such that
 
-\begin{equation}
-\mathrm{Var}(y) = \mathrm{Var}(y_{\mathrm{additive}}) + \mathrm{Var}(y_{\mathrm{epistatic}}) +  \mathrm{Var}(y_{\mathrm{error}}) = 1
-\end{equation}
+## Running mvMAPIT
 
-
-The residual error therefore can be computed as
-
-```{r simulate_residual_error, eval = FALSE}
-y_err <- rnorm(ind)
-y_err <- y_err * sqrt((1 - pve) / var(y_err))
-```
-
-The continuous phenotype is the sum of the three contributions.
-
-```{r continuous_phenotype, eval = FALSE}
-y <- y_marginal + y_epi + y_err
-# human readable names
-colnames(X) <- paste("SNP", 1:ncol(X), sep = "")
-dim(X)
-dim(y)
-SNPs <- colnames(X)[c(s1, s2)] # names of the causal SNPs
-```
-
-## Running MAPIT
-
-:warning: MAPIT takes the X matrix as $p \times n$; **not** as  $n \times p$.
+:warning: mvMAPIT takes the X matrix as $p \times n$; **not** as  $n \times p$.
 
 Set the number of cores
 ```{r, eval = FALSE}
 cores <- detectCores()
 ```
-MAPIT can be run in multiple modes. By defautl it runs in a hybrid mode, performing tests both wtih a normal Z-test as well as the Davies method. In order to run only Z-test or Davies, set `hybrid = FALSE` and the test key word agument to the desired test.
-```{r run_mapit_hybrid, eval = FALSE}
-ptm <- proc.time() # Start clock
-mapit <- MvMAPIT(
-        t(X),
-        y,
-        hybrid = TRUE,
-        test = "normal",
-        cores = cores
+mvMAPIT can be run in multiple modes. By default it runs in a hybrid mode, performing tests both wtih a normal Z-test as well as the Davies method.
+```{r run_mapit_normal, eval = FALSE}
+mapit <- mvmapit(
+        t(data$genotype),
+        t(data$trait),
+        test = "normal"
 )
-proc.time() - ptm # Stop clock
-
-hybrid.pvals <- mapit$pvalues
-names(hybrid.pvals) <- colnames(X)
 ```
 
 ```{r load_mapit_analysis_data, include=FALSE}
@@ -243,29 +140,12 @@ additive_snps <- mapit_analysis_data$additive_snps
 exhaustive_search_results <- mapit_analysis_data$exhaustive_search
 ```
 
-## Plot observed the p-values on a QQ-plot
-
-```{r plot_p_values, eval = TRUE}
-ggd.qqplot(hybrid.pvals)
-ggd.qqplot(normal.pvals)
-ggd.qqplot(davies.pvals)
-```
-
-### Look at the causal SNPs
-
-```{r print_p_values_groups, eval = TRUE}
-kable(hybrid.pvals[epistatic_snps])
-kable(normal.pvals[epistatic_snps])
-kable(davies.pvals[epistatic_snps])
-```
-
 ### Running an Informed Exhaustive Search
-
 
 > **NOTE**: Now we may take only the significant SNPs according to their marginal epistatic effects and run a simple exhaustive search between them
 
 ```{r search_significant_SNPs, eval = FALSE}
-thresh <- 0.05 / length(hybrid.pvals) # Set a significance threshold
+thresh <- 0.05 / length(mapit$pvalues) # Set a significance threshold
 significant_snps <- hybrid.pvals[hybrid.pvals <= thresh] # Call only marginally significant SNPs
 significant_snps <- significant_snps[!is.na(significant_snps)]
 pairs <- c()
@@ -280,7 +160,3 @@ if (length(significant_snps) > 1) {
 }
 ```
 
-Look at the exhaustive search results
-```{r examine_search_results, eval = TRUE}
-kable(sort(exhaustive_search_results$interaction_pairs)) # Sort the pairs in order of significance
-```
