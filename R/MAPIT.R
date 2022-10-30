@@ -161,7 +161,7 @@ mvmapit <- function(
         timings <- vc.mod$timings
     }
     timings_mean <- apply(as.matrix(timings[rowSums(timings) != 0, ]), 2, mean)
-    log$info("Calculated mean time of execution. Return list.")
+    log$debug("Calculated mean time of execution. Return list.")
     row.names(pvals) <- rownames(X)
     row.names(pves) <- rownames(X)
     column_names <- mapit_struct_names(Y)
