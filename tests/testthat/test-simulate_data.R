@@ -1,5 +1,5 @@
 test_that(
-    "Simulate multiple phenotypes returns apropriate phenotype object", {
+    "Simulate multiple traits returns apropriate trait object", {
         # given
         p <- 20
         f <- 10
@@ -19,17 +19,17 @@ test_that(
 
         # then
         expect_equal(
-            nrow(data$phenotype),
+            nrow(data$trait),
             n
         )
         expect_equal(
-            ncol(data$phenotype),
+            ncol(data$trait),
             d
         )
         expect_equal(
-            sum(is.na(data$phenotype)),
+            sum(is.na(data$trait)),
             0
-        )  # no NA values in phenotype
+        )  # no NA values in trait
         expect_equal(
             length(data),
             7
@@ -38,7 +38,7 @@ test_that(
 )
 
 test_that(
-    "Simulate multiple phenotypes returns causal SNPs", {
+    "Simulate multiple traits returns causal SNPs", {
         # given
         p <- 20
         f <- 10
@@ -66,7 +66,7 @@ test_that(
 )
 
 test_that(
-    "Simulate multiple phenotypes remove SNPs with low maf", {
+    "Simulate multiple traits remove SNPs with low maf", {
         # given
         p <- 20
         f <- 10
