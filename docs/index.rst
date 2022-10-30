@@ -4,6 +4,7 @@ Multivariate MAPIT
 
 Abstract for the project here.
 
+
 Contents
 ========
 
@@ -12,6 +13,7 @@ Contents
    :caption: User Guide
 
    Readme <readme>
+   Bookdown <bookdown>
 
 .. toctree::
    :maxdepth: 2
