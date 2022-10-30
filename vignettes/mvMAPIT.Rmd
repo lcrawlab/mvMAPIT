@@ -1,10 +1,10 @@
 ---
-title: "Illustrating the multivariate MArginal ePIstasis Test (MAPIT) with Simulations"
+title: "Illustrating the mvMAPIT with Simulations"
 author: "Julian Stamp"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Illustrating the multivariate MArginal ePIstasis Test (MAPIT) with Simulations}
+  %\VignetteIndexEntry{Illustrating the mvMAPIT with Simulations}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,26 +17,60 @@ knitr::opts_chunk$set(
 library(knitr)
 ```
 
-# Standard workflow
+> **_NOTE:_** if you use mvMAPIT in published research, please cite:
+> Crawford, L., Zeng, P., Mukherjee, S., & Zhou, X. (2017). Detecting epistasis with the marginal epistasis test in genetic mapping studies of quantitative traits. PLoS genetics, 13(7), e1006869.
+> Stamp, J., DenAdel, A., Weinreich, D. & Crawford, L. (2022). Multivariate MAPIT.
+> Stamp J, Crawford L (2022). mvMAPIT: Multivariate Genome Wide Marginal Epistasis Test. https://github.com/lcrawlab/mvMAPIT, https://lcrawlab.github.io/mvMAPIT/
 
-> **_NOTE:_** if you use MAPIT in published research, please cite:
-> placeholder
 
-## Getting Started
+# Getting Started
+Load necessary libraries. For the sake of getting started, `mvMAPIT` comes with
+a small set of simulated data that contains random genotype-like data and two
+simulated quantitative traits with epistatic interactions.
+The vignette traces the simulation and the possible analysis of this data.
 
-Load necessary libraries
+```{r load_dependencies}
+library(mvMAPIT)
+library(dplyr)
+library(ggplot2)
+library(ggrepel)
+library(tidyr)
+```
 
 > **_NOTE:_**
 This code assumes that the basic C++ functions are set up on the computer in use.
 > The `Rcpp` packages rely on C++ libraries, e.g. `openblas`, `lapack`, `flibs`.
 > Mac users please refer to the homebrew applications and install the `gcc` commands listed in the `README.md` file.
 
-```{r load_dependencies, eval = FALSE}
-library(mvMAPIT)
-```
-## Simulating Data
+# Simulating Data
+Data are $p$ single nucleotide polymorphisms (SNPs) and $n$ simulated sample genotypes togeter with some quantitative traits.
 
-Data are $p$ single nucleotide polymorphisms (SNPs) and $n$ simulated sample genotypes.
+## Simulate Genotypes
+Create a matrix that contains underdetermined genotype data.
+```{r simulate_genotypes, eval = FALSE}
+set.seed(1234)
+
+n_samples <- 2938
+n_snp <- 5747
+
+sample_names <- seq_len(n_samples) %>% sprintf(fmt = "id%04d")
+snp_names <- seq_len(n_snp) %>% sprintf(fmt = "snp%04d")
+
+random_genotype_vec <- sample(0:2, n_samples * n_snp, replace = TRUE)
+genotype_data <- matrix(random_genotype_vec,
+  nrow = n_samples,
+  ncol = n_snp,
+)
+
+colnames(genotype_data) <- snp_names
+rownames(genotype_data) <- sample_names
+```
+
+## Simulate Traits
+The simulated traits will be based on the genotype data simulated in the previous
+step.
+The causal SNPs as well as their effect sizes will be drawn at random.
+For simulating traits, we need to control the following simulation parameters.
 
 Simulation Parameters:
 
@@ -52,25 +86,20 @@ Simulation Parameters:
     * `group_ratio_pleiotropic`: ratio by which to split the epistatic SNPs into groups.
 1. `epistatic_correlation`: correlation between the epistatic effects.
 
+
 ```{r simulation_parameters, eval = FALSE}
 seed <- 67132
-n <- 100
-p <- 2000
 d <- 2
 PVE <- 0.6
-rho <- 0.8
+rho <- 0.2
 n_causal <- 1000
-n_trait_specific <- 10
+n_trait_specific <- 0
 n_pleiotropic <- 10
 group_ratio_pleiotropic <- 1
 epistatic_correlation <- 0.9
 maf <- 0.05
-X <- matrix(
-    runif(p * n),
-    ncol = p
-)
-data <- simulate_traits(
-    X,
+simulated_data <- simulate_traits(
+    genotype_data,
     n_causal = n_causal,
     n_trait_specific = n_trait_specific,
     n_pleiotropic = n_pleiotropic,
@@ -83,6 +112,7 @@ data <- simulate_traits(
     seed = seed,
     logLevel = "ERROR"
 )
+
 ```
 The entries in the genotype matrix are:
 
@@ -99,64 +129,105 @@ An example genotype matrix could look like this:
 | ...  |  0  |  1  | 0 |  1  |
 |  n   |  2  |  2  | 1 |  1  |
 
-As in the paper, the genotype matrix will be scaled and centered such that the data at every SNP has mean $\mu = 0$ and standard deviation $\sigma = 1$. The genotypes are simulated such that all variants have minor allele frequency $\mathrm{MAF} > 0.05$. For each SNP a minor allele frequency is drawn at random from a uniform distribution $\mathrm{MAF} \sim \mathrm{Uniform}(0.05, 0.5)$. Then, haplotypes for each SNP are simulated by drawing from a $\mathrm{Uniform}(0, 1)$ distribution and comparing the drawn value to the minor allele frequency. The values less than the minor allele frequency are mapped to 1, the ones above to zero. The genotype is simulated by adding the haplotype vectors.
 
-As in the paper, we randomly choose causal variants that classify into three groups:
+We randomly choose causal variants that are split into three groups:
 
 1. set 1 of interaction SNPs,
 1. set 2 of interaction SNPs, and
-1. a large set of additive SNPs.
+1. set of additive SNPs without interactions.
 
 In the simulations carried out in this study, SNPs interact between sets. SNPs in the first group interact with SNPs in the second group, but do not interact with variants in their own group, and vice versa. One may view the SNPs in the first set as the “hubs” in an interaction map. We are reminded that interaction (epistatic) effects are different from additive effects.
 
 > **NOTE**: All causal SNPs in both the first and second groups have additive effects and are involved in pairwise interactions, while causal SNPs in the third set only have additive effects.
 
-To summarize, each effect size for the marginal, epistatic, and random error effects are drawn from a standard normal distribution. Meaning $\beta$ ~ MVN(0,I), $\alpha$ ~ MVN(0,I), and $\epsilon$ ~ MVN(0,I). We then scale both the additive and pairwise genetic effects so that collectively they explain a fixed proportion of genetic variance. Namely, the additive effects make up $\rho$%, while the pairwise interactions make up the remaining $(1 − \rho)$% of the explained heritability. Once we obtain the final effect sizes for all causal SNPs, we draw errors to achieve the target $H^2$ such that
+To summarize, each effect size for the marginal, epistatic, and random error effects are drawn from a matrix normal distribution. This means $\beta$ ~ MVN(0, U, I), $\alpha$ ~ MVN(0,V,I), and $\epsilon$ ~ MVN(0, I, I).
+With the effects we simulate traits for each variance component.
+We then scale both the additive and pairwise variance components so that collectively they explain a fixed proportion of genetic variance. Namely, the additive effects make up $\rho$%, while the pairwise interactions make up the remaining $(1 − \rho)$% of the explained heritability. Once we obtain the final genetic components for all causal SNPs, we draw errors to achieve the target $H^2$ such that
 
-## Running mvMAPIT
-
+# Running mvMAPIT
 :warning: mvMAPIT takes the X matrix as $p \times n$; **not** as  $n \times p$.
 
 Set the number of cores
 ```{r, eval = FALSE}
 cores <- detectCores()
 ```
-mvMAPIT can be run in multiple modes. By default it runs in a hybrid mode, performing tests both wtih a normal Z-test as well as the Davies method.
+The R routine `mvmapit` can be run in multiple modes. By default it runs in a hybrid mode, performing tests both wtih a normal Z-test as well as the Davies method.
 ```{r run_mapit_normal, eval = FALSE}
-mapit <- mvmapit(
+mvmapit_hybrid <- mvmapit(
         t(data$genotype),
         t(data$trait),
         test = "normal"
 )
 ```
-
-```{r load_mapit_analysis_data, include=FALSE}
-load('../data/mapit_analysis_data.rda') # knitr is run in the vignettes directory
-hybrid.pvals <- mapit_analysis_data$hybrid_pvalues
-normal.pvals <- mapit_analysis_data$normal_pvalues
-davies.pvals <- mapit_analysis_data$davies_pvalues
-epistatic_snps <- mapit_analysis_data$epistatic_snps
-additive_snps <- mapit_analysis_data$additive_snps
-exhaustive_search_results <- mapit_analysis_data$exhaustive_search
+```{r assign_data, include = FALSE}
+mvmapit_hybrid <- mvmapit_data$mvmapit
+fisher <- mvmapit_data$fisher
+pairs <- mvmapit_data$exhaustive_search
+thresh <- 0.05 / nrow(fisher)
 ```
 
-### Running an Informed Exhaustive Search
+# Running an Informed Exhaustive Search
+Now we may take only the significant SNPs according to their marginal epistatic effects and run a simple exhaustive search between them.
+The significant SNPs are significant after combining the results from the multivariate analysis using Fisher's method and
+adjusting the significnat threshold via Bonferroni correction.
 
-> **NOTE**: Now we may take only the significant SNPs according to their marginal epistatic effects and run a simple exhaustive search between them
+The search itself is a simple regression on the interaction terms between all significant interactions.
+
 
 ```{r search_significant_SNPs, eval = FALSE}
-thresh <- 0.05 / length(mapit$pvalues) # Set a significance threshold
-significant_snps <- hybrid.pvals[hybrid.pvals <= thresh] # Call only marginally significant SNPs
-significant_snps <- significant_snps[!is.na(significant_snps)]
-pairs <- c()
-if (length(significant_snps) > 1) {
-  pairnames <- comboGeneral(names(significant_snps), 2) # Generate unique pairs of SNP names; for length(names) = n, the result is a (n * (n-1)) x 2 matrix with one row corresponding to a pair
+fisher <- fishers_combined(mvmapit_hybrid$pvalues)
+# exhaustive search for p-values
+thresh <- 0.05 / nrow(X) # Set a significance threshold
+
+significant_snps <-  fisher %>%
+    filter(p < thresh) # Call only marginally significant SNPs
+pairs <- NULL
+if (nrow(significant_snps) > 1) {
+  pairnames <- comboGeneral(significant_snps$id, 2) # Generate unique pairs of SNP names; for length(names) = n, the result is a (n * (n-1)) x 2 matrix with one row corresponding to a pair
   for (k in seq_len(nrow(pairnames))) {
     fit <- lm(y ~ X[, pairnames[k, 1]]:X[, pairnames[k, 2]])
-    p_value <- coefficients(summary(fit))[8]
-    names(p_value) <- paste(pairnames[k, 1], pairnames[k, 2], sep = "-")
-    pairs <- c(pairs, p_value)
+    p_value1 <- coefficients(summary(fit))[[1]][2, 4]
+    p_value2 <- coefficients(summary(fit))[[2]][2, 4]
+    tib <- tibble::tibble(
+            x = p_value1,
+            y = p_value2,
+            u = pairnames[k, 1],
+            v = pairnames[k, 2]
+    )
+    pairs <- bind_rows(pairs, tib)
   }
 }
+
+colnames(pairs) <- c(colnames(y), "var1", "var2")
 ```
 
+# Visualize Results
+```{r manhattan_plots}
+manhplot <- ggplot(fisher, aes(x = 1:nrow(fisher), y = -log10(p))) +
+  geom_hline(yintercept = -log10(thresh), color = "grey40", linetype = "dashed") + 
+  geom_point(alpha = 0.75) +
+  geom_text_repel(aes(label=ifelse(p < thresh, as.character(id), '')))
+plot(manhplot)
+```
+
+
+
+```{r trait1_plots_exhaustive}
+plotable <- pairs %>%
+  pivot_longer(
+    cols = starts_with("p_"),
+    names_to = "trait",
+    names_prefix = "trait ",
+    values_to = "p",
+    values_drop_na = TRUE
+  ) %>%
+  mutate(pplot = case_when(
+    p < 0.05 ~ p,
+    TRUE ~ 1))
+tiles <- ggplot(data = plotable, aes(x=var1, y=var2, fill=-log10(pplot)))+ 
+  geom_tile() +
+  facet_wrap(~trait) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  scale_fill_viridis_c()
+plot(tiles)
+```
