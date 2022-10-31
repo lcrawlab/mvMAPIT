@@ -1,5 +1,5 @@
 test_that(
-    "test that all pvalues equal if phenotypes equal", {
+    "test that all pvalues equal if traits are equal", {
         # given
         p <- 20
         n <- 10

@@ -45,7 +45,7 @@
 #' @import foreach
 #' @import mvtnorm
 #' @import parallel
-#' @import utils
+#' @importFrom utils head
 simulate_traits <- function(
     genotype_matrix, n_causal = 1000, n_trait_specific = 10, n_pleiotropic = 10,
     H2 = 0.6, d = 2, rho = 0.8, marginal_correlation = 0.3, epistatic_correlation = 0.3,

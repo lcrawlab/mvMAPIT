@@ -5,7 +5,7 @@
 #' @param pvalues Vector with p-values to combine
 #' @return Scalar Fisher's combined p-value
 #' @noRd
-#' @import stats
+#' @importFrom stats pchisq
 sumlog <- function(pvalues) {
     df <- 2 * length(pvalues)
     fisherp <- pchisq(
