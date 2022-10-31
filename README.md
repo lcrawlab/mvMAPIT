@@ -10,10 +10,10 @@ Find the full package documentation here: [Multivariate MAPIT Documentation](htt
 
 This R package is a generalization of the [MAPIT
 implementation](https://github.com/lorinanthony/MAPIT) by Crawford et
-al. (2017)[^1] for any number of phenotypes.
+al. (2017)[^1] for any number of traits as described by Stamp et al. (2022)[^2].
 
-Introduction
-------------
+### Introduction
+
 
 Epistasis, commonly defined as the interaction between multiple genes,
 is an important genetic component underlying phenotypic variation. Many
@@ -68,11 +68,11 @@ using R Studio.
 
 mvMAPIT requires the installation of the following R libraries:
 
--   [doParallel](https://cran.r-project.org/web/packages/doParallel/index.html)
--   [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)
--   [RcppArmadillo](https://cran.r-project.org/web/packages/RcppArmadillo/index.html)
--   [RcppParallel](https://cran.r-project.org/web/packages/RcppParallel/index.html)
--   [CompQuadForm](https://cran.r-project.org/web/packages/CompQuadForm/index.html)
+- [doParallel](https://cran.r-project.org/web/packages/doParallel/index.html)
+- [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)
+- [RcppArmadillo](https://cran.r-project.org/web/packages/RcppArmadillo/index.html)
+- [RcppParallel](https://cran.r-project.org/web/packages/RcppParallel/index.html)
+- [CompQuadForm](https://cran.r-project.org/web/packages/CompQuadForm/index.html)
 
 The easiest method to install these packages is with the following
 example command entered in an R shell:
@@ -114,7 +114,7 @@ compiler. A work around to use OpenMP in R on macOS can be found
 mvMAPIT can be compiled without OpenMP, but we recommend using it if
 applicable.
 
-####Compiling for OpenMP
+#### Compiling for OpenMP
 
 In order to enable the OpenMP implementation of mvMAPIT, the required
 C++ libraries need to be installed and the `PKG_CXXFLAGS` compiler flag

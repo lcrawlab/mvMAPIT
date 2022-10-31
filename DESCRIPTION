@@ -46,10 +46,14 @@ Imports:
     RcppArmadillo,
     RcppParallel,
     RcppSpdlog,
+    stats,
     testthat,
-    tidyr
+    tidyr,
+    utils
 Suggests:
     ggplot2,
+    ggrepel,
+    kableExtra,
     knitr,
     markdown,
     rmarkdown

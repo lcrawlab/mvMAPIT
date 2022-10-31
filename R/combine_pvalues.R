@@ -5,6 +5,7 @@
 #' @param pvalues Vector with p-values to combine
 #' @return Scalar Fisher's combined p-value
 #' @noRd
+#' @import stats
 sumlog <- function(pvalues) {
     df <- 2 * length(pvalues)
     fisherp <- pchisq(
@@ -42,6 +43,7 @@ sumlog <- function(pvalues) {
 #' )
 #' fisher <- fishers_combined(mapit$pvalues)
 #' @export
+#' @import dplyr
 fishers_combined <- function(pvalues) {
     pvalues %>%
         group_by(id) %>%
@@ -80,6 +82,7 @@ fishers_combined <- function(pvalues) {
 #' harmonic <- harmonic_combined(mapit$pvalues)
 #' @export
 #' @import harmonicmeanp
+#' @import dplyr
 harmonic_combined <- function(pvalues) {
     pvalues %>%
         group_by(id) %>%
