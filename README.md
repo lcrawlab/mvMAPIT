@@ -6,8 +6,7 @@
 Find the full package documentation here: [Multivariate MAPIT Documentation](https://lcrawlab.github.io/mvMAPIT).
 
 
-The multivariate MArginal ePIstasis Test (mvMAPIT)
-==================================================
+## The multivariate MArginal ePIstasis Test (mvMAPIT)
 
 This R package is a generalization of the [MAPIT
 implementation](https://github.com/lorinanthony/MAPIT) by Crawford et
@@ -42,16 +41,13 @@ phenotypes.
 mvMAPIT is implemented as a set of R and C++ routines, which can be
 carried out within an R environment.
 
-The Model
----------
+### The Model
 
 Add text.
 
-Installation
-============
+## Installation
 
-The R Environment
------------------
+### The R Environment
 
 R is a widely used, free, and open source software environment for
 statistical computing and graphics. The most recent version of R can be
@@ -67,8 +63,8 @@ Administration](http://cran.r-project.org/doc/manuals/r-release/R-admin.html).
 In its current construction, we recommend against running MAPIT while
 using R Studio.
 
-R Packages Required for mvMAPIT
--------------------------------
+### R Packages Required for mvMAPIT
+
 
 mvMAPIT requires the installation of the following R libraries:
 
@@ -88,8 +84,7 @@ install.packages("doParallel", dependecies = TRUE)
 Alternatively, one can also [install R packages from the
 command-line](http://cran.r-project.org/doc/manuals/r-release/R-admin.html#Installing-packages).
 
-C++ Functions Required for MAPIT
---------------------------------
+### C++ Functions Required for MAPIT
 
 The code in this repository assumes that basic C++ functions and
 applications are already set up on the running personal computer or
@@ -108,8 +103,7 @@ For extra tips on how to run C++ on macOS, please visit
 to avoid errors dealing with `-lgfortran` or `-lquadmath`, please visit
 <http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/>.
 
-OpenMP
-------
+### OpenMP
 
 Note that mvMAPIT takes advantage of [OpenMP](http://openmp.org/wp/), an
 API for multi-platform shared-memory parallel programming in C/C++. This
@@ -120,7 +114,7 @@ compiler. A work around to use OpenMP in R on macOS can be found
 mvMAPIT can be compiled without OpenMP, but we recommend using it if
 applicable.
 
-### Compiling for OpenMP
+####Compiling for OpenMP
 
 In order to enable the OpenMP implementation of mvMAPIT, the required
 C++ libraries need to be installed and the `PKG_CXXFLAGS` compiler flag
@@ -136,8 +130,7 @@ The easiest way to install the package from sources is to change into
 the directory of mvMAPIT and run `R CMD INSTALL . --preclean`. The
 `--preclean` flag makes sure that the latest state is run.
 
-Tutorial for Running MAPIT
---------------------------
+## Tutorial for Running MAPIT
 
 For the simulation tutorial provided here, we generate genotypes for
 3,000 samples typed at 10,000 unrelated variants. We show in our example
@@ -147,8 +140,7 @@ order to find interacting causal variants of interest.
 
 ------------------------------------------------------------------------
 
-Questions and Feedback
-======================
+## Questions and Feedback
 For questions or concerns with the MAPIT functions, please contact
 Lorin Crawford <mailto:lorin_crawford@brown.edu> or
 Julian Stamp <mailto:julian_stamp@brown.edu>.
@@ -157,8 +149,7 @@ We appreciate any feedback you may have with our repository and instructions.
 
 
 
-References
-----------
+## References
 
 [^1]: L. Crawford, P. Zeng, S. Mukherjee, X. Zhou (2017). Detecting
     epistasis with the marginal epistasis test in genetic mapping
