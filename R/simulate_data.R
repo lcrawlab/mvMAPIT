@@ -348,7 +348,3 @@ get_factors <- function(n1, n) {
     )
 }
 
-
-#' @noRd
-#' @export
-simulate_phenotypes <- simulate_traits

@@ -279,6 +279,3 @@ get_variance_components_ind <- function(Y) {
     return(ind)
 }
 
-#' @noRd
-#' @export
-MvMAPIT <- mvmapit
