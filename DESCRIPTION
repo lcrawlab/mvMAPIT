@@ -49,6 +49,7 @@ Imports:
     testthat,
     tidyr
 Suggests:
+    ggplot2,
     knitr,
     markdown,
     rmarkdown

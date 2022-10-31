@@ -1,13 +1,21 @@
 url: https://lcrawlab.github.io/mvMAPIT/
-destination: docs/_static/pkgdown
 reference:
 - title: "Multivariate MAPIT Analysis"
   desc: >
-    Functions for the method and combining the variance component p-values.
+    Functions for the marginal epistasis analysis.
   contents: 
   - mvmapit
+- title: "Combining P-values"
+  desc: >
+    Functions for combining the variance component p-values.
+  contents:
   - fishers_combined
   - harmonic_combined
+- title: "Simulations"
+  desc: >
+    Functions for simulating quantitative traits with pairwise epistasis.
+  contents:
+  - simulate_traits
 - title: "Simulated Data Examples"
   desc: "Data structures with simulated genotype, trait, and analysis data."
   contents:

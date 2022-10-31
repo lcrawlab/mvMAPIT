@@ -1,12 +1,11 @@
-Changelog
-=========
+# Changelog <img src="man/figures/logo.png" align="right" alt="" width="120"/>
 
-# mvMAPIT 1.1.0
+## mvMAPIT 1.1.0
 
-## Bug Fixes
+### Bugfixes
 
 * Lots of them
 
-# pkgdown 1.0.0
+## mvMAPIT 1.0.0
 
-* This is the first release of mvMAPIT.
+* This was never officially released.
