@@ -1,2 +1,15 @@
 url: https://lcrawlab.github.io/mvMAPIT/
 destination: docs/_static/pkgdown
+reference:
+- title: "Multivariate MAPIT Analysis"
+  desc: >
+    Functions for the method and combining the variance component p-values.
+  contents: 
+  - mvmapit
+  - fishers_combined
+  - harmonic_combined
+- title: "Simulated Data Examples"
+  desc: "Data structures with simulated genotype, trait, and analysis data."
+  contents:
+  - simulated_data
+  - mvmapit_data

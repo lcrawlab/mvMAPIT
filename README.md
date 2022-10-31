@@ -1,11 +1,10 @@
 
-title: Multivariate MAPIT
----
+# [Multivariate MAPIT Documentation](https://lcrawlab.github.io/mvMAPIT) <img src="man/figures/logo.png" align="right" alt="" width="120"/>
 
 [![R CMD check](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml)
 
+Find the full package documentation here: [Multivariate MAPIT Documentation](https://lcrawlab.github.io/mvMAPIT).
 
-------------------------------------------------------------------------
 
 The multivariate MArginal ePIstasis Test (mvMAPIT)
 ==================================================
@@ -23,7 +22,7 @@ statistical methods have been developed to model and identify epistatic
 interactions between genetic variants. However, because of the large
 combinatorial search space of interactions, most epistasis mapping
 methods face enormous computational challenges and often suffer from low
-statistical power. In Crawford et al. (2017), we present a novel,
+statistical power. In Crawford et al. (2017)[^1], we present a novel,
 alternative strategy for mapping epistasis: **the MArginal ePIstasis
 Test (MAPIT)**. Our method examines one variant at a time, and estimates
 and tests its \"marginal epistatic effects\" \-\-- the combined pairwise
@@ -148,11 +147,21 @@ order to find interacting causal variants of interest.
 
 ------------------------------------------------------------------------
 
+Questions and Feedback
+======================
+For questions or concerns with the MAPIT functions, please contact
+Lorin Crawford <mailto:lorin_crawford@brown.edu> or
+Julian Stamp <mailto:julian_stamp@brown.edu>.
+
+We appreciate any feedback you may have with our repository and instructions.
+
+
+
 References
 ----------
 
-[^1]: L Crawford, P Zeng, S Mukherjee, X Zhou (2017). Detecting
+[^1]: L. Crawford, P. Zeng, S. Mukherjee, X. Zhou (2017). Detecting
     epistasis with the marginal epistasis test in genetic mapping
     studies of quantitative traits. *PLoS Genet*. **13** (7): e1006869.
     <http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869>
-
+[^2]: J. Stamp, A. DenAdel, D. Weinreich, L. Crawford (2022). Multivariate MAPIT.
