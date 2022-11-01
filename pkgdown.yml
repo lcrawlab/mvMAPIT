@@ -3,7 +3,7 @@ pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   mvMAPIT: mvMAPIT.html
-last_built: 2022-11-01T01:55Z
+last_built: 2022-11-01T03:02Z
 urls:
   reference: https://lcrawlab.github.io/mvMAPIT/reference
   article: https://lcrawlab.github.io/mvMAPIT/articles
