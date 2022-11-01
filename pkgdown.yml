@@ -2,8 +2,9 @@ pandoc: 2.7.3
 pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
+  docker-mvmapit: docker-mvmapit.html
   mvMAPIT: mvMAPIT.html
-last_built: 2022-11-01T03:02Z
+last_built: 2022-11-01T21:52Z
 urls:
   reference: https://lcrawlab.github.io/mvMAPIT/reference
   article: https://lcrawlab.github.io/mvMAPIT/articles
