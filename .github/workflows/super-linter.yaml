@@ -23,4 +23,4 @@ jobs:
         env:
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FILTER_REGEX_EXCLUDE: (configure|LICENSE.md|RcppExports.cpp|RcppExports.R|tests|oscar|docs/_build)
+          FILTER_REGEX_EXCLUDE: (configure|LICENSE.md|RcppExports.cpp|RcppExports.R|tests|oscar|NEWS.md)
