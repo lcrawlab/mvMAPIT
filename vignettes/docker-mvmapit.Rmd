@@ -1,0 +1,54 @@
+---
+title: "Dockerized mvMAPIT"
+output: rmarkdown::html_vignette
+description: >
+  Learn how to use the Docker Image for mvMAPIT.
+vignette: >
+  %\VignetteIndexEntry{Using the mvMAPIT Docker Image}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+In order to enable users to work with mvMAPIT without having to install all dependencies, we provide a docker image with
+all dependencies and an installed R package `mvMAPIT`. Learn how to use it or build your own version of the docker image.
+
+## Docker Setup
+
+Follow the official guide to learn how to [Get Docker](https://docs.docker.com/get-docker/). This is required for being
+able to follow this tutorial.
+
+## Build an Image with mvMAPIT
+
+The github repository of [mvMAPIT](https://github.com/lcrawlab/mvMAPIT) already comes with a `Dockerfile`. To build the
+image, clone the github repository and run the following commands.
+
+```bash
+cd mvMAPIT
+docker build -t mvmapit .
+```
+
+This will produce an image named `mvmapit` that contains `Rstudio`, `mvMAPIT`, and all dependencies.
+
+Alternatively, the image will be made available through Dockerhub.
+
+## Run the mvMAPIT Image
+
+With a local copy of the docker image `mvmapit` available, run the following code.
+
+```bash
+docker run --rm -ti \
+    -e DISABLE_AUTH=true \
+    -p 8787:8787 \
+    --name my_container \
+    mvmapit
+```
+
+This will start the docker container that serves an RStudio application at [localhost:8787](localhost:8787). In this
+container, `mvMAPIT` is already installed and can be imported and run in the R console via the following code.
+
+```R
+library(mvMAPIT)
+mvmapit(t(simulated_data$genotype[1:100,1:10]), t(simulated_data$trait[1:100,]), cores = 4, logLevel = "DEBUG")
+```
+
+![RStudio with mvMAPIT.](docker-mvmapit.png){width=80%}
