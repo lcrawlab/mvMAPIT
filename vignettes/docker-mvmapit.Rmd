@@ -44,6 +44,11 @@ docker run --rm -ti \
 ```
 
 This will start the docker container that serves an RStudio application at [localhost:8787](localhost:8787). In this
-container, `mvMAPIT` is already installed and can be imported in the R console via `library(mvMAPIT)`.
+container, `mvMAPIT` is already installed and can be imported and run in the R console via the following code.
+
+```R
+library(mvMAPIT)
+mvmapit(t(simulated_data$genotype[1:100,1:10]), t(simulated_data$trait[1:100,]), cores = 4, logLevel = "DEBUG")
+```
 
 ![RStudio with mvMAPIT.](docker-mvmapit.png){width=80%}
