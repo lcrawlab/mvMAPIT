@@ -41,7 +41,7 @@ def change_version(version):
 
     logger.info(f"Version: {version}")
     for key, sedcmd in files.items():
-        sed(["-i", ".bu", "-E", sedcmd, key])
+        sed(["-i", "-E", sedcmd, key])
 
     _cmd("autoconf")
 
@@ -51,7 +51,8 @@ def autoformat():
 
     logger.info(f"Autoformat directories: {directories}")
     for d in directories:
-        cmd = ["Rscript", "-e", f"formatR::tidy_dir('{d}', args.newline = TRUE)"]
+        cmd = ["Rscript", "-e",
+               f"formatR::tidy_dir('{d}', args.newline = TRUE)"]
         logger.info(f"Run cmd: {cmd}")
         run(cmd)
 
