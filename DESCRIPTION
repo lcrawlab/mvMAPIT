@@ -1,11 +1,16 @@
 Type: Package
 Package: mvMAPIT
-Title: Implements the Multivariate MArginal ePIstasis Test (mvMAPIT) from
-    Crawford et al. 2017
+Title: Multivariate Genome Wide Marginal Epistasis Test
 Version: 1.1.0
-Author: lcrawlab
-Maintainer: Lorin Crawford <lorin_crawford@brown.edu>
-Description: Epistasis, commonly defined as the interaction between
+URL: https://github.com/lcrawlab/mvMAPIT, https://lcrawlab.github.io/mvMAPIT/
+Authors@R: c(
+    person("Julian", "Stamp", email = "julian_stamp@brown.edu", role = c("cre", "aut")),
+    person("Lorin", "Crawford", email = "lorin_crawford@brown.edu", role = "aut"))
+Author: Julian Stamp <julian_stamp@brown.edu>
+Maintainer: Julian Stamp <julian_stamp@brown.edu>
+Description: Multivariate analysis of pairwise epistatic contributions to
+    genetic architecture in quantitative traits.
+    Epistasis, commonly defined as the interaction between
     multiple genes, is an important genetic component underlying
     phenotypic variation. Many statistical methods have been developed to
     model and identify epistatic interactions between genetic variants.
@@ -23,27 +28,28 @@ Description: Epistasis, commonly defined as the interaction between
     and robust parameter inference and p-value computation.
 License: GPL (>= 3)
 Depends:
-    R (>= 2.10)
+    R (>= 3.5)
 Imports:
     checkmate,
     CompQuadForm,
-    doParallel,
     dplyr,
     foreach,
     harmonicmeanp,
-    LaplacesDemon,
     logging,
-    Matrix,
     mvtnorm,
-    PHENIX,
     Rcpp,
     RcppAlgos,
     RcppArmadillo,
     RcppParallel,
     RcppSpdlog,
+    stats,
     testthat,
-    tidyr
+    tidyr,
+    utils
 Suggests:
+    ggplot2,
+    ggrepel,
+    kableExtra,
     knitr,
     markdown,
     rmarkdown

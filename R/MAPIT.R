@@ -1,6 +1,6 @@
 #' Multivariate MArginal ePIstasis Test (mvMAPIT)
 #'
-#' This function will run a multivariate version of the MArginal ePIstasis
+#' This function runs a multivariate version of the MArginal ePIstasis
 #' Test (mvMAPIT) under the following model variations:
 #'
 #' (1) Standard Model: y = m+g+e
@@ -39,18 +39,37 @@
 #' @param C is an n x n covariance matrix detailing environmental effects and population structure effects.
 #' @param threshold is a parameter detailing the value at which to recalibrate the Z test p values. If nothing is defined by the user, the default value will be 0.05 as recommended by the Crawford et al. (2017).
 #' @param accuracy is a parameter setting the davies function numerical approximation accuracy. This parameter is not needed for the normal test. Smaller p-values than the accuracy will be zero.
-#' @param test is a parameter defining what hypothesis test should be implemented. Takes on values 'normal', 'davies', and 'hybrid'. The 'hybrid' test runs first the 'normal' test and then the 'davies' test on the significant variants.
-#' @param cores is a parameter detailing the number of cores to parallelize over. It is important to note that this value only matters when the user has implemented OPENMP on their operating system. If OPENMP is not installed, then please leave cores = 1 and use the standard version of this code and software.
+#' @param test is a parameter defining what hypothesis test should be run. Takes on values 'normal', 'davies', and 'hybrid'. The 'hybrid' test runs first the 'normal' test and then the 'davies' test on the significant variants.
+#' @param cores is a parameter detailing the number of cores to parallelize over. It is important to note that this value only matters when the user has installed OPENMP on their operating system.
 #' @param variantIndex is a vector containing indices of variants to be included in the computation.
 #' @param logLevel is a string parameter defining the log level for the logging package.
-#' @param logFile is a string parameter defining the name of the log file for the logging output.
+#' @param logFile is a string parameter defining the name of the log file for the logging output. Default is stdout.
 #'
 #' @return A list of P values and PVEs
+#' @examples
+#' set.seed(837)
+#' p <- 200
+#' n <- 100
+#' d <- 2
+#' X <- matrix(
+#'     runif(p * n),
+#'     ncol = p
+#' )
+#' Y <- matrix(
+#'     runif(d * n),
+#'     ncol = d
+#' )
+#' mapit <- mvmapit(
+#'     t(X),
+#'     t(Y),
+#'     test = "normal", cores = 1, logLevel = "INFO"
+#' )
 #' @useDynLib mvMAPIT
+#' @name mvmapit
 #' @export
 #' @import CompQuadForm
 #' @import Rcpp
-MvMAPIT <- function(
+mvmapit <- function(
     X, Y, Z = NULL, C = NULL, threshold = 0.05, accuracy = 1e-08, test = c("normal", "davies", "hybrid"),
     cores = 1, variantIndex = NULL, logLevel = "WARN", logFile = NULL
 ) {
@@ -65,7 +84,7 @@ MvMAPIT <- function(
 
     logging::logReset()
     logging::basicConfig(level = logLevel)
-    log <- logging::getLogger("MvMAPIT")
+    log <- logging::getLogger("mvmapit")
     if (!is.null(logFile)) {
         filePath <- file.path(getwd(), logFile)
         log$debug("Logging to file: %s", filePath)
@@ -142,7 +161,7 @@ MvMAPIT <- function(
         timings <- vc.mod$timings
     }
     timings_mean <- apply(as.matrix(timings[rowSums(timings) != 0, ]), 2, mean)
-    log$info("Calculated mean time of execution. Return list.")
+    log$debug("Calculated mean time of execution. Return list.")
     row.names(pvals) <- rownames(X)
     row.names(pves) <- rownames(X)
     column_names <- mapit_struct_names(Y)

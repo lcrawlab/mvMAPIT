@@ -2,18 +2,38 @@
 % Please edit documentation in R/combine_pvalues.R
 \name{fishers_combined}
 \alias{fishers_combined}
-\title{Fisher's combine method on MvMAPIT return}
+\title{Fisher's combine method on mvmapit return}
 \usage{
 fishers_combined(pvalues)
 }
 \arguments{
-\item{pvalues}{Tibble with p-values from MvMAPIT function call. Grouping is
+\item{pvalues}{Tibble with p-values from mvmapit function call. Grouping is
 based on the column named "id"}
 }
 \value{
 A Tibble with the combined p-values.
 }
 \description{
-This function takes in the p-values tibble that MvMAPIT returned. It then
+This function takes in the p-values tibble that mvmapit returned. It then
 computes the combined p-values grouped by variant id.
+}
+\examples{
+set.seed(837)
+p <- 200
+n <- 100
+d <- 2
+X <- matrix(
+    runif(p * n),
+    ncol = p
+)
+Y <- matrix(
+    runif(d * n),
+    ncol = d
+)
+mapit <- mvmapit(
+    t(X),
+    t(Y),
+    test = "normal", cores = 1, logLevel = "INFO"
+)
+fisher <- fishers_combined(mapit$pvalues)
 }

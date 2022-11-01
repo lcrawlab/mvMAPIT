@@ -9,6 +9,7 @@
 #' @param lambda Eigenvalues of the variance component model under the Null
 #' @return Saddlepoint approximation of p-values
 #' @noRd
+#' @importFrom stats pnorm uniroot
 saddlepoint_approximation <- function(x, lambda) {
     d = max(lambda)
     lambda = lambda/d

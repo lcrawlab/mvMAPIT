@@ -15,7 +15,7 @@ test_that(
         )
         Y <- c(runif(n))
         # when
-        mapit <- MvMAPIT(
+        mapit <- mvmapit(
             t(X),
             Y, accuracy = 1e-05, cores = 1, logLevel = "ERROR"
         )
@@ -41,7 +41,7 @@ test_that(
         )
         Y <- c(runif(n))
         # when
-        mapit <- MvMAPIT(
+        mapit <- mvmapit(
             t(X),
             Y, test = "davies", accuracy = 1e-05, cores = 1, logLevel = "ERROR"
         )

@@ -1,5 +1,5 @@
 test_that(
-    "test that all pvalues equal if phenotypes equal", {
+    "test that all pvalues equal if traits are equal", {
         # given
         p <- 20
         n <- 10
@@ -11,7 +11,7 @@ test_that(
         y <- runif(n)
         Y <- as.matrix(cbind(y, y))
         # when
-        mapit <- MvMAPIT(
+        mapit <- mvmapit(
             t(X),
             t(Y),
             test = "normal", cores = 1, logLevel = "DEBUG"

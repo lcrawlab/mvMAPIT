@@ -5,6 +5,7 @@
 #' @param pvalues Vector with p-values to combine
 #' @return Scalar Fisher's combined p-value
 #' @noRd
+#' @importFrom stats pchisq
 sumlog <- function(pvalues) {
     df <- 2 * length(pvalues)
     fisherp <- pchisq(
@@ -14,15 +15,35 @@ sumlog <- function(pvalues) {
     return(fisherp)
 }
 
-#' Fisher's combine method on MvMAPIT return
+#' Fisher's combine method on mvmapit return
 #'
-#' This function takes in the p-values tibble that MvMAPIT returned. It then
+#' This function takes in the p-values tibble that mvmapit returned. It then
 #' computes the combined p-values grouped by variant id.
 #'
-#' @param pvalues Tibble with p-values from MvMAPIT function call. Grouping is
+#' @param pvalues Tibble with p-values from mvmapit function call. Grouping is
 #' based on the column named "id"
 #' @return A Tibble with the combined p-values.
+#' @examples
+#' set.seed(837)
+#' p <- 200
+#' n <- 100
+#' d <- 2
+#' X <- matrix(
+#'     runif(p * n),
+#'     ncol = p
+#' )
+#' Y <- matrix(
+#'     runif(d * n),
+#'     ncol = d
+#' )
+#' mapit <- mvmapit(
+#'     t(X),
+#'     t(Y),
+#'     test = "normal", cores = 1, logLevel = "INFO"
+#' )
+#' fisher <- fishers_combined(mapit$pvalues)
 #' @export
+#' @import dplyr
 fishers_combined <- function(pvalues) {
     pvalues %>%
         group_by(id) %>%
@@ -32,16 +53,36 @@ fishers_combined <- function(pvalues) {
 }
 
 
-#' Harmonic mean p combine method on MvMAPIT return
+#' Harmonic mean p combine method on mvmapit return
 #'
-#' This function takes in the p-values tibble that MvMAPIT returned. It then
+#' This function takes in the p-values tibble that mvmapit returned. It then
 #' computes the combined p-values grouped by variant id.
 #'
-#' @param pvalues Tibble with p-values from MvMAPIT function call. Grouping is
+#' @param pvalues Tibble with p-values from mvmapit function call. Grouping is
 #' based on the column named "id"
 #' @return A Tibble with the combined p-values.
+#' @examples
+#' set.seed(837)
+#' p <- 200
+#' n <- 100
+#' d <- 2
+#' X <- matrix(
+#'     runif(p * n),
+#'     ncol = p
+#' )
+#' Y <- matrix(
+#'     runif(d * n),
+#'     ncol = d
+#' )
+#' mapit <- mvmapit(
+#'     t(X),
+#'     t(Y),
+#'     test = "normal", cores = 1, logLevel = "INFO"
+#' )
+#' harmonic <- harmonic_combined(mapit$pvalues)
 #' @export
 #' @import harmonicmeanp
+#' @import dplyr
 harmonic_combined <- function(pvalues) {
     pvalues %>%
         group_by(id) %>%

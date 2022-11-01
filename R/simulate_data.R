@@ -1,40 +1,53 @@
 #' Simulate phenotye data
 #'
-#' This function simulates phenotype data from a genotype matrix.
+#' This function simulates trait data from a genotype matrix.
 #'
-#' This function takes a genotype matrix and simulates phenotype data under the following model:
-#'
+#' This function takes a genotype matrix and simulates trait data under the following model:
 #' beta_i ~ MN(0, V_i, I), i in \{ additive, epistatic, residual\}
 #'
-#' The effect sizes follow a matrix normal distribution with no correlation between the samples but covariance between the effects for different phenotypes
-#'
-#'
-#'
+#' The effect sizes follow a matrix normal distribution with no correlation between the samples but covariance between the effects for different traits
 #'
 #' @param genotype_matrix Genotype matrix with samples as rows, and SNPs as columns.
 #' @param n_causal Number of SNPs that are causal.
 #' @param n_trait_specific Number of causal SNPs with single trait epistatic effects.
-#' @param n_pleiotropic Number of SNPs with pleiotropic effects.
+#' @param n_pleiotropic Number of SNPs with epistatic effects on all traits.
 #' @param group_ratio_trait Ratio of sizes of trait specific groups that interact, e.g. a ratio 1:3 would be value 3.
 #' @param group_ratio_pleiotropic Ratio of sizes of pleiotropic groups that interact, e.g. a ratio 1:3 would be value 3.
 #' @param H2 Broad-sense heritability. Can be vector.
-#' @param d Number of phenotypes.
+#' @param d Number of traits.
 #' @param rho Proportion of heritability explained by additivity.
-#' @param marginal_correlation Correlation between the additive effects of the phenotype.
-#' @param epistatic_correlation Correlation between the epistatic effects of the phenotype.
+#' @param marginal_correlation Correlation between the additive effects of the trait.
+#' @param epistatic_correlation Correlation between the epistatic effects of the trait.
 #' @param seed Random seed for simulation.
 #' @param logLevel is a string parameter defining the log level for the logging package.
 #' @param logFile is a string parameter defining the name of the log file for the logging output.
 #' @param maf_threshold is a float parameter defining the threshold for the minor allele frequency not included in causal SNPs.
-#' @return A list object containing the phenotype data, the genotype data, as well as the causal SNPs and summary statistics.
+#' @return A list object containing the trait data, the genotype data, as well as the causal SNPs and summary statistics.
+#' @examples
+#' p <- 200
+#' f <- 10
+#' g <- 4
+#' n <- 100
+#' d <- 3
+#' X <- matrix(
+#'     runif(p * n),
+#'     ncol = p
+#' )
+#' data <- simulate_traits(
+#'     X, n_causal = f, n_trait_specific = g, n_pleiotropic = g, d = d, maf_threshold = 0,
+#'     logLevel = "ERROR"
+#' ) #'
 #' @useDynLib mvMAPIT
 #' @export
+#' @name simulate_traits
 #' @import checkmate
 #' @import dplyr
 #' @import foreach
 #' @import mvtnorm
 #' @import parallel
-simulate_phenotypes <- function(
+#' @importFrom utils head
+#' @importFrom stats var cor sd complete.cases
+simulate_traits <- function(
     genotype_matrix, n_causal = 1000, n_trait_specific = 10, n_pleiotropic = 10,
     H2 = 0.6, d = 2, rho = 0.8, marginal_correlation = 0.3, epistatic_correlation = 0.3,
     group_ratio_trait = 1, group_ratio_pleiotropic = 1, maf_threshold = 0.01, seed = 67132,
@@ -61,7 +74,7 @@ simulate_phenotypes <- function(
 
     logging::logReset()
     logging::basicConfig(level = logLevel)
-    log <- logging::getLogger("simulate_phenotypes")
+    log <- logging::getLogger("simulate_traits")
     if (!is.null(logFile)) {
         filePath <- file.path(getwd(), logFile)
         log$debug("Logging to file: %s", filePath)
@@ -109,7 +122,7 @@ simulate_phenotypes <- function(
     Y <- c()
     causal_snps <- list()
 
-    pleiotropic_set <- sample(snp.ids.filtered, n_pleiotropic, replace = F)  # declare peleiotropic SNPs before since they have to be present in every phenotype
+    pleiotropic_set <- sample(snp.ids.filtered, n_pleiotropic, replace = F)  # declare peleiotropic SNPs before since they have to be present in every trait
     pleio_split <- split(pleiotropic_set, f = f_pleiotropic)
     X_pleio_group1 <- X[, pleio_split$group1]
     X_pleio_group2 <- X[, pleio_split$group2]
@@ -170,7 +183,7 @@ simulate_phenotypes <- function(
 
     for (j in 1:d) {
         ## select causal SNPs
-        log$debug("Simulating phenotype %d", j)
+        log$debug("Simulating trait %d", j)
         causal_snps_j <- sample(snp.ids.trait, n_causal - n_pleiotropic, replace = F)
         trait_specific_additive <- c(causal_snps_j, pleiotropic_set)
         trait_specific_snps <- sample(causal_snps_j, n_trait_specific, replace = F)
@@ -245,7 +258,7 @@ simulate_phenotypes <- function(
 
         y <- y_marginal + y_epi + y_err
         Y <- cbind(Y, y)
-        causal_snps[[paste0("phenotype_", j)]] <- list(
+        causal_snps[[paste0("trait_", j)]] <- list(
             causal_snps = c(causal_snps_j, pleiotropic_set),
             pleiotropic_groups = pleio_split, trait_specific_groups = trait_grouped,
             alpha = alpha_j, beta = beta_j
@@ -272,16 +285,16 @@ simulate_phenotypes <- function(
     colnames(genotype_matrix) <- seq_len(ncol(genotype_matrix)) %>%
         sprintf(fmt = "snp_%05d")  # column names names for SNPs
     colnames(Y) <- seq_len(ncol(Y)) %>%
-        sprintf(fmt = "p_%02d")  # column names names for phenotypes
+        sprintf(fmt = "p_%02d")  # column names names for traits
 
-    log$debug("Phenotype data: %s", head(Y))
-    log$debug("Phenotype correlation: %s", cor(Y))
+    log$debug("trait data: %s", head(Y))
+    log$debug("trait correlation: %s", cor(Y))
     log$debug("Correlation of simulated epistatic effects: %s", cor(alpha))
 
     # return data
     parameter_names <- c("number_samples",
                          "number_snps",
-                         "number_phenotypes",
+                         "number_traits",
                          "number_causal_snps",
                          "number_epistatic_effects",
                          "number_pleiotropic_snps",
@@ -318,7 +331,7 @@ simulate_phenotypes <- function(
     parameters <- parameters %>%
         mutate(trait = rep(colnames(Y), each = length(parameter_names)))
     simulated_pleiotropic_epistasis_data <- list(
-        parameters = parameters, phenotype = Y, genotype = genotype_matrix,
+        parameters = parameters, trait = Y, genotype = genotype_matrix,
         additive = additive, epistatic = epistatic, interactions = interactions,
         snps.filtered = snp.ids.filtered
     )

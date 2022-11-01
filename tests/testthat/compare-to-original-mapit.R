@@ -13,11 +13,11 @@ X = t(
     (t(X) -
         Xmean)/Xsd
 )
-mapit.normal <- MvMAPIT(
+mapit.normal <- mvmapit(
     t(X),
     (Y), test = "normal", cores = 4, logLevel = "INFO"
 )
-mapit.davies <- MvMAPIT(
+mapit.davies <- mvmapit(
     t(X),
     t(Y),
     test = "davies", cores = 4, logLevel = "INFO"
