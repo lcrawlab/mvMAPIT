@@ -26,7 +26,7 @@ def _use_dev_files(tmpdir, files):
 
 def task_rinstall(tmpdir):
     logger.info(f"Temporary directory {tmpdir}.")
-    dev_files = ["src/Makevars.in.dev", "src/MAPIT.h.dev"]
+    dev_files = ["src/Makevars.in", "src/MAPIT.h.dev"]
     _use_dev_files(tmpdir, dev_files)
 
     logger.info(f"Install mvMAPIT.")
