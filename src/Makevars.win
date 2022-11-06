@@ -1,5 +1,18 @@
 ## Taken from Dirk Eddelbuettel's reponse on: https://stackoverflow.com/questions/32974568/r-package-with-c-c-and-openmp-how-to-make-makevars-file-under-mypackage-sr
 ## This assume that we can call Rscript to ask Rcpp about its locations
-CXX_STD = CXX11
-PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS)
-PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
+## CXX_STD = CXX11
+## PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS)
+## PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
+
+PKG_CPPFLAGS = -DARMA_64BIT_WORD=1 -I.
+PKG_CXXFLAGS = -std=gnu++11  -g -O2 -I.
+CXX = /usr/local/opt/llvm/bin/clang++
+CXX11 = clang++
+PKG_LIBS = -lz   -lz -L/usr/local/Cellar/r/4.2.1_4/lib/R/lib -lRlapack -L/usr/local/opt/gcc/lib/gcc/current/gcc/x86_64-apple-darwin21/12 -L/usr/local/opt/gcc/lib/gcc/current/gcc -L/usr/local/opt/gcc/lib/gcc/current -lgfortran -lquadmath -L/usr/local/opt/openblas/lib -lopenblas
+
+# Include all C++ files in src/ and its subdirectories. Configure in configure.ac
+SOURCES=MAPIT.cpp RcppExports.cpp  gsm/gsm.cpp logging/log.cpp mapit/davies.cpp mapit/normal.cpp mapit/projection.cpp mapit/pve.cpp mapit/util.cpp mqs/mqs.cpp tests/test-compare-to-original-mapit.cpp tests/test-davies.cpp tests/test-gsm.cpp tests/test-log.cpp tests/test-mqs.cpp tests/test-normal.cpp tests/test-projection.cpp tests/test-pve.cpp tests/test-runner.cpp tests/test-util.cpp
+
+# To compile code in subdirectories of src/, each of the files contained
+# must be specified in the src/Makevars file OBJECTS variable
+OBJECTS=$(SOURCES:.cpp=.o)
