@@ -1,9 +1,3 @@
-## Taken from Dirk Eddelbuettel's reponse on: https://stackoverflow.com/questions/32974568/r-package-with-c-c-and-openmp-how-to-make-makevars-file-under-mypackage-sr
-## This assume that we can call Rscript to ask Rcpp about its locations
-## CXX_STD = CXX11
-## PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS)
-## PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
-
 PKG_CPPFLAGS = -DARMA_64BIT_WORD=1 -I.
 PKG_CXXFLAGS = -std=gnu++11  -g -O2 -I.
 CXX = /usr/local/opt/llvm/bin/clang++
