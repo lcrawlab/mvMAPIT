@@ -56,12 +56,6 @@ po/*~
 # system files
 .DS_Store
 
-# autoconf
-src/Makevars
-autom4te.cache
-config.log
-config.status
-
 # logging
 *.log
 
@@ -72,3 +66,5 @@ src/symbols.rds
 *.bu
 /doc/
 /Meta/
+
+/dev

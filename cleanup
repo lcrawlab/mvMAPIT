@@ -1,6 +1,0 @@
-#!/bin/sh
-# Delete the files created by Autoconf during R CMD check.
-
-rm -f config.*
-rm -f src/Makevars
-rm -rf autom4te.cache
