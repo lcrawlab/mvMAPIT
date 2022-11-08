@@ -1,7 +1,8 @@
 
-# [Multivariate MAPIT Documentation](https://lcrawlab.github.io/mvMAPIT) <img src="man/figures/logo.png" align="right" alt="" width="120"/>
+# Multivariate MAPIT Documentation <img src="man/figures/logo.png" align="right" alt="" width="120"/>
 
 [![R CMD check](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml)
+[![Docker Image CI](https://github.com/lcrawlab/mvMAPIT/actions/workflows/docker-image.yml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/docker-image.yml)
 
 Find the full package documentation here: [Multivariate MAPIT Documentation](https://lcrawlab.github.io/mvMAPIT).
 

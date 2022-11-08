@@ -1,6 +1,5 @@
 FROM rocker/verse:4.0.5
 
-WORKDIR ${HOME}
 COPY ./ /tmp/mvMAPIT
 
 RUN R -e "install.packages(c( 'checkmate', \
@@ -19,7 +18,7 @@ RUN R -e "install.packages(c( 'checkmate', \
                               'testthat', \
                               'tidyr', \
                               'utils'), \
-                             dependencies=TRUE \
+                             dependencies = TRUE \
                              );"
-
+                             
 RUN R -e "install.packages('/tmp/mvMAPIT/', type = 'source', repos = NULL)"
