@@ -4,7 +4,7 @@
 [![R CMD check](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml)
 [![Docker Image CI](https://github.com/lcrawlab/mvMAPIT/actions/workflows/docker-image.yml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/docker-image.yml)
 
-Find the full package documentation here: [Multivariate MAPIT Documentation](https://lcrawlab.github.io/mvMAPIT).
+Find the full package documentation including examples, and articles here: [Multivariate MAPIT Documentation](https://lcrawlab.github.io/mvMAPIT).
 
 
 ## The multivariate MArginal ePIstasis Test (mvMAPIT)
@@ -17,22 +17,54 @@ mvMAPIT is implemented as a set of R and C++ routines, which can be
 carried out within an R environment.
 ### Introduction
 
-Epistasis, commonly defined as the interaction between genetic loci, is known to 
-play an important role in the phenotypic variation of complex traits. As a 
-result, many statistical methods have been developed to identify genetic variants 
-that are involved in epistasis, and nearly all of these approaches carry out 
-this task by focusing on analyzing one trait at a time. However, because of the 
+Epistasis, commonly defined as the interaction between genetic loci, is known to
+play an important role in the phenotypic variation of complex traits. As a
+result, many statistical methods have been developed to identify genetic variants
+that are involved in epistasis, and nearly all of these approaches carry out
+this task by focusing on analyzing one trait at a time. However, because of the
 large combinatorial search space of interactions, most epistasis mapping
 methods face enormous computational challenges and often suffer from low
-statistical power. 
+statistical power.
 
-Previous studies have shown that jointly modeling multiple phenotypes can often dramatically increase statistical power for association mapping. Therefore, here we present the **multivariate MArginal ePIstasis Test (mvMAPIT)** – a multi-outcome generalization of a recently proposed epistatic detection method which seeks to detect *marginal epistasis* or the combined pairwise interaction effects between a given variant and all other variants. By searching for marginal epistatic effects, one can identify genetic variants that are involved in epistasis without the need to identify the exact partners with which the variants interact – thus, potentially alleviating much of the statistical and computational burden associated with conventional explicit search based methods. Our proposed mvMAPIT builds upon this strategy by taking of correlation structures between traits to improve the identification of variants involved in epistasis. We formulate mvMAPIT as a multivariate linear mixed model and develop a multi-trait variance component estimation algorithm for efficient parameter inference and *P*-value computation. Together with reasonable model approximations, our proposed approach is scalable to moderately sized GWA studies.
+Previous studies have shown that jointly modeling multiple phenotypes can often
+dramatically increase statistical power for association mapping. Therefore, here
+we present the **multivariate MArginal ePIstasis Test (mvMAPIT)** – a
+multi-outcome generalization of a recently proposed epistatic detection method
+which seeks to detect *marginal epistasis* or the combined pairwise interaction
+effects between a given variant and all other variants. By searching for marginal
+epistatic effects, one can identify genetic variants that are involved in
+epistasis without the need to identify the exact partners with which the variants
+interact – thus, potentially alleviating much of the statistical and computational
+burden associated with conventional explicit search based methods. Our proposed
+mvMAPIT builds upon this strategy by taking of correlation structures between
+traits to improve the identification of variants involved in epistasis. We
+formulate mvMAPIT as a multivariate linear mixed model and develop a multi-trait
+variance component estimation algorithm for efficient parameter inference and
+*P*-value computation. Together with reasonable model approximations, our proposed
+approach is scalable to moderately sized GWA studies.
 
 
 ### The Method
-The **multivariate MArginal ePIstasis Test** is a multi-outcome extension of the statistical framework MAPIT which aims to identify variants that are involved in epistatic interactions by leveraging the correlation structure of non-additive genetic variation that is shared between multiple traits. The key idea behind the concept of marginal epistasis is to identify variants that are involved in epistasis while avoiding the need to explicitly conduct an exhaustive search over all possible pairwise interactions. As an overview of mvMAPIT and its corresponding software implementation, we will assume that we have access to an GWA study on `N` individuals denoted as `D = {X,Y}` where `X` is an `N x J` matrix of genotypes with `J` denoting the number of SNPs (each of which is encoded as `{0,1,2}` copies of a reference allele at each locus `j`) and `Y` denoting a `N x D` matrix holding `D` different traits that are measured for each of the `N` individuals. 
+The **multivariate MArginal ePIstasis Test** is a multi-outcome extension of the
+statistical framework MAPIT which aims to identify variants that are involved in
+epistatic interactions by leveraging the correlation structure of non-additive
+genetic variation that is shared between multiple traits. The key idea behind the
+concept of marginal epistasis is to identify variants that are involved in
+epistasis while avoiding the need to explicitly conduct an exhaustive search over
+all possible pairwise interactions. As an overview of mvMAPIT and its
+corresponding software implementation, we will assume that we have access to an
+GWA study on `N` individuals denoted as `D = {X,Y}` where `X` is an `N x J` matrix
+of genotypes with `J` denoting the number of SNPs (each of which is encoded as
+`{0,1,2}` copies of a reference allele at each locus `j`) and `Y` denoting a `N x D`
+matrix holding `D` different traits that are measured for each of the `N`
+individuals.
 
-The goal of mvMAPIT is to identify variants that have non-zero interaction effects with any other variant in the data. To accomplish this, we examine each SNP in turn and assess the null hypothesis that the variance component is zero. In practice, we use a computationally efficient method of moments algorithm called MQS to estimate model parameters and to carry out calibrated statistical tests within mvMAPIT.
+The goal of mvMAPIT is to identify variants that have non-zero interaction effects
+with any other variant in the data. To accomplish this, we examine each SNP in
+turn and assess the null hypothesis that the variance component is zero. In
+practice, we use a computationally efficient method of moments algorithm calledMQS
+to estimate model parameters and to carry out calibrated statistical tests within
+mvMAPIT.
 
 ## Installation
 
@@ -92,6 +124,12 @@ install.packages(c( 'checkmate',
 Alternatively, one can also [install R packages from the
 command-line](http://cran.r-project.org/doc/manuals/r-release/R-admin.html#Installing-packages).
 
+### Installing mvMAPIT
+
+The easiest way to install the package from sources is to change into
+the directory of mvMAPIT and run `R CMD INSTALL . --preclean`. The
+`--preclean` flag makes sure that the latest state is run.
+
 ### C++ Functions Required for MAPIT
 
 The code in this repository assumes that basic Fortran and C++ libraries and compilers are already set up on the running personal computer or
@@ -104,12 +142,6 @@ then typing the following into the terminal:
 ``` {.bash}
 brew install gcc
 ```
-
-For extra tips on how to run C++ on macOS, please visit
-<http://seananderson.ca/2013/11/18/rcpp-mavericks.html>. For tips on how
-to avoid errors dealing with `-lgfortran` or `-lquadmath`, please visit
-<http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/>.
-
 ### OpenMP
 
 Note that mvMAPIT takes advantage of [OpenMP](http://openmp.org/wp/), an
@@ -121,26 +153,23 @@ compiler. A work around to use OpenMP in R on macOS can be found
 mvMAPIT can be compiled without OpenMP, but we recommend using it if
 applicable.
 
-### Installing mvMAPIT
+### Known Issues
+- When your compiler changes, some R package dependencies might need to be recompiled. This is likely the case if the compilation error explicitly names an R package in the local library.
 
-The easiest way to install the package from sources is to change into
-the directory of mvMAPIT and run `R CMD INSTALL . --preclean`. The
-`--preclean` flag makes sure that the latest state is run.
+- On macOS, you might need to run `brew reinstall z3` to fix `'libz3.4.11.dylib' (no such file)` related errors ([clang issues](https://github.com/Homebrew/discussions/discussions/3920)).
 
-## Tutorial for Running MAPIT
+- For extra tips on how to run C++ on macOS, please visit
+<http://seananderson.ca/2013/11/18/rcpp-mavericks.html>.
 
-For the simulation tutorial provided here, we generate genotypes for
-3,000 samples typed at 10,000 unrelated variants. We show in our example
-R code how to implement MAPIT (both the standard and parallelized
-versions) to perform a marginal epistasis association mapping test in
-order to find interacting causal variants of interest.
+- For tips on how to avoid errors dealing with `-lgfortran` or `-lquadmath`, please visit
+<http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/>.
 
 ------------------------------------------------------------------------
 
 ## Questions and Feedback
 For questions or concerns with the MAPIT functions, please contact
 [Lorin Crawford](mailto:lorin_crawford@brown.edu) or
-[Julian Stamp ](mailto:julian_stamp@brown.edu).
+[Julian Stamp](mailto:julian_stamp@brown.edu).
 
 We appreciate any feedback you may have with our repository and instructions.
 
@@ -152,4 +181,5 @@ We appreciate any feedback you may have with our repository and instructions.
     epistasis with the marginal epistasis test in genetic mapping
     studies of quantitative traits. *PLoS Genet*. **13** (7): e1006869.
     <http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869>
+
 [^2]: J. Stamp, A. DenAdel, D. Weinreich, L. Crawford (2022). Multivariate MAPIT.
