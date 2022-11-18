@@ -4,7 +4,8 @@ pkgdown_sha: ~
 articles:
   docker-mvmapit: docker-mvmapit.html
   mvMAPIT: mvMAPIT.html
-last_built: 2022-11-17T21:35Z
+  simulations: simulations.html
+last_built: 2022-11-18T15:01Z
 urls:
   reference: https://lcrawlab.github.io/mvMAPIT/reference
   article: https://lcrawlab.github.io/mvMAPIT/articles
