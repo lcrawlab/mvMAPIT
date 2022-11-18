@@ -4,13 +4,14 @@ output: rmarkdown::html_vignette
 description: >
   Learn how to use the Docker Image for mvMAPIT.
 vignette: >
-  %\VignetteIndexEntry{Using the mvMAPIT Docker Image}
+  %\VignetteIndexEntry{Dockerized mvMAPIT}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-In order to enable users to work with mvMAPIT without having to install all dependencies, we provide a docker image with
-all dependencies and an installed R package `mvMAPIT`. Learn how to use it or build your own version of the docker image.
+In order to enable users to work with mvMAPIT without having to install all dependencies and libraries on their local,
+we provide a docker build with all dependencies and an installed R package `mvMAPIT`. Learn how to build your
+own version of the docker image.
 
 ## Docker Setup
 

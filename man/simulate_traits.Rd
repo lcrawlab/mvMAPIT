@@ -78,5 +78,5 @@ X <- matrix(
 data <- simulate_traits(
     X, n_causal = f, n_trait_specific = g, n_pleiotropic = g, d = d, maf_threshold = 0,
     logLevel = "ERROR"
-) #'
+)
 }
