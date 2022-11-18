@@ -8,15 +8,14 @@ Find the full package documentation including examples, and articles here: [Mult
 
 
 ## The multivariate MArginal ePIstasis Test (mvMAPIT)
-
 This R package is a generalization of the [MAPIT
 implementation](https://github.com/lorinanthony/MAPIT) by Crawford et
 al. (2017)[^1] for any number of traits as described by Stamp et al. (2022)[^2].
 
 mvMAPIT is implemented as a set of R and C++ routines, which can be
 carried out within an R environment.
-### Introduction
 
+### Introduction
 Epistasis, commonly defined as the interaction between genetic loci, is known to
 play an important role in the phenotypic variation of complex traits. As a
 result, many statistical methods have been developed to identify genetic variants
@@ -69,7 +68,6 @@ mvMAPIT.
 ## Installation
 
 ### The R Environment
-
 R is a widely used, free, and open source software environment for
 statistical computing and graphics. The most recent version of R can be
 downloaded from the [Comprehensive R Archive Network
@@ -82,8 +80,6 @@ and R-packages, refer to the manual [R Installation and
 Administration](http://cran.r-project.org/doc/manuals/r-release/R-admin.html).
 
 ### R Packages Required for mvMAPIT
-
-
 mvMAPIT requires the installation of the following R libraries:
 
 - [checkmate](https://cran.r-project.org/package=checkmate)
@@ -125,7 +121,6 @@ Alternatively, one can also [install R packages from the
 command-line](http://cran.r-project.org/doc/manuals/r-release/R-admin.html#Installing-packages).
 
 ### Installing mvMAPIT
-
 The easiest way to install the package from sources is to change into
 the directory of mvMAPIT and run `R CMD INSTALL . --preclean`. The
 `--preclean` flag makes sure that the latest state is run.
@@ -143,7 +138,6 @@ then typing the following into the terminal:
 brew install gcc
 ```
 ### OpenMP
-
 Note that mvMAPIT takes advantage of [OpenMP](http://openmp.org/wp/), an
 API for multi-platform shared-memory parallel programming in C/C++. This
 is to speed up the computational time of the modeling algorithm.
@@ -176,7 +170,6 @@ We appreciate any feedback you may have with our repository and instructions.
 
 
 ## References
-
 [^1]: L. Crawford, P. Zeng, S. Mukherjee, X. Zhou (2017). Detecting
     epistasis with the marginal epistasis test in genetic mapping
     studies of quantitative traits. *PLoS Genet*. **13** (7): e1006869.
