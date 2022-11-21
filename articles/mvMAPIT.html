@@ -60,11 +60,20 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/docker-mvmapit.html">Dockerized mvMAPIT</a>
+<li class="divider">
+    </li>
+<li class="dropdown-header">Tutorials</li>
+    <li>
+      <a href="../articles/tutorial-docker-mvmapit.html">Dockerized mvMAPIT</a>
     </li>
     <li>
-      <a href="../articles/simulations.html">Simulate Traits</a>
+      <a href="../articles/tutorial-simulations.html">Simulate Traits</a>
+    </li>
+    <li class="divider">
+    </li>
+<li class="dropdown-header">Studies</li>
+    <li>
+      <a href="../articles/study-phillips-bnabs.html">Synergistic epistasis in binding affinity landscapes</a>
     </li>
   </ul>
 </li>
@@ -96,7 +105,7 @@
       <h1 data-toc-skip>Illustrating mvMAPIT with Simulated Data</h1>
                         <h4 data-toc-skip class="author">Julian Stamp</h4>
             
-            <h4 data-toc-skip class="date">2022-11-18</h4>
+            <h4 data-toc-skip class="date">2022-11-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/lcrawlab/mvMAPIT/blob/HEAD/vignettes/mvMAPIT.Rmd" class="external-link"><code>vignettes/mvMAPIT.Rmd</code></a></small>
       <div class="hidden name"><code>mvMAPIT.Rmd</code></div>
@@ -115,8 +124,8 @@
 <div class="section level2">
 <h2 id="getting-started">Getting Started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
-<p>Load necessary libraries. For the sake of getting started, <code>mvMAPIT</code> comes with a small set of simulated data. This data contains random genotype-like data and two simulated quantitative traits with epistatic interactions. To make use of this data, call the genotype data as <code>simulated_data$genotype</code>, and the simulated trait data as <code>simulated_data$trait</code>. The vignette traces the analysis of simulated data. The simulations are described in <code><a href="../articles/simulations.html">vignette("simulations")</a></code>.</p>
-<p>For a working installation of mvMAPIT please look at the<code>README.md</code> or <code><a href="../articles/docker-mvmapit.html">vignette("docker-mvmapit")</a></code></p>
+<p>Load necessary libraries. For the sake of getting started, <code>mvMAPIT</code> comes with a small set of simulated data. This data contains random genotype-like data and two simulated quantitative traits with epistatic interactions. To make use of this data, call the genotype data as <code>simulated_data$genotype</code>, and the simulated trait data as <code>simulated_data$trait</code>. The vignette traces the analysis of simulated data. The simulations are described in <code>vignette("simulations")</code>.</p>
+<p>For a working installation of mvMAPIT please look at the<code>README.md</code> or <code>vignette("docker-mvmapit")</code></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lcrawlab/mvMAPIT" class="external-link">mvMAPIT</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>

@@ -7,16 +7,19 @@
     <loc>https://lcrawlab.github.io/mvMAPIT/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/articles/docker-mvmapit.html</loc>
-  </url>
-  <url>
     <loc>https://lcrawlab.github.io/mvMAPIT/articles/index.html</loc>
   </url>
   <url>
     <loc>https://lcrawlab.github.io/mvMAPIT/articles/mvMAPIT.html</loc>
   </url>
   <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/articles/simulations.html</loc>
+    <loc>https://lcrawlab.github.io/mvMAPIT/articles/study-phillips-bnabs.html</loc>
+  </url>
+  <url>
+    <loc>https://lcrawlab.github.io/mvMAPIT/articles/tutorial-docker-mvmapit.html</loc>
+  </url>
+  <url>
+    <loc>https://lcrawlab.github.io/mvMAPIT/articles/tutorial-simulations.html</loc>
   </url>
   <url>
     <loc>https://lcrawlab.github.io/mvMAPIT/authors.html</loc>
@@ -41,6 +44,9 @@
   </url>
   <url>
     <loc>https://lcrawlab.github.io/mvMAPIT/reference/mvmapit_data.html</loc>
+  </url>
+  <url>
+    <loc>https://lcrawlab.github.io/mvMAPIT/reference/phillips_data.html</loc>
   </url>
   <url>
     <loc>https://lcrawlab.github.io/mvMAPIT/reference/simulate_traits.html</loc>

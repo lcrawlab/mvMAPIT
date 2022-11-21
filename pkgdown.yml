@@ -2,10 +2,11 @@ pandoc: 2.7.3
 pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
-  docker-mvmapit: docker-mvmapit.html
   mvMAPIT: mvMAPIT.html
-  simulations: simulations.html
-last_built: 2022-11-18T15:57Z
+  study-phillips-bnabs: study-phillips-bnabs.html
+  tutorial-docker-mvmapit: tutorial-docker-mvmapit.html
+  tutorial-simulations: tutorial-simulations.html
+last_built: 2022-11-21T04:01Z
 urls:
   reference: https://lcrawlab.github.io/mvMAPIT/reference
   article: https://lcrawlab.github.io/mvMAPIT/articles
