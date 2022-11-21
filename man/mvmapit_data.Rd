@@ -5,11 +5,10 @@
 \alias{mvmapit_data}
 \title{Multivariate MAPIT analysis and exhaustive search analysis.}
 \format{
-## `mvmapit_data`
 A nested list containing tibble data frames:
 \describe{
   \item{mvmapit}{mvmapit return object; named list containing tibbles `pvalues`, `pves`, and `duration`.}
-  \item{fisher}{Tibble containing fisher combiend p-values of the mvmapit data.}
+  \item{fisher}{Tibble containing fisher combined p-values of the mvmapit data.}
   \item{exhaustive_search}{A dataframe containing the p-values of an exhaustive search together with the analysed interaction pair.}
 }
 }
