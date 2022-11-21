@@ -131,7 +131,7 @@
 <div class="section level2">
 <h2 id="multivariate-mapit-analysis">Multivariate MAPIT Analysis<a class="anchor" aria-label="anchor" href="#multivariate-mapit-analysis"></a>
 </h2>
-<p>For our analysis with mvMAPIT, residue sequence information was encoded as a binary matrix with the germline sequence residues marked by zeros and the somatic mutations represented as ones. As quantitative traits,  measure the binding affinity of the two antibodies to different influenza strains. Here, we assess the contribution of epistatic effects when binding to <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_9\)</span> for CR6261, and <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_3\)</span> for CR9114.</p>
+<p>For our analysis with mvMAPIT, residue sequence information was encoded as a binary matrix with the germline sequence residues marked by zeros and the somatic mutations represented as ones. As quantitative traits, Phillips et al.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> measure the binding affinity of the two antibodies to different influenza strains. Here, we assess the contribution of epistatic effects when binding to <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_9\)</span> for CR6261, and <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_3\)</span> for CR9114.</p>
 <div class="section level3">
 <h3 id="load-the-data">Load the data<a class="anchor" aria-label="anchor" href="#load-the-data"></a>
 </h3>
@@ -167,7 +167,7 @@
 <div class="section level3">
 <h3 id="apply-mvmapit">Apply mvMAPIT<a class="anchor" aria-label="anchor" href="#apply-mvmapit"></a>
 </h3>
-<p>We apply the mvMAPIT framework to protein sequence data from . Apply <code><a href="../reference/mvmapit.html">mvmapit()</a></code> to the data by running the following.</p>
+<p>We apply the mvMAPIT framework to protein sequence data from Phillips et al (2021)<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>. Apply <code><a href="../reference/mvmapit.html">mvmapit()</a></code> to the data by running the following.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mvmapit_CR9114</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mvmapit.html">mvmapit</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">CR9114</span><span class="op">$</span><span class="va">genotype</span><span class="op">)</span>,</span>
@@ -219,7 +219,7 @@
 <span>       colour <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="fu">show</span><span class="op">(</span><span class="va">gg_fisher</span><span class="op">)</span></span></code></pre></div>
 <p><img src="study-phillips-bnabs_files/figure-html/manhattan-1.png" width="672"></p>
-<p>Interestingly, while the univariate MAPIT approach was able to identify significant marginal epistatic effects for CR6261, it lacked the power to identify significant positions driving non-additive variation in binding affinity for CR9114. Overall, the combined trait approach in mvMAPIT revealed marginal epistatic effects for positions 29, 35, 82, 83, and 84 in CR6261, and positions 30, 36, 57, 64, 65, 66, 82, and 83 for CR9114. Most notably, these same positions were also identified as contributing to pairwise epistasis by .</p>
+<p>Interestingly, while the univariate MAPIT approach was able to identify significant marginal epistatic effects for CR6261, it lacked the power to identify significant positions driving non-additive variation in binding affinity for CR9114. Overall, the combined trait approach in mvMAPIT revealed marginal epistatic effects for positions 29, 35, 82, 83, and 84 in CR6261, and positions 30, 36, 57, 64, 65, 66, 82, and 83 for CR9114. Most notably, these same positions were also identified as contributing to pairwise epistasis by Phillips et al. (2021)<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>.</p>
 </div>
 <div class="section level3">
 <h3 id="plot-the-regression-analysis-results">Plot the regression analysis results<a class="anchor" aria-label="anchor" href="#plot-the-regression-analysis-results"></a>
@@ -242,10 +242,10 @@
 <span>    guide <span class="op">=</span> <span class="st">"colourbar"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="fu">show</span><span class="op">(</span><span class="va">gg_CR6261</span><span class="op">)</span></span></code></pre></div>
 <p><img src="study-phillips-bnabs_files/figure-html/CR6261-1.png" width="672"></p>
-<p>Panel B illustrates interaction coefficients when assessing binding of CR6261with <span class="math inline">\(H_1\)</span> (lower left triangle) and <span class="math inline">\(H_9\)</span> (upper right triangle).</p>
+<p>This plot illustrates interaction coefficients when assessing binding of CR6261with <span class="math inline">\(H_1\)</span> (lower left triangle) and <span class="math inline">\(H_9\)</span> (upper right triangle).</p>
 </div>
 <div class="section level4">
 <h4 id="cr9114">CR9114<a class="anchor" aria-label="anchor" href="#cr9114"></a>
@@ -266,10 +266,11 @@
 <span>               <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">phillips_data</span><span class="op">$</span><span class="va">regression</span><span class="op">$</span><span class="va">CR6261</span><span class="op">$</span><span class="va">effect</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="fu">show</span><span class="op">(</span><span class="va">gg_CR9114</span><span class="op">)</span></span></code></pre></div>
 <p><img src="study-phillips-bnabs_files/figure-html/CR9114-1.png" width="672"></p>
-<p>This plot shows the same information when assessing binding of CR9114 with <span class="math inline">\(H_1\)</span> (lower left triangle) and <span class="math inline">\(H_3\)</span> (upper right triangle). Our results show that mvMAPIT identifies all required mutations in these systems as well as most positions involved in at least one epistatic pair.</p>
+<p>This plot shows interaction coefficients when assessing binding of CR9114 with <span class="math inline">\(H_1\)</span> (lower left triangle) and <span class="math inline">\(H_3\)</span> (upper right triangle). Required mutations (indicated by R) are plotted in gray and left out of the analysis<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>.</p>
+<p>Our results show that mvMAPIT identifies all required mutations in these systems as well as most positions involved in at least one epistatic pair.</p>
 </div>
 </div>
 </div>
@@ -281,6 +282,10 @@
 <hr>
 <ol>
 <li id="fn1"><p>Angela M Phillips, Katherine R Lawrence, Alief Moulana, Thomas Dupic, Jeffrey Chang, Milo S Johnson, Ivana Cvijovic, Thierry Mora, Aleksandra M Walczak, Michael M Desai (2021) Binding affinity landscapes constrain the evolution of broadly neutralizing anti-influenza antibodies eLife 10:e71393 <a href="https://doi.org/10.7554/eLife.71393" class="external-link uri">https://doi.org/10.7554/eLife.71393</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Angela M Phillips, Katherine R Lawrence, Alief Moulana, Thomas Dupic, Jeffrey Chang, Milo S Johnson, Ivana Cvijovic, Thierry Mora, Aleksandra M Walczak, Michael M Desai (2021) Binding affinity landscapes constrain the evolution of broadly neutralizing anti-influenza antibodies eLife 10:e71393 <a href="https://doi.org/10.7554/eLife.71393" class="external-link uri">https://doi.org/10.7554/eLife.71393</a><a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>Angela M Phillips, Katherine R Lawrence, Alief Moulana, Thomas Dupic, Jeffrey Chang, Milo S Johnson, Ivana Cvijovic, Thierry Mora, Aleksandra M Walczak, Michael M Desai (2021) Binding affinity landscapes constrain the evolution of broadly neutralizing anti-influenza antibodies eLife 10:e71393 <a href="https://doi.org/10.7554/eLife.71393" class="external-link uri">https://doi.org/10.7554/eLife.71393</a><a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>Angela M Phillips, Katherine R Lawrence, Alief Moulana, Thomas Dupic, Jeffrey Chang, Milo S Johnson, Ivana Cvijovic, Thierry Mora, Aleksandra M Walczak, Michael M Desai (2021) Binding affinity landscapes constrain the evolution of broadly neutralizing anti-influenza antibodies eLife 10:e71393 <a href="https://doi.org/10.7554/eLife.71393" class="external-link uri">https://doi.org/10.7554/eLife.71393</a><a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>Angela M Phillips, Katherine R Lawrence, Alief Moulana, Thomas Dupic, Jeffrey Chang, Milo S Johnson, Ivana Cvijovic, Thierry Mora, Aleksandra M Walczak, Michael M Desai (2021) Binding affinity landscapes constrain the evolution of broadly neutralizing anti-influenza antibodies eLife 10:e71393 <a href="https://doi.org/10.7554/eLife.71393" class="external-link uri">https://doi.org/10.7554/eLife.71393</a><a href="#fnref5" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
   </div>
