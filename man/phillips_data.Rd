@@ -9,7 +9,7 @@ A named list containing tibble data frames:
 \describe{
   \item{fisher}{Tibble containing among other columns the residue id, p-values, antibody species, trait of the Phillips data. Combined p-value with Fisher's method.}
   \item{harmonic}{Tibble containing among other columns the residue id, p-values, antibody species, trait of the Phillips data. Combined p-value with harmonic mean p method.}
-  \item{regression}{Tibble containing regression coefficients as reported by Phillips et al..}
+  \item{regression}{Named list containing two tibbles containing regression coefficients as reported by Phillips et al.}
 }
 }
 \source{
