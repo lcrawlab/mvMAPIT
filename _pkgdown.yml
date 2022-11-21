@@ -21,3 +21,18 @@ reference:
   contents:
   - simulated_data
   - mvmapit_data
+- title: "Real Data Examples"
+  desc: "Data structures with results from real applications."
+  contents:
+  - phillips_data
+  
+articles:
+- title: Tutorials
+  navbar: Tutorials
+  contents:
+  - starts_with("tutorial")
+- title: Studies
+  navbar: Studies
+  desc: Vignettes with example studies
+  contents:
+  - starts_with("study")
