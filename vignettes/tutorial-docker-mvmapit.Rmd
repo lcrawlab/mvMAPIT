@@ -51,5 +51,3 @@ container, `mvMAPIT` is already installed and can be imported and run in the R c
 library(mvMAPIT)
 mvmapit(t(simulated_data$genotype[1:100,1:10]), t(simulated_data$trait[1:100,]), cores = 4, logLevel = "DEBUG")
 ```
-
-![RStudio with mvMAPIT.](docker-mvmapit.png){width=80%}
