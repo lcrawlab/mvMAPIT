@@ -13,4 +13,5 @@ bin/
 pkgdown/
 Dockerfile
 _pkgdown.yml
-
+compare-to-original-mapit\.R
+original_MAPIT\.rds
