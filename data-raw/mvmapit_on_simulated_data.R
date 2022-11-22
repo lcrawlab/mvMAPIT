@@ -3,7 +3,7 @@ library(parallel)
 library(stats)
 library(dplyr)
 library(RcppAlgos)
-load('../data/simulated_data.rda')
+load('data/simulated_data.rda')
 
 X <- simulated_data$genotype
 y <- simulated_data$trait

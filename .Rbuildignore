@@ -6,3 +6,11 @@
 ^doc$
 ^Meta$
 ^\.github$
+\.o$
+\.idea/
+docs/
+bin/
+pkgdown/
+Dockerfile
+_pkgdown.yml
+

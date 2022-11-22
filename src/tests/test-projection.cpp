@@ -43,15 +43,15 @@ context("projection as vector multiplication") {
     arma::mat result = project_matrix(K, b);
     // then
     expect_true(arma::approx_equal(result, correct_answer, "absdiff", 0.00001));
-    // expect_true(result(0, 0) == correct_answer(0, 0)); // -0.0 == 0.0 error
-    // expect_true(result(0, 1) == correct_answer(0, 1));
-    // expect_true(result(0, 2) == correct_answer(0, 2));
-    // expect_true(result(1, 0) == correct_answer(1, 0));
-    expect_true(result(1, 1) == correct_answer(1, 1));
-    expect_true(result(1, 2) == correct_answer(1, 2));
-    // expect_true(result(2, 0) == correct_answer(2, 0));
-    expect_true(result(2, 1) == correct_answer(2, 1));
-    expect_true(result(2, 2) == correct_answer(2, 2));
+    expect_true(result(0, 0) - correct_answer(0, 0) < 0.00001);
+    expect_true(result(0, 1) - correct_answer(0, 1) < 0.00001);
+    expect_true(result(0, 2) - correct_answer(0, 2) < 0.00001);
+    expect_true(result(1, 0) - correct_answer(1, 0) < 0.00001);
+    expect_true(result(1, 1) - correct_answer(1, 1) < 0.00001);
+    expect_true(result(1, 2) - correct_answer(1, 2) < 0.00001);
+    expect_true(result(2, 0) - correct_answer(2, 0) < 0.00001);
+    expect_true(result(2, 1) - correct_answer(2, 1) < 0.00001);
+    expect_true(result(2, 2) - correct_answer(2, 2) < 0.00001);
   }
 }
 
