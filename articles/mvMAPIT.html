@@ -75,6 +75,9 @@
     <li>
       <a href="../articles/study-phillips-bnabs.html">Synergistic epistasis in binding affinity landscapes</a>
     </li>
+    <li>
+      <a href="../articles/study-wtccc-mice.html">Joint modeling of hematology traits yields epistatic signal in stock of mice</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -105,7 +108,7 @@
       <h1 data-toc-skip>Illustrating mvMAPIT with Simulated Data</h1>
                         <h4 data-toc-skip class="author">Julian Stamp</h4>
             
-            <h4 data-toc-skip class="date">2022-11-21</h4>
+            <h4 data-toc-skip class="date">2022-11-22</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/lcrawlab/mvMAPIT/blob/HEAD/vignettes/mvMAPIT.Rmd" class="external-link"><code>vignettes/mvMAPIT.Rmd</code></a></small>
       <div class="hidden name"><code>mvMAPIT.Rmd</code></div>
@@ -188,27 +191,13 @@ true_pos
 <tbody>
 <tr>
 <td style="text-align:left;">
-snp_00576
+snp_00068
 </td>
 <td style="text-align:left;">
 fisher
 </td>
 <td style="text-align:left;">
-3.25e-06
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-snp_00762
-</td>
-<td style="text-align:left;">
-fisher
-</td>
-<td style="text-align:left;">
-3.81e-09
+2.65e-10
 </td>
 <td style="text-align:left;">
 TRUE
@@ -216,16 +205,44 @@ TRUE
 </tr>
 <tr>
 <td style="text-align:left;">
-snp_00901
+snp_00460
 </td>
 <td style="text-align:left;">
 fisher
 </td>
 <td style="text-align:left;">
-5.99e-06
+7.86e-07
 </td>
 <td style="text-align:left;">
 FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+snp_00469
+</td>
+<td style="text-align:left;">
+fisher
+</td>
+<td style="text-align:left;">
+1.47e-09
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+snp_00665
+</td>
+<td style="text-align:left;">
+fisher
+</td>
+<td style="text-align:left;">
+1.17e-09
+</td>
+<td style="text-align:left;">
+TRUE
 </td>
 </tr>
 <tr>
@@ -236,108 +253,10 @@ snp_00917
 fisher
 </td>
 <td style="text-align:left;">
-2.16e-07
+2.83e-07
 </td>
 <td style="text-align:left;">
 TRUE
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-snp_01092
-</td>
-<td style="text-align:left;">
-fisher
-</td>
-<td style="text-align:left;">
-7.54e-07
-</td>
-<td style="text-align:left;">
-TRUE
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-snp_02219
-</td>
-<td style="text-align:left;">
-fisher
-</td>
-<td style="text-align:left;">
-4.07e-21
-</td>
-<td style="text-align:left;">
-TRUE
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-snp_02262
-</td>
-<td style="text-align:left;">
-fisher
-</td>
-<td style="text-align:left;">
-2.41e-06
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-snp_02280
-</td>
-<td style="text-align:left;">
-fisher
-</td>
-<td style="text-align:left;">
-2.5e-13
-</td>
-<td style="text-align:left;">
-TRUE
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-snp_02476
-</td>
-<td style="text-align:left;">
-fisher
-</td>
-<td style="text-align:left;">
-2.05e-31
-</td>
-<td style="text-align:left;">
-TRUE
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-snp_03737
-</td>
-<td style="text-align:left;">
-fisher
-</td>
-<td style="text-align:left;">
-6.96e-07
-</td>
-<td style="text-align:left;">
-TRUE
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-snp_05699
-</td>
-<td style="text-align:left;">
-fisher
-</td>
-<td style="text-align:left;">
-1.82e-06
-</td>
-<td style="text-align:left;">
-FALSE
 </td>
 </tr>
 </tbody>
@@ -345,8 +264,7 @@ FALSE
 <p>To compare this list to the full list of causal epistatic SNPs of the simulations, refer to the following list.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">truth</span><span class="op">)</span></span>
-<span><span class="co">#  [1] "snp_00762" "snp_00917" "snp_01092" "snp_02167" "snp_02219" "snp_02280"</span></span>
-<span><span class="co">#  [7] "snp_02476" "snp_03737" "snp_04312" "snp_04565"</span></span></code></pre></div>
+<span><span class="co"># [1] "snp_00068" "snp_00156" "snp_00469" "snp_00665" "snp_00917"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="running-an-informed-exhaustive-search">Running an Informed Exhaustive Search<a class="anchor" aria-label="anchor" href="#running-an-informed-exhaustive-search"></a>

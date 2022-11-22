@@ -88,6 +88,9 @@
     <li>
       <a href="articles/study-phillips-bnabs.html">Synergistic epistasis in binding affinity landscapes</a>
     </li>
+    <li>
+      <a href="articles/study-wtccc-mice.html">Joint modeling of hematology traits yields epistatic signal in stock of mice</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -165,21 +168,21 @@
 <li><a href="https://cran.r-project.org/package=tidyr" class="external-link">tidyr</a></li>
 </ul>
 <p>The easiest method to install these packages is with the following example command entered in an R shell:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">install.packages</span>(<span class="kw">c</span>( <span class="st">'checkmate'</span>, </span>
-<span id="cb1-2"><a href="#cb1-2"></a>                    <span class="st">'CompQuadForm'</span>, </span>
-<span id="cb1-3"><a href="#cb1-3"></a>                    <span class="st">'dplyr'</span>, </span>
-<span id="cb1-4"><a href="#cb1-4"></a>                    <span class="st">'foreach'</span>, </span>
-<span id="cb1-5"><a href="#cb1-5"></a>                    <span class="st">'harmonicmeanp'</span>, </span>
-<span id="cb1-6"><a href="#cb1-6"></a>                    <span class="st">'logging'</span>, </span>
-<span id="cb1-7"><a href="#cb1-7"></a>                    <span class="st">'mvtnorm'</span>, </span>
-<span id="cb1-8"><a href="#cb1-8"></a>                    <span class="st">'Rcpp'</span>, </span>
-<span id="cb1-9"><a href="#cb1-9"></a>                    <span class="st">'RcppAlgos'</span>, </span>
-<span id="cb1-10"><a href="#cb1-10"></a>                    <span class="st">'RcppArmadillo'</span>, </span>
-<span id="cb1-11"><a href="#cb1-11"></a>                    <span class="st">'RcppParallel'</span>, </span>
-<span id="cb1-12"><a href="#cb1-12"></a>                    <span class="st">'RcppSpdlog'</span>, </span>
-<span id="cb1-13"><a href="#cb1-13"></a>                    <span class="st">'testthat'</span>, </span>
-<span id="cb1-14"><a href="#cb1-14"></a>                    <span class="st">'tidyr'</span>), </span>
-<span id="cb1-15"><a href="#cb1-15"></a>                    <span class="dt">dependencies =</span> <span class="ot">TRUE</span>);</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">install.packages</span>(<span class="kw">c</span>( <span class="st">'checkmate'</span>, </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>                    <span class="st">'CompQuadForm'</span>, </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>                    <span class="st">'dplyr'</span>, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>                    <span class="st">'foreach'</span>, </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>                    <span class="st">'harmonicmeanp'</span>, </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>                    <span class="st">'logging'</span>, </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>                    <span class="st">'mvtnorm'</span>, </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>                    <span class="st">'Rcpp'</span>, </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>                    <span class="st">'RcppAlgos'</span>, </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>                    <span class="st">'RcppArmadillo'</span>, </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>                    <span class="st">'RcppParallel'</span>, </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>                    <span class="st">'RcppSpdlog'</span>, </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>                    <span class="st">'testthat'</span>, </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>                    <span class="st">'tidyr'</span>), </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>                    <span class="dt">dependencies =</span> <span class="ot">TRUE</span>);</span></code></pre></div>
 <p>Alternatively, one can also <a href="http://cran.r-project.org/doc/manuals/r-release/R-admin.html#Installing-packages" class="external-link">install R packages from the command-line</a>.</p>
 </div>
 <div class="section level3">
@@ -191,7 +194,7 @@
 <h3 id="c-functions-required-for-mapit">C++ Functions Required for MAPIT<a class="anchor" aria-label="anchor" href="#c-functions-required-for-mapit"></a>
 </h3>
 <p>The code in this repository assumes that basic Fortran and C++ libraries and compilers are already set up on the running personal computer or cluster. If not, the mvMAPIT functions and necessary Rcpp packages will not work properly. A simple option is to use <a href="https://gcc.gnu.org/" class="external-link">gcc</a>. macOS users may use this collection by installing the <a href="http://brew.sh/index.html" class="external-link">Homebrew package manager</a> and then typing the following into the terminal:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">brew</span> install gcc</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ex">brew</span> install gcc</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="openmp">OpenMP<a class="anchor" aria-label="anchor" href="#openmp"></a>
