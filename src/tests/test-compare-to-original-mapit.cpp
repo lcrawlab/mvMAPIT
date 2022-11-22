@@ -116,15 +116,15 @@ context("MAPIT1_Normal") {
     //         expect_true(result(0, 0) - correct_answer(0, 0) == 0.0);
     // expect_true(result(0, 1) - correct_answer(0, 1) == 0.0);
     //         expect_true(result(0, 2) - correct_answer(0, 2) == 0.0);
-    expect_true(result(1, 0) == correct_answer(1, 0));
-    expect_true(result(1, 1) == correct_answer(1, 1));
-    expect_true(result(1, 2) == correct_answer(1, 2));
-    expect_true(result(2, 0) == correct_answer(2, 0));
-    expect_true(result(2, 1) == correct_answer(2, 1));
-    expect_true(result(2, 2) == correct_answer(2, 2));
-    expect_true(result2(0) == yc(0));
-    expect_true(result2(1) == yc(1));
-    expect_true(result2(2) == yc(2));
+    expect_true(result(1, 0) - correct_answer(1, 0) < 0.00001 );
+    expect_true(result(1, 1) - correct_answer(1, 1) < 0.00001 );
+    expect_true(result(1, 2) - correct_answer(1, 2) < 0.00001 );
+    expect_true(result(2, 0) - correct_answer(2, 0) < 0.00001 );
+    expect_true(result(2, 1) - correct_answer(2, 1) < 0.00001 );
+    expect_true(result(2, 2) - correct_answer(2, 2) < 0.00001 );
+    expect_true(result2(0) - yc(0) < 0.00001 );
+    expect_true(result2(1) - yc(1) < 0.00001 );
+    expect_true(result2(2) - yc(2) < 0.00001 );
   }
   test_that("compute_q_vector is equal to original") {
     // given
@@ -180,9 +180,9 @@ context("MAPIT1_Normal") {
     // when
     arma::mat result = compute_q_matrix(phenotypes, matrices);
     // then
-    expect_true(result(0, 0) == correct_answer(0));
-    expect_true(result(1, 0) == correct_answer(1));
-    expect_true(result(2, 0) == correct_answer(2));
+    expect_true(result(0, 0) - correct_answer(0) < 0.00001);
+    expect_true(result(1, 0) - correct_answer(1) < 0.00001);
+    expect_true(result(2, 0) - correct_answer(2) < 0.00001);
   }
   test_that("compute_s_matrix is equal to original") {
     // given
@@ -241,15 +241,15 @@ context("MAPIT1_Normal") {
     // when
     arma::mat result = compute_s_matrix(matrices);
     // then
-    expect_true(result(0, 0) == correct_answer(0, 0));
-    expect_true(result(0, 1) == correct_answer(0, 1));
-    expect_true(result(0, 2) == correct_answer(0, 2));
-    expect_true(result(1, 0) == correct_answer(1, 0));
-    expect_true(result(1, 1) == correct_answer(1, 1));
-    expect_true(result(1, 2) == correct_answer(1, 2));
-    expect_true(result(2, 0) == correct_answer(2, 0));
-    expect_true(result(2, 1) == correct_answer(2, 1));
-    expect_true(result(2, 2) == correct_answer(2, 2));
+    expect_true(result(0, 0) - correct_answer(0, 0) < 0.00001);
+    expect_true(result(0, 1) - correct_answer(0, 1) < 0.00001);
+    expect_true(result(0, 2) - correct_answer(0, 2) < 0.00001);
+    expect_true(result(1, 0) - correct_answer(1, 0) < 0.00001);
+    expect_true(result(1, 1) - correct_answer(1, 1) < 0.00001);
+    expect_true(result(1, 2) - correct_answer(1, 2) < 0.00001);
+    expect_true(result(2, 0) - correct_answer(2, 0) < 0.00001);
+    expect_true(result(2, 1) - correct_answer(2, 1) < 0.00001);
+    expect_true(result(2, 2) - correct_answer(2, 2) < 0.00001);
   }
   test_that("compute variance component is equal to original") {
     // given

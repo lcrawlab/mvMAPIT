@@ -24,7 +24,7 @@ library(ggplot2)
 library(dplyr)
 ```
 
-This study uses the data of the binding affinites published by [Phillips et al. (2021)](https://doi.org/10.7554/eLife.71393)[^1].
+This study uses the data of the binding affinites published by [Phillips et al. (2021)](https://doi.org/10.7554/eLife.71393)$^1$.
 
 # The Data
 
@@ -37,7 +37,7 @@ Download the data for the broadly neutralizing antibodies here:
 
 # Multivariate MAPIT Analysis
 
-For our analysis with mvMAPIT, residue sequence information was encoded as a binary matrix with the germline sequence residues marked by zeros and the somatic mutations represented as ones. As quantitative traits, \citet{phillips_binding_2021} measure the binding affinity of the two antibodies to different influenza strains. Here, we assess the contribution of epistatic effects when binding to $H_1$ and $H_9$ for CR6261, and $H_1$ and $H_3$ for CR9114.
+For our analysis with mvMAPIT, residue sequence information was encoded as a binary matrix with the germline sequence residues marked by zeros and the somatic mutations represented as ones. As quantitative traits, Phillips et al. (2021) measure the binding affinity of the two antibodies to different influenza strains. Here, we assess the contribution of epistatic effects when binding to $H_1$ and $H_9$ for CR6261, and $H_1$ and $H_3$ for CR9114.
 
 ## Load the data
 
@@ -74,7 +74,7 @@ CR6261 <- list("phenotype" = phenotype2, "genotype" = genotype2, "map" = data2ma
 
 ## Apply mvMAPIT
 
-We apply the mvMAPIT framework to protein sequence data from \citet{phillips_binding_2021}. 
+We apply the mvMAPIT framework to protein sequence data from Phillips et al (2021)$^1$. 
 Apply `mvmapit()` to the data by running the following.
 
 ```{r run_mvmapit, eval = FALSE}
@@ -132,7 +132,7 @@ gg_fisher <- phillips_data$fisher %>%
 show(gg_fisher)
 ```
 
-Interestingly, while the univariate MAPIT approach was able to identify significant marginal epistatic effects for CR6261, it lacked the power to identify significant positions driving non-additive variation in binding affinity for CR9114. Overall, the combined trait approach in mvMAPIT revealed marginal epistatic effects for positions 29, 35, 82, 83, and 84 in CR6261, and positions 30, 36, 57, 64, 65, 66, 82, and 83 for CR9114. Most notably, these same positions were also identified as contributing to pairwise epistasis by \citet{phillips_binding_2021}. 
+Interestingly, while the univariate MAPIT approach was able to identify significant marginal epistatic effects for CR6261, it lacked the power to identify significant positions driving non-additive variation in binding affinity for CR9114. Overall, the combined trait approach in mvMAPIT revealed marginal epistatic effects for positions 29, 35, 82, 83, and 84 in CR6261, and positions 30, 36, 57, 64, 65, 66, 82, and 83 for CR9114. Most notably, these same positions were also identified as contributing to pairwise epistasis by Phillips et al. (2021). 
 
 ## Plot the regression analysis results
 
@@ -185,4 +185,4 @@ show(gg_CR9114)
 This plot shows the same information when assessing binding of CR9114 with $H_1$ (lower left triangle) and $H_3$ (upper right triangle). Our results show that mvMAPIT identifies all required mutations in these systems as well as most positions involved in at least one epistatic pair.
 
 # References
-[^1]: Angela M Phillips, Katherine R Lawrence, Alief Moulana, Thomas Dupic, Jeffrey Chang, Milo S Johnson, Ivana Cvijovic, Thierry Mora, Aleksandra M Walczak, Michael M Desai (2021) Binding affinity landscapes constrain the evolution of broadly neutralizing anti-influenza antibodies eLife 10:e71393 <https://doi.org/10.7554/eLife.71393>
+1: Angela M Phillips, Katherine R Lawrence, Alief Moulana, Thomas Dupic, Jeffrey Chang, Milo S Johnson, Ivana Cvijovic, Thierry Mora, Aleksandra M Walczak, Michael M Desai (2021) Binding affinity landscapes constrain the evolution of broadly neutralizing anti-influenza antibodies eLife 10:e71393 <https://doi.org/10.7554/eLife.71393>
