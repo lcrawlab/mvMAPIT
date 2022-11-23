@@ -124,12 +124,12 @@
 <div class="section level2">
 <h2 id="preprocessing-of-the-heterogenous-stock-of-mice-dataset">Preprocessing of the heterogenous stock of mice dataset<a class="anchor" aria-label="anchor" href="#preprocessing-of-the-heterogenous-stock-of-mice-dataset"></a>
 </h2>
-<p>This example study makes use of GWA data from the Wellcome Trust Centre for Human Genetics<span class="math inline">\(^1\)</span> <span class="math inline">\(^2\)</span> <span class="math inline">\(^3\)</span> (<a href="http://mtweb.cs.ucl.ac.uk/mus/www/mouse/index.shtml" class="external-link uri">http://mtweb.cs.ucl.ac.uk/mus/www/mouse/index.shtml</a>). The genotypes from this study were downloaded directly using the <code>BGLR-R</code> package. This study contains <span class="math inline">\(N =\)</span> 1,814 heterogenous stock of mice from 85 families (all descending from eight inbred progenitor strains)<span class="math inline">\(^1\)</span> <span class="math inline">\(^2\)</span>, and 131 quantitative traits that are classified into 6 broad categories including behavior, diabetes, asthma, immunology, haematology, and biochemistry. Phenotypic measurements for these mice can be found freely available online to download (details can be found at <a href="http://mtweb.cs.ucl.ac.uk/mus/www/mouse/HS/index.shtml" class="external-link uri">http://mtweb.cs.ucl.ac.uk/mus/www/mouse/HS/index.shtml</a> and data can be downloaded from <a href="https://github.com/lcrawlab/mvMAPIT" class="external-link uri">https://github.com/lcrawlab/mvMAPIT</a>). In the main text, we focused on 15 hematological phenotypes including: atypical lymphocytes (ALY; <code>Haem.ALYabs</code>), basophils (BAS; <code>Haem.BASabs</code>), hematocrit (HCT; <code>Haem.HCT</code>), hemoglobin (HGB; <code>Haem.HGB</code>), large immature cells (LIC; <code>Haem.LICabs</code>), lymphocytes (LYM; <code>Haem.LYMabs</code>), mean corpuscular hemoglobin (MCH; <code>Haem.MCH</code>), mean corpuscular volume (MCV; <code>Haem.MCV</code>), monocytes (MON; <code>Haem.MONabs</code>), mean platelet volume (MPV; <code>Haem.MPV</code>), neutrophils (NEU; <code>Haem.NEUabs</code>), plateletcrit (PCT; <code>Haem.PCT</code>), platelets (PLT; <code>Haem.PLT</code>), red blood cell count (RBC; <code>Haem.RBC</code>), red cell distribution width (RDW; <code>Haem.RDW</code>), and white blood cell count (WBC; <code>Haem.WBC</code>). All phenotypes were previously corrected for sex, age, body weight, season, year, and cage effects <span class="math inline">\(^1\)</span> <span class="math inline">\(^2\)</span>. For individuals with missing genotypes, we imputed values by the mean genotype of that SNP in their corresponding family. Only polymorphic SNPs with minor allele frequency above 5% were kept for the analyses. This left a total of <span class="math inline">\(J =\)</span> 10,227 autosomal SNPs that were available for all mice.</p>
+<p>This example study makes use of GWA data from the Wellcome Trust Centre for Human Genetics<span class="math inline">\(^{1,2,3}\)</span> (<a href="http://mtweb.cs.ucl.ac.uk/mus/www/mouse/index.shtml" class="external-link uri">http://mtweb.cs.ucl.ac.uk/mus/www/mouse/index.shtml</a>). The genotypes from this study were downloaded directly using the <code>BGLR-R</code> package. This study contains <span class="math inline">\(N =\)</span> 1,814 heterogenous stock of mice from 85 families (all descending from eight inbred progenitor strains)<span class="math inline">\(^{1,2}\)</span>, and 131 quantitative traits that are classified into 6 broad categories including behavior, diabetes, asthma, immunology, haematology, and biochemistry. Phenotypic measurements for these mice can be found freely available online to download (details can be found at <a href="http://mtweb.cs.ucl.ac.uk/mus/www/mouse/HS/index.shtml" class="external-link uri">http://mtweb.cs.ucl.ac.uk/mus/www/mouse/HS/index.shtml</a>). In the main text, we focused on 15 hematological phenotypes including: atypical lymphocytes (ALY; <code>Haem.ALYabs</code>), basophils (BAS; <code>Haem.BASabs</code>), hematocrit (HCT; <code>Haem.HCT</code>), hemoglobin (HGB; <code>Haem.HGB</code>), large immature cells (LIC; <code>Haem.LICabs</code>), lymphocytes (LYM; <code>Haem.LYMabs</code>), mean corpuscular hemoglobin (MCH; <code>Haem.MCH</code>), mean corpuscular volume (MCV; <code>Haem.MCV</code>), monocytes (MON; <code>Haem.MONabs</code>), mean platelet volume (MPV; <code>Haem.MPV</code>), neutrophils (NEU; <code>Haem.NEUabs</code>), plateletcrit (PCT; <code>Haem.PCT</code>), platelets (PLT; <code>Haem.PLT</code>), red blood cell count (RBC; <code>Haem.RBC</code>), red cell distribution width (RDW; <code>Haem.RDW</code>), and white blood cell count (WBC; <code>Haem.WBC</code>). All phenotypes were previously corrected for sex, age, body weight, season, year, and cage effects <span class="math inline">\(^{1,2}\)</span>. For individuals with missing genotypes, we imputed values by the mean genotype of that SNP in their corresponding family. Only polymorphic SNPs with minor allele frequency above 5% were kept for the analyses. This left a total of <span class="math inline">\(J =\)</span> 10,227 autosomal SNPs that were available for all mice.</p>
 </div>
 <div class="section level2">
 <h2 id="analyze-hematology-traits-in-mice">Analyze hematology traits in mice<a class="anchor" aria-label="anchor" href="#analyze-hematology-traits-in-mice"></a>
 </h2>
-<p>In this section, we apply mvMAPIT to individual-level genotypes and 15 hematology traits in a heterogeneous stock of mice dataset from the Wellcome Trust Centre for Human Genetics<span class="math inline">\(^1\)</span> <span class="math inline">\(^2\)</span> <span class="math inline">\(^3\)</span>. This collection of data contains approximately <span class="math inline">\(N =\)</span> 2,000 individuals depending on the phenotype, and each mouse has been genotyped at <span class="math inline">\(J =\)</span> 10,346 SNPs. Specifically, this stock of mice are known to be genetically related with population structure and the genetic architectures of these particular traits have been shown to have different levels of broad-sense heritability with varying contributions from non-additive genetic effects.</p>
+<p>In this section, we apply mvMAPIT to individual-level genotypes and 15 hematology traits in a heterogeneous stock of mice dataset from the Wellcome Trust Centre for Human Genetics<span class="math inline">\(^{1,2,3}\)</span>. This collection of data contains approximately <span class="math inline">\(N =\)</span> 2,000 individuals depending on the phenotype, and each mouse has been genotyped at <span class="math inline">\(J =\)</span> 10,346 SNPs. Specifically, this stock of mice are known to be genetically related with population structure and the genetic architectures of these particular traits have been shown to have different levels of broad-sense heritability with varying contributions from non-additive genetic effects.</p>
 <div class="section level3">
 <h3 id="apply-mvmapit">Apply mvMAPIT<a class="anchor" aria-label="anchor" href="#apply-mvmapit"></a>
 </h3>
@@ -339,9 +339,7 @@
 <td>1.81e-8</td>
 <td>Foxp1</td>
 <td>abnormal B cell differentiation, physiology, count</td>
-<td>
-<span class="math inline">\(^{15}\)</span>, <span class="math inline">\(^{16}\)</span>
-</td>
+<td><span class="math inline">\(^{15,16}\)</span></td>
 </tr>
 <tr class="even">
 <td>rs13478924</td>
@@ -354,9 +352,7 @@
 <td>2.86e-8</td>
 <td>Foxp1</td>
 <td>abnormal B cell differentiation, physiology, count</td>
-<td>
-<span class="math inline">\(^{15}\)</span>, <span class="math inline">\(^{16}\)</span>
-</td>
+<td><span class="math inline">\(^{15,16}\)</span></td>
 </tr>
 <tr class="odd">
 <td>rs13478985</td>
@@ -527,9 +523,7 @@
 <td>2.44e-9</td>
 <td>App</td>
 <td>increased susceptibility to induced thrombosis</td>
-<td>
-<span class="math inline">\(^{20}\)</span>, <span class="math inline">\(^{11}\)</span>
-</td>
+<td><span class="math inline">\(^{20,11}\)</span></td>
 </tr>
 <tr class="even">
 <td>rs4212186</td>
@@ -542,9 +536,7 @@
 <td>1.31e-9</td>
 <td>App</td>
 <td>increased susceptibility to induced thrombosis</td>
-<td>
-<span class="math inline">\(^{20}\)</span>, <span class="math inline">\(^{11}\)</span>
-</td>
+<td><span class="math inline">\(^{20,11}\)</span></td>
 </tr>
 <tr class="odd">
 <td>rs3711994</td>
