@@ -44,6 +44,7 @@ library(ggplot2)
 library(ggrepel)
 library(tidyr)
 library(kableExtra)
+library(RcppAlgos)
 ```
 
 
@@ -63,14 +64,14 @@ fisher <- fishers_combined(mvmapit_hybrid$pvalues)
 
 
 ```{r assign_data, include = FALSE}
-mvmapit_hybrid <- mvmapit_data$mvmapit
 fisher <- mvmapit_data$fisher
 pairs <- mvmapit_data$exhaustive_search
-thresh <- 0.05 / nrow(fisher)
+thresh <- 0.05 / (nrow(fisher) / 2)
 ```
 
 
-To visualize the genome wide `p`-values, we use a Manhattan plot.
+To visualize the genome wide `p`-values, we use a Manhattan plot. 
+The `p`-values are plotted after combining the results from the multivariate analysis using Fisher's method.
 
 ```{r manhattan_plots}
 manhplot <- ggplot(fisher, aes(x = 1:nrow(fisher), y = -log10(p))) +
@@ -80,34 +81,40 @@ manhplot <- ggplot(fisher, aes(x = 1:nrow(fisher), y = -log10(p))) +
 plot(manhplot)
 ```
 
-To control the type I error despite multiple testing, we recomment the conservative Bonferroni correction.
-The significant SNPs returned by the `mvMAPIT` analysis are shown in the output below.
+To control the type I error despite multiple testing, we recommend the conservative Bonferroni correction.
+The significant SNPs returned by the `mvMAPIT` analysis are shown in the output below. There are in total 6 significant SNPs after multiple test correction. Of the significant SNPs, 4 are true positives. 
 
 ```{r significant_snps}
-thresh <- 0.05 / nrow(fisher)
+thresh <- 0.05 / (nrow(fisher) / 2)
 significant_snps <-  fisher %>%
     filter(p < thresh) # Call only marginally significant SNPs
 
-truth <- simulated_data$epistatic$name %>%
+truth <- simulated_data$epistatic %>%
+  ungroup() %>%
+  mutate(discovered = (name %in% significant_snps$id)) %>%
+  select(name, discovered) %>%
   unique()
 
 significant_snps %>% 
   mutate_if(is.numeric, ~(as.character(signif(., 3)))) %>%
-  mutate(true_pos = id %in% truth) %>%
+  mutate(true_pos = id %in% truth$name) %>%
   kable(., linesep = "") %>%
   kable_material(c("striped"))
 ```
 
-To compare this list to the full list of causal epistatic SNPs of the simulations, refer to the following list.
+## True Epistatic SNPs
+
+To compare this list to the full list of causal epistatic SNPs of the simulations, refer to the following list. There are 5 causal SNPs. Of these 5 causal SNPs, 4 were succesfully discovered by mvMAPIT.
 
 ```{r simulated_snps}
-print(truth)
+truth %>% 
+  kable(., linesep = "") %>%
+  kable_material(c("striped"))
 ```
 
 # Running an Informed Exhaustive Search
+
 Now we may take only the significant SNPs according to their marginal epistatic effects and run a simple exhaustive search between them.
-The significant SNPs are significant after combining the results from the multivariate analysis using Fisher's method and
-adjusting the significnat threshold via Bonferroni correction.
 
 The search itself is a simple regression on the interaction terms between all significant interactions.
 
@@ -149,10 +156,10 @@ plotable <- pairs %>%
     values_to = "p",
     values_drop_na = TRUE
   ) %>%
-  mutate(pplot = case_when(
-    p < 0.05 ~ p,
-    TRUE ~ 1))
-tiles <- ggplot(data = plotable, aes(x=var1, y=var2, fill=-log10(pplot)))+ 
+  mutate(trait = case_when(
+    trait == "p_01" ~ "Trait 1",
+    trait == "p_02"  ~ "Trait 2"))
+tiles <- ggplot(data = plotable, aes(x=var1, y=var2, fill=-log10(p)))+ 
   geom_tile() +
   facet_wrap(~trait) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
@@ -160,16 +167,58 @@ tiles <- ggplot(data = plotable, aes(x=var1, y=var2, fill=-log10(pplot)))+
 plot(tiles)
 ```
 
-Compare this to the true interaction structure.
+The only significant interactions after multiple testing correction are the interaction
+between `snp00068` and `snp_00665` as well as `snp_00465` and `snp_00917`.
+
+```{r significant_exhaustive}
+pairs %>%
+  filter(p_01 < 0.05/15 | p_02 < 0.05/15) %>%
+  kable(., linesep = "", digits = 14) %>%
+  kable_material(c("striped"))
+```
+
+## True epistataic structure
+
+Compare the results of the exhaustive search to the true interaction structure. Notice that the only significant interactions in the exhaustive search are the two with the largest true effects.
 
 ```{r simulated_interactions}
 true_interactions <- simulated_data$interactions %>%
   mutate(var1 = sprintf(group1, fmt = "snp_%05d")) %>%
-  mutate(var2 = sprintf(group2, fmt = "snp_%05d"))
-true_tiles <- ggplot(data = true_interactions, aes(x=var1, y=var2, fill=effect_size))+ 
+  mutate(var2 = sprintf(group2, fmt = "snp_%05d")) %>%
+  mutate(trait = case_when(
+    trait == 1 ~ "Trait 1",
+    trait == 2  ~ "Trait 2")) %>%
+  select(-c("group1", "group2"))
+X <- true_interactions[, c("var1", "var2")]
+X  <- t(apply(X, 1, sort))
+true_interactions[,c("var1", "var2")]  <- X
+
+epistatic_pairnames <- comboGeneral(simulated_data$epistatic$name %>% unique(), 2)
+true_pairs <- NULL
+for (k in seq_len(nrow(epistatic_pairnames))) {
+  tib <- tibble::tibble(var1 = epistatic_pairnames[k, 1],
+                        var2 = epistatic_pairnames[k, 2])
+  true_pairs <- bind_rows(true_pairs, tib)
+}
+anti <- anti_join(true_pairs, true_interactions) %>%
+  mutate(effect_size = 0)
+
+true_int_plot <- true_interactions %>%
+  bind_rows(anti %>% mutate(trait = "Trait 1")) %>%
+  bind_rows(anti %>% mutate(trait = "Trait 2"))
+
+true_tiles <- ggplot(data = true_int_plot, aes(x=var1, y=var2, fill=effect_size)) + 
   geom_tile() +
   facet_wrap(~trait) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
   scale_fill_gradient2(low = "blue", high = "red", mid = "white")
 plot(true_tiles)
+```
+
+While mvMAPIT does not identify the explicit partner, it still implicates more correct SNPs in this example. All true epistatic SNPs are listed in the following table.
+
+```{r true_interactions}
+true_interactions %>%
+  kable(., linesep = "") %>%
+  kable_material(c("striped"))
 ```
