@@ -36,7 +36,6 @@ Imports:
     mvtnorm,
     Rcpp,
     stats,
-    testthat,
     tidyr,
     utils
 Suggests:
@@ -45,10 +44,11 @@ Suggests:
     kableExtra,
     knitr,
     markdown,
-    rmarkdown
+    RcppAlgos,
+    rmarkdown,
+    testthat
 LinkingTo:
     Rcpp,
-    RcppAlgos,
     RcppArmadillo,
     RcppParallel,
     RcppSpdlog,
