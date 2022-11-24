@@ -38,7 +38,7 @@ In this section, we apply mvMAPIT to individual-level genotypes and 15 hematolog
 
 ## Apply mvMAPIT
 
-The number of complete samples in the data varies for different traits and trait pairs. For this study we created separate data sets for each trait and trait pair containing the genotype data in a genotype matrix encoded as `{0, 1, 2}` (minor allele count)  and the trait or trait pair in a phenotype matrix. 
+The number of complete samples in the data varies for different traits and trait pairs. For this study we created separate data sets for each trait and trait pair containing the genotype data in a genotype matrix encoded as `{0, 1, 2}` (minor allele count)  and the trait or trait pair in a phenotype matrix.
 Apply `mvmapit()` to each data set by running the following.
 
 ```{r run_mvmapit, eval = FALSE}
@@ -116,7 +116,7 @@ show(gg)
 
 ## Two trait pairs HCT & HGB as well as MCV & MCH
 
-The hypothesis that most of the signal in the combined $P$-values from mvMAPIT likely stems from the covariance component portion of the model holds true for the joint pairwise analysis of hematocrit (HCT) and hemoglobin (HGB) and mean corpuscular hemoglobin (MCH) and mean corpuscular volume (MCV) (e.g., see the third and fourth rows of the following figure). 
+The hypothesis that most of the signal in the combined $P$-values from mvMAPIT likely stems from the covariance component portion of the model holds true for the joint pairwise analysis of hematocrit (HCT) and hemoglobin (HGB) and mean corpuscular hemoglobin (MCH) and mean corpuscular volume (MCV) (e.g., see the third and fourth rows of the following figure).
 
 ```{r mice_data, eval = FALSE}
 gg <- mice_HCTHGB_MCVMCH$fisher %>% ggplot(aes(
@@ -190,7 +190,7 @@ The following table lists a select subset of SNPs in coding regions of genes tha
 | rs3711994 | 19:45078018 | ALY | LYM | 3.71e-4 | 0.10 | 1.04e-12 | 2.80e-14 | Btrc | abnormal lymphocyte morphology | $^{21}$ |
 
 
-In the first two columns, we list SNPs and their genetic location according to the mouse assembly NCBI build 34 (accessed from $^{21}$) in the format `Chromosome:Basepair`. Next, we give the results stemming from univariate analyses on traits 1 and 2, respectively, the covariance (cov) test, and the overall $P$-value derived by mvMAPIT using Fisher's method. The last columns detail the closest neighboring genes found using the Mouse Genome Informatics database$^4$ $^5$ $^6$, a short summary of the suggested annotated function for those genes, and the reference to the source of the annotation. 
+In the first two columns, we list SNPs and their genetic location according to the mouse assembly NCBI build 34 (accessed from $^{21}$) in the format `Chromosome:Basepair`. Next, we give the results stemming from univariate analyses on traits 1 and 2, respectively, the covariance (cov) test, and the overall $P$-value derived by mvMAPIT using Fisher's method. The last columns detail the closest neighboring genes found using the Mouse Genome Informatics database$^4$ $^5$ $^6$, a short summary of the suggested annotated function for those genes, and the reference to the source of the annotation.
 
 
 # References
@@ -216,13 +216,13 @@ In the first two columns, we list SNPs and their genetic location according to t
 
 11: Juan Carlos Souto, Laura Almasy, Montserrat Borrell, Francisco Blanco-Vaca, José Mateo, José Manuel Soria, Inma Coll, Rosa Felices, William Stone, Jordi Fontcuberta, and John Blangero. Genetic susceptibility to thrombosis and its relationship to physiological risk factors: The GAIT study. The American Journal of Human Genetics, 67(6):1452–1459, 2000. ISSN 0002-9297. doi: 10.1086/316903. URL https://www.sciencedirect.com/science/article/pii/S0002929707632145.
 
-12: Joachim Weischenfeldt, Inge Damgaard, David Bryder, Kim Theilgaard-Mönch, Lina A. Thoren, Finn Cilius Nielsen, Sten Eirik W. Jacobsen, Claus Nerlov, and Bo Torben Porse. NMD is essential for hematopoietic stem and progenitor cells and for eliminating by-products of programmed DNA rearrangements. Genes & Development, 22(10):1381–1396, 2008. ISSN 0890-9369, 1549-5477. doi:10.1101/gad.468808. URL http://genesdev.cshlp.org/content/22/10/1381. Company: Cold Spring Harbor Laboratory Press Distributor: Cold Spring Harbor Laboratory Press Institution: Cold Spring Harbor Laboratory Press Label: Cold Spring Harbor Laboratory Press Publisher: Cold Spring Harbor Lab.
+12: Joachim Weischenfeldt, Inge Damgaard, David Bryder, Kim Theilgaard-Mönch, Lina A. Thoren, Finn Cilius Nielsen, Sten Eirik W. Jacobsen, Claus Nerlov, and Bo Torben Porse. NMD is essential for hematopoietic stem and progenitor cells and for eliminating by-products of programmed DNA rearrangements. Genes & Development, 22(10):1381–1396, 2008. ISSN 0890-9369, 1549-5477. doi: 10.1101/gad.468808. URL http://genesdev.cshlp.org/content/22/10/1381. Company: Cold Spring Harbor Laboratory Press Distributor: Cold Spring Harbor Laboratory Press Institution: Cold Spring Harbor Laboratory Press Label: Cold Spring Harbor Laboratory Press Publisher: Cold Spring Harbor Lab.
 
 13: Kevin Berendse, Maxim Boek, Marion Gijbels, Nicole N. Van der Wel, Femke C. Klouwer, Marius A. van den Bergh-Weerman, Abhijit Babaji Shinde, Rob Ofman, Bwee Tien Poll-The, Sander M.
 Houten, Myriam Baes, Ronald J. A. Wanders, and Hans R. Waterham. Liver disease predominates in a mouse model for mild human zellweger spectrum disorder. Biochimica et Biophysica Acta (BBA) - Molecular Basis of Disease, 1865(10):2774–2787, 2019. ISSN 0925-4439.
 doi: 10.1016/j.bbadis.2019.06.013. URL https://www.sciencedirect.com/science/article/pii/S0925443919302121.
 
-14: Patricia Isnard, Nathalie Coré, Philippe Naquet, and Malek Djabali. Altered lymphoid development in mice deficient for the mAF4 proto-oncogene. Blood, 96(2):705–710, 2000. ISSN 0006-4971. doi:10.1182/blood.V96.2.705. URL https://doi.org/10.1182/blood.V96.2.705.
+14: Patricia Isnard, Nathalie Coré, Philippe Naquet, and Malek Djabali. Altered lymphoid development in mice deficient for the mAF4 proto-oncogene. Blood, 96(2):705–710, 2000. ISSN 0006-4971. doi: 10.1182/blood.V96.2.705. URL https://doi.org/10.1182/blood.V96.2.705.
 
 15: Xiaoming Feng, Gregory C. Ippolito, Lifeng Tian, Karla Wiehagen, Soyoung Oh, Arivazhagan Sambandam, Jessica Willen, Ralph M. Bunte, Shanna D. Maika, June V. Harriss, Andrew J. Caton, Avinash Bhandoola, Philip W. Tucker, and Hui Hu. Foxp1 is an essential transcriptional regulator for the generation of quiescent naive t cells during thymocyte development. Blood, 115(3):510–518, 2010. ISSN 0006-4971. doi: 10.1182/blood-2009-07-232694. URL https://doi.org/10.1182/blood-2009-07-232694.
 
@@ -241,6 +241,6 @@ lation. Molecular Cell, 53(3):484–497, 2014. ISSN 1097-2765. doi: 10.1016/j.mo
 
 21: Keiko Nakayama, Shigetsugu Hatakeyama, Shun-ichiro Maruyama, Akira Kikuchi, Kazunori Onoé, Robert A. Good, and Keiichi I. Nakayama. Impaired degradation of inhibitory subunit of NF-b (IkappaB) and -catenin as a result of targeted disruption of the -TrCP1 gene. Proceedings of the National Academy of Sciences, 100(15):8752–8757, 2003. doi: 10.1073/pnas.1133216100. URL https://www.pnas.org/doi/full/10.1073/pnas.1133216100. Publisher: Proceedings of the National Academy of Sciences.
 
-22: Sagiv Shifman, 1480 Jordana Tzenova Bell, Richard R. Copley, Martin S. Taylor, Robert W. Williams, Richard Mott, and Jonathan Flint. A high-resolution single nucleotide polymorphism genetic map of the mouse genome. PLOS Biology, 4(12):e395, 2006. ISSN 1545-7885. doi: 10.1371/journal. pbio.0040395. URL <https://journals.plos.org/plosbiology/article?id=10.1371/journal>. pbio.0040395. Publisher: Public Library of Science.
+22: Sagiv Shifman, 1480 Jordana Tzenova Bell, Richard R. Copley, Martin S. Taylor, Robert W. Williams, Richard Mott, and Jonathan Flint. A high-resolution single nucleotide polymorphism genetic map of the mouse genome. PLOS Biology, 4(12):e395, 2006. ISSN 1545-7885. doi: 10.1371/journal. pbio.0040395. URL <https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.0040395>. Publisher: Public Library of Science.
 
 23: Stamp, Julian, 2022, "Leveraging the Genetic Correlation between Traits Improves the Detection of Epistasis in Genome-wide Association Studies", https://doi.org/10.7910/DVN/WPFIGU, Harvard Dataverse, V1

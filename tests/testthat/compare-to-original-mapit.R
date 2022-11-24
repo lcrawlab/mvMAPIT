@@ -7,9 +7,9 @@ normal.pvalues <- original$normal$pvalues
 davies.pvalues <- original$davies$pvalues
 tolerance <- 1e-04
 # when
-Xmean = apply(X, 2, mean)
-Xsd = apply(X, 2, sd)
-X = t(
+Xmean <- apply(X, 2, mean)
+Xsd <- apply(X, 2, sd)
+X <- t(
     (t(X) -
         Xmean)/Xsd
 )

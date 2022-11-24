@@ -98,8 +98,8 @@ simulate_traits <- function(
     log$debug("Minor allele frequency threshold %f.", maf_threshold)
 
     # divide groups into ratios
-    n_group1_trait = ceiling(n_trait_specific / (1 + group_ratio_trait))
-    n_group1_pleiotropic = ceiling(n_pleiotropic / (1 + group_ratio_pleiotropic))
+    n_group1_trait <- ceiling(n_trait_specific / (1 + group_ratio_trait))
+    n_group1_pleiotropic <- ceiling(n_pleiotropic / (1 + group_ratio_pleiotropic))
 
     coll <- makeAssertCollection()
     assertInt(n_causal, lower = 0, upper = n_snp, add = coll)
@@ -126,6 +126,7 @@ simulate_traits <- function(
     pleio_split <- split(pleiotropic_set, f = f_pleiotropic)
     X_pleio_group1 <- X[, pleio_split$group1]
     X_pleio_group2 <- X[, pleio_split$group2]
+    i <- NULL
     X_epi_pleio <- foreach(i = seq_len(n_group1_pleiotropic), .combine = cbind) %do% {
             # this step fails if there are too little pleiotropic SNPs; i.e. <=
             # 3?
@@ -211,6 +212,7 @@ simulate_traits <- function(
 
         start_interactions <- proc.time()
         log$debug("Computing interactions. This may take a while.")
+        i <- NULL
         X_epi <- foreach(i = seq_len(length(trait_specific_j_1)), .combine = cbind) %do% {
                 X_trait_specific_j_1[, i] * X_trait_specific_j_2
         }
@@ -274,8 +276,8 @@ simulate_traits <- function(
                         values_to = "id"
                         ) %>%
                      mutate(name = sprintf("snp_%05d", id)) %>%
-                     dplyr::group_by(trait, id, name) %>%
-                     summarise(total_effect = sum(abs(effect_size))) %>%
+                     dplyr::group_by(.data[["trait"]], .data[["id"]], .data[["name"]]) %>%
+                     summarise(total_effect = sum(abs(.data[["effect_size"]]))) %>%
                      mutate(pleiotropic = (id  %in% pleiotropic_set))
     } else {
         epistatic <- NULL

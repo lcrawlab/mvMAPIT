@@ -4,7 +4,7 @@
 [![R CMD check](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml)
 [![Docker Image CI](https://github.com/lcrawlab/mvMAPIT/actions/workflows/docker-image.yml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/docker-image.yml)
 
-Find the full package documentation including examples, and articles here: [Multivariate MAPIT Documentation](https://lcrawlab.github.io/mvMAPIT).
+Find the full package documentation including examples, and articles here: [Multivariate MAPIT Documentation](https://lcrawlab.github.io/mvMAPIT/).
 
 
 ## The multivariate MArginal ePIstasis Test (mvMAPIT)
@@ -71,13 +71,13 @@ mvMAPIT.
 R is a widely used, free, and open source software environment for
 statistical computing and graphics. The most recent version of R can be
 downloaded from the [Comprehensive R Archive Network
-(CRAN)](http://cran.r-project.org/) CRAN provides precompiled binary
+(CRAN)](https://cran.r-project.org/) CRAN provides precompiled binary
 versions of R for Windows, macOS, and select Linux distributions that
 are likely sufficient for many users' needs. Users can also install R
 from source code; however, this may require a significant amount of
 effort. For specific details on how to compile, install, and manage R
 and R-packages, refer to the manual [R Installation and
-Administration](http://cran.r-project.org/doc/manuals/r-release/R-admin.html).
+Administration](https://cran.r-project.org/doc/manuals/r-release/R-admin.html).
 
 ### R Packages Required for mvMAPIT
 mvMAPIT requires the installation of the following R libraries:
@@ -118,7 +118,7 @@ install.packages(c( 'checkmate',
 ```
 
 Alternatively, one can also [install R packages from the
-command-line](http://cran.r-project.org/doc/manuals/r-release/R-admin.html#Installing-packages).
+command-line](https://cran.r-project.org/doc/manuals/r-release/R-admin.html#Installing-packages).
 
 ### Installing mvMAPIT
 The easiest way to install the package from sources is to change into
@@ -131,19 +131,19 @@ The code in this repository assumes that basic Fortran and C++ libraries and com
 cluster. If not, the mvMAPIT functions and necessary Rcpp packages will
 not work properly. A simple option is to use
 [gcc](https://gcc.gnu.org/). macOS users may use this collection by
-installing the [Homebrew package manager](http://brew.sh/index.html) and
+installing the [Homebrew package manager](https://brew.sh/index.html) and
 then typing the following into the terminal:
 
 ``` {.bash}
 brew install gcc
 ```
 ### OpenMP
-Note that mvMAPIT takes advantage of [OpenMP](http://openmp.org/wp/), an
+Note that mvMAPIT takes advantage of [OpenMP](https://www.openmp.org/), an
 API for multi-platform shared-memory parallel programming in C/C++. This
 is to speed up the computational time of the modeling algorithm.
 Unfortunately, macOS does not currently support OpenMP under the default
 compiler. A work around to use OpenMP in R on macOS can be found
-[here](http://thecoatlessprofessor.com/programming/openmp-in-r-on-os-x/).
+[here](https://thecoatlessprofessor.com/programming/openmp-in-r-on-os-x/).
 mvMAPIT can be compiled without OpenMP, but we recommend using it if
 applicable.
 
@@ -153,10 +153,10 @@ applicable.
 - On macOS, you might need to run `brew reinstall z3` to fix `'libz3.4.11.dylib' (no such file)` related errors ([clang issues](https://github.com/Homebrew/discussions/discussions/3920)).
 
 - For extra tips on how to run C++ on macOS, please visit
-<http://seananderson.ca/2013/11/18/rcpp-mavericks.html>.
+<https://seananderson.ca/2013/11/18/rcpp-mavericks.html>.
 
 - For tips on how to avoid errors dealing with `-lgfortran` or `-lquadmath`, please visit
-<http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/>.
+<https://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/>.
 
 ------------------------------------------------------------------------
 
@@ -173,6 +173,6 @@ We appreciate any feedback you may have with our repository and instructions.
 [^1]: L. Crawford, P. Zeng, S. Mukherjee, X. Zhou (2017). Detecting
     epistasis with the marginal epistasis test in genetic mapping
     studies of quantitative traits. *PLoS Genet*. **13** (7): e1006869.
-    <http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869>
+    <https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869>
 
 [^2]: J. Stamp, A. DenAdel, D. Weinreich, L. Crawford (2022). Multivariate MAPIT.

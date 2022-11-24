@@ -4,11 +4,16 @@
 \alias{harmonic_combined}
 \title{Harmonic mean p combine method on mvmapit return}
 \usage{
-harmonic_combined(pvalues)
+harmonic_combined(pvalues, group_col = "id", p_col = "p")
 }
 \arguments{
 \item{pvalues}{Tibble with p-values from mvmapit function call. Grouping is
 based on the column named "id"}
+
+\item{group_col}{String that denotes column by which to group and combine
+p-values.}
+
+\item{p_col}{String that denotes p-value column.}
 }
 \value{
 A Tibble with the combined p-values.
