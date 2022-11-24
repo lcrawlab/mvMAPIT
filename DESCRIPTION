@@ -36,6 +36,7 @@ Imports:
     mvtnorm,
     Rcpp,
     stats,
+    testthat,
     tidyr,
     utils
 Suggests:
