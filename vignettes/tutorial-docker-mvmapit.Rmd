@@ -20,7 +20,7 @@ able to follow this tutorial.
 
 ## Build an Image with mvMAPIT
 
-The github repository of [mvMAPIT](https://github.com/lcrawlab/mvMAPIT) already comes with a `Dockerfile`. To build the
+The github repository of [mvMAPIT](https://github.com/lcrawlab/mvMAPIT/) already comes with a `Dockerfile`. To build the
 image, clone the github repository and run the following commands.
 
 ```bash
@@ -44,10 +44,10 @@ docker run --rm -ti \
     mvmapit
 ```
 
-This will start the docker container that serves an RStudio application at [localhost:8787](localhost:8787). In this
+This will start the docker container that serves an RStudio application at `localhost:8787`. In this
 container, `mvMAPIT` is already installed and can be imported and run in the R console via the following code.
 
-```R
+```{r run_mvmapit}
 library(mvMAPIT)
 mvmapit(t(simulated_data$genotype[1:100,1:10]), t(simulated_data$trait[1:100,]), cores = 4, logLevel = "DEBUG")
 ```
