@@ -81,7 +81,7 @@ computes the combined p-values grouped by variant id.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">harmonic_combined</span><span class="op">(</span><span class="va">pvalues</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">harmonic_combined</span><span class="op">(</span><span class="va">pvalues</span>, group_col <span class="op">=</span> <span class="st">"id"</span>, p_col <span class="op">=</span> <span class="st">"p"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -89,6 +89,15 @@ computes the combined p-values grouped by variant id.</p>
     <dl><dt>pvalues</dt>
 <dd><p>Tibble with p-values from mvmapit function call. Grouping is
 based on the column named "id"</p></dd>
+
+
+<dt>group_col</dt>
+<dd><p>String that denotes column by which to group and combine
+p-values.</p></dd>
+
+
+<dt>p_col</dt>
+<dd><p>String that denotes p-value column.</p></dd>
 
 </dl></div>
     <div id="value">

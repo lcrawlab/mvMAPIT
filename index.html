@@ -121,7 +121,7 @@
 <div class="page-header"><h1 id="multivariate-mapit-documentation-">Multivariate MAPIT Documentation <img src="reference/figures/logo.png" align="right" alt="" width="120"><a class="anchor" aria-label="anchor" href="#multivariate-mapit-documentation-"></a>
 </h1></div>
 
-<p>Find the full package documentation including examples, and articles here: <a href="https://lcrawlab.github.io/mvMAPIT">Multivariate MAPIT Documentation</a>.</p>
+<p>Find the full package documentation including examples, and articles here: <a href="https://lcrawlab.github.io/mvMAPIT/">Multivariate MAPIT Documentation</a>.</p>
 <div class="section level2">
 <h2 id="the-multivariate-marginal-epistasis-test-mvmapit">The multivariate MArginal ePIstasis Test (mvMAPIT)<a class="anchor" aria-label="anchor" href="#the-multivariate-marginal-epistasis-test-mvmapit"></a>
 </h2>
@@ -146,7 +146,7 @@
 <div class="section level3">
 <h3 id="the-r-environment">The R Environment<a class="anchor" aria-label="anchor" href="#the-r-environment"></a>
 </h3>
-<p>R is a widely used, free, and open source software environment for statistical computing and graphics. The most recent version of R can be downloaded from the <a href="http://cran.r-project.org/" class="external-link">Comprehensive R Archive Network (CRAN)</a> CRAN provides precompiled binary versions of R for Windows, macOS, and select Linux distributions that are likely sufficient for many users’ needs. Users can also install R from source code; however, this may require a significant amount of effort. For specific details on how to compile, install, and manage R and R-packages, refer to the manual <a href="http://cran.r-project.org/doc/manuals/r-release/R-admin.html" class="external-link">R Installation and Administration</a>.</p>
+<p>R is a widely used, free, and open source software environment for statistical computing and graphics. The most recent version of R can be downloaded from the <a href="https://cran.r-project.org/" class="external-link">Comprehensive R Archive Network (CRAN)</a> CRAN provides precompiled binary versions of R for Windows, macOS, and select Linux distributions that are likely sufficient for many users’ needs. Users can also install R from source code; however, this may require a significant amount of effort. For specific details on how to compile, install, and manage R and R-packages, refer to the manual <a href="https://cran.r-project.org/doc/manuals/r-release/R-admin.html" class="external-link">R Installation and Administration</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="r-packages-required-for-mvmapit">R Packages Required for mvMAPIT<a class="anchor" aria-label="anchor" href="#r-packages-required-for-mvmapit"></a>
@@ -183,7 +183,7 @@
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>                    <span class="st">'testthat'</span>, </span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>                    <span class="st">'tidyr'</span>), </span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>                    <span class="dt">dependencies =</span> <span class="ot">TRUE</span>);</span></code></pre></div>
-<p>Alternatively, one can also <a href="http://cran.r-project.org/doc/manuals/r-release/R-admin.html#Installing-packages" class="external-link">install R packages from the command-line</a>.</p>
+<p>Alternatively, one can also <a href="https://cran.r-project.org/doc/manuals/r-release/R-admin.html#Installing-packages" class="external-link">install R packages from the command-line</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="installing-mvmapit">Installing mvMAPIT<a class="anchor" aria-label="anchor" href="#installing-mvmapit"></a>
@@ -193,13 +193,13 @@
 <div class="section level3">
 <h3 id="c-functions-required-for-mapit">C++ Functions Required for MAPIT<a class="anchor" aria-label="anchor" href="#c-functions-required-for-mapit"></a>
 </h3>
-<p>The code in this repository assumes that basic Fortran and C++ libraries and compilers are already set up on the running personal computer or cluster. If not, the mvMAPIT functions and necessary Rcpp packages will not work properly. A simple option is to use <a href="https://gcc.gnu.org/" class="external-link">gcc</a>. macOS users may use this collection by installing the <a href="http://brew.sh/index.html" class="external-link">Homebrew package manager</a> and then typing the following into the terminal:</p>
+<p>The code in this repository assumes that basic Fortran and C++ libraries and compilers are already set up on the running personal computer or cluster. If not, the mvMAPIT functions and necessary Rcpp packages will not work properly. A simple option is to use <a href="https://gcc.gnu.org/" class="external-link">gcc</a>. macOS users may use this collection by installing the <a href="https://brew.sh/index.html" class="external-link">Homebrew package manager</a> and then typing the following into the terminal:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ex">brew</span> install gcc</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="openmp">OpenMP<a class="anchor" aria-label="anchor" href="#openmp"></a>
 </h3>
-<p>Note that mvMAPIT takes advantage of <a href="http://openmp.org/wp/" class="external-link">OpenMP</a>, an API for multi-platform shared-memory parallel programming in C/C++. This is to speed up the computational time of the modeling algorithm. Unfortunately, macOS does not currently support OpenMP under the default compiler. A work around to use OpenMP in R on macOS can be found <a href="http://thecoatlessprofessor.com/programming/openmp-in-r-on-os-x/" class="external-link">here</a>. mvMAPIT can be compiled without OpenMP, but we recommend using it if applicable.</p>
+<p>Note that mvMAPIT takes advantage of <a href="https://www.openmp.org/" class="external-link">OpenMP</a>, an API for multi-platform shared-memory parallel programming in C/C++. This is to speed up the computational time of the modeling algorithm. Unfortunately, macOS does not currently support OpenMP under the default compiler. A work around to use OpenMP in R on macOS can be found <a href="https://thecoatlessprofessor.com/programming/openmp-in-r-on-os-x/" class="external-link">here</a>. mvMAPIT can be compiled without OpenMP, but we recommend using it if applicable.</p>
 </div>
 <div class="section level3">
 <h3 id="known-issues">Known Issues<a class="anchor" aria-label="anchor" href="#known-issues"></a>
@@ -207,8 +207,8 @@
 <ul>
 <li><p>When your compiler changes, some R package dependencies might need to be recompiled. This is likely the case if the compilation error explicitly names an R package in the local library.</p></li>
 <li><p>On macOS, you might need to run <code>brew reinstall z3</code> to fix <code>'libz3.4.11.dylib' (no such file)</code> related errors (<a href="https://github.com/Homebrew/discussions/discussions/3920" class="external-link">clang issues</a>).</p></li>
-<li><p>For extra tips on how to run C++ on macOS, please visit <a href="http://seananderson.ca/2013/11/18/rcpp-mavericks.html" class="external-link uri">http://seananderson.ca/2013/11/18/rcpp-mavericks.html</a>.</p></li>
-<li><p>For tips on how to avoid errors dealing with <code>-lgfortran</code> or <code>-lquadmath</code>, please visit <a href="http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/" class="external-link uri">http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/</a>.</p></li>
+<li><p>For extra tips on how to run C++ on macOS, please visit <a href="https://seananderson.ca/2013/11/18/rcpp-mavericks.html" class="external-link uri">https://seananderson.ca/2013/11/18/rcpp-mavericks.html</a>.</p></li>
+<li><p>For tips on how to avoid errors dealing with <code>-lgfortran</code> or <code>-lquadmath</code>, please visit <a href="https://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/" class="external-link uri">https://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/</a>.</p></li>
 </ul>
 <hr>
 </div>
@@ -225,7 +225,7 @@
 <div class="footnotes">
 <hr>
 <ol>
-<li id="fn1"><p>L. Crawford, P. Zeng, S. Mukherjee, X. Zhou (2017). Detecting epistasis with the marginal epistasis test in genetic mapping studies of quantitative traits. <em>PLoS Genet</em>. <strong>13</strong> (7): e1006869. <a href="http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869" class="external-link uri">http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>L. Crawford, P. Zeng, S. Mukherjee, X. Zhou (2017). Detecting epistasis with the marginal epistasis test in genetic mapping studies of quantitative traits. <em>PLoS Genet</em>. <strong>13</strong> (7): e1006869. <a href="https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869" class="external-link uri">https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 <li id="fn2"><p>J. Stamp, A. DenAdel, D. Weinreich, L. Crawford (2022). Multivariate MAPIT.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
