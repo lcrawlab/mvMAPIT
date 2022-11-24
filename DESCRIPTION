@@ -35,12 +35,7 @@ Imports:
     logging,
     mvtnorm,
     Rcpp,
-    RcppAlgos,
-    RcppArmadillo,
-    RcppParallel,
-    RcppSpdlog,
     stats,
-    testthat,
     tidyr,
     utils
 Suggests:
@@ -52,7 +47,9 @@ Suggests:
     rmarkdown
 LinkingTo:
     Rcpp,
+    RcppAlgos,
     RcppArmadillo,
+    RcppParallel,
     RcppSpdlog,
     testthat
 VignetteBuilder:

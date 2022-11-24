@@ -174,12 +174,14 @@ mvmapit <- function(
         pvals[!(c(1:nrow(pvals)) %in%
             variantIndex)] <- NA
     }
-    pvals <- as.data.frame(pvals) %>%
-        mutate(id = row.names(.)) %>%
+    pvals_df <- as.data.frame(pvals)
+    pvals <- pvals_df %>%
+        mutate(id = row.names(pvals_df)) %>%
         tidyr::pivot_longer(cols = !id,
                      names_to = "trait", values_to = "p")
-    pves <- as.data.frame(pves) %>%
-        mutate(id = row.names(.)) %>%
+    pves_df <- as.data.frame(pves)
+    pves <- pves_df %>%
+        mutate(id = row.names(pves_df)) %>%
         tidyr::pivot_longer(cols = !id,
                      names_to = "trait", values_to = "PVE")
     duration_ms <- timings_mean

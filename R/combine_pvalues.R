@@ -20,8 +20,10 @@ sumlog <- function(pvalues) {
 #' This function takes in the p-values tibble that mvmapit returned. It then
 #' computes the combined p-values grouped by variant id.
 #'
-#' @param pvalues Tibble with p-values from mvmapit function call. Grouping is
-#' based on the column named "id"
+#' @param pvalues Tibble with p-values from mvmapit function call.
+#' @param group_col String that denotes column by which to group and combine
+#' p-values.
+#' @param p_col String that denotes p-value column.
 #' @return A Tibble with the combined p-values.
 #' @examples
 #' set.seed(837)
@@ -44,12 +46,12 @@ sumlog <- function(pvalues) {
 #' fisher <- fishers_combined(mapit$pvalues)
 #' @export
 #' @import dplyr
-fishers_combined <- function(pvalues) {
+fishers_combined <- function(pvalues, group_col = "id", p_col = "p") {
     pvalues %>%
-        group_by(id) %>%
-        summarize(p = sumlog(p)) %>%
+        group_by(.data[[group_col]]) %>%
+        summarize(p = sumlog(.data[[p_col]])) %>%
         mutate(trait = "fisher") %>%
-        relocate(id, trait, p)
+        relocate(.data[[group_col]], .data[["trait"]], .data[["p"]])
 }
 
 
@@ -60,6 +62,9 @@ fishers_combined <- function(pvalues) {
 #'
 #' @param pvalues Tibble with p-values from mvmapit function call. Grouping is
 #' based on the column named "id"
+#' @param group_col String that denotes column by which to group and combine
+#' p-values.
+#' @param p_col String that denotes p-value column.
 #' @return A Tibble with the combined p-values.
 #' @examples
 #' set.seed(837)
@@ -83,10 +88,10 @@ fishers_combined <- function(pvalues) {
 #' @export
 #' @import harmonicmeanp
 #' @import dplyr
-harmonic_combined <- function(pvalues) {
+harmonic_combined <- function(pvalues, group_col = "id", p_col = "p") {
     pvalues %>%
-        group_by(id) %>%
-        summarize(p = as.numeric(hmp.stat(p))) %>%
+        group_by(.data[[group_col]]) %>%
+        summarize(p = as.numeric(hmp.stat(.data[[p_col]]))) %>%
         mutate(trait = "harmonic") %>%
-        relocate(id, trait, p)
+        relocate(.data[[group_col]], .data[["trait"]], .data[["p"]])
 }

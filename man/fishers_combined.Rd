@@ -4,11 +4,15 @@
 \alias{fishers_combined}
 \title{Fisher's combine method on mvmapit return}
 \usage{
-fishers_combined(pvalues)
+fishers_combined(pvalues, group_col = "id", p_col = "p")
 }
 \arguments{
-\item{pvalues}{Tibble with p-values from mvmapit function call. Grouping is
-based on the column named "id"}
+\item{pvalues}{Tibble with p-values from mvmapit function call.}
+
+\item{group_col}{String that denotes column by which to group and combine
+p-values.}
+
+\item{p_col}{String that denotes p-value column.}
 }
 \value{
 A Tibble with the combined p-values.

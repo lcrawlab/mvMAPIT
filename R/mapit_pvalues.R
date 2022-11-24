@@ -11,34 +11,34 @@
 #' @noRd
 #' @importFrom stats pnorm uniroot
 saddlepoint_approximation <- function(x, lambda) {
-    d = max(lambda)
-    lambda = lambda/d
-    x = x/d
-    k0 = function(zeta) -sum(log(1 - 2 * zeta * lambda))/2
-    kprime0 = function(zeta) sapply(zeta, function(zz) sum(lambda/
+    d <- max(lambda)
+    lambda <- lambda/d
+    x <- x/d
+    k0 <- function(zeta) -sum(log(1 - 2 * zeta * lambda))/2
+    kprime0 <- function(zeta) sapply(zeta, function(zz) sum(lambda/
                                                            (1 -
                                                             2 * zz * lambda)))
-    kpprime0 = function(zeta) 2 *
+    kpprime0 <- function(zeta) 2 *
         sum(lambda^2/(1 - 2 * zeta * lambda)^2)
-    n = length(lambda)
+    n <- length(lambda)
     if (any(lambda < 0)) {
-        lmin = max(1/(2 * lambda[lambda < 0])) *
+        lmin <- max(1/(2 * lambda[lambda < 0])) *
             0.99999
     } else if (x > sum(lambda)) {
-        lmin = -0.01
+        lmin <- -0.01
     } else {
-        lmin = -length(lambda)/(2 *
+        lmin <- -length(lambda)/(2 *
             x)
     }
-    lmax = min(1/(2 * lambda[lambda > 0])) *
+    lmax <- min(1/(2 * lambda[lambda > 0])) *
         0.99999
-    hatzeta = uniroot(
+    hatzeta <- uniroot(
         function(zeta) kprime0(zeta) -
             x, lower = lmin, upper = lmax, tol = 1e-08
     )$root
-    w = sign(hatzeta) *
+    w <- sign(hatzeta) *
         sqrt(2 * (hatzeta * x - k0(hatzeta)))
-    v = hatzeta * sqrt(kpprime0(hatzeta))
+    v <- hatzeta * sqrt(kpprime0(hatzeta))
     if (abs(hatzeta) <
         1e-04) {
         return(NA)
