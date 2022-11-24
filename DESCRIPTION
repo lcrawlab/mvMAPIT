@@ -8,8 +8,6 @@ Authors@R: c(
     role = c("cre", "aut"), comment = c(ORCID = "0000-0003-3014-6249")),
     person("Lorin", "Crawford", email = "lorin_crawford@brown.edu",
     role = "aut", comment = c(ORCID = "0000-0003-0178-8242")))
-Author: Julian Stamp <julian_stamp@brown.edu>
-Maintainer: Julian Stamp <julian_stamp@brown.edu>
 Description: Epistasis, commonly defined as the interaction between genetic loci, is known to play an important role in
   the phenotypic variation of complex traits. As a result, many statistical methods have been developed to identify
   genetic variants that are involved in epistasis, and nearly all of these approaches carry out this task by focusing on
@@ -37,12 +35,7 @@ Imports:
     logging,
     mvtnorm,
     Rcpp,
-    RcppAlgos,
-    RcppArmadillo,
-    RcppParallel,
-    RcppSpdlog,
     stats,
-    testthat,
     tidyr,
     utils
 Suggests:
@@ -51,10 +44,13 @@ Suggests:
     kableExtra,
     knitr,
     markdown,
-    rmarkdown
+    RcppAlgos,
+    rmarkdown,
+    testthat
 LinkingTo:
     Rcpp,
     RcppArmadillo,
+    RcppParallel,
     RcppSpdlog,
     testthat
 VignetteBuilder:

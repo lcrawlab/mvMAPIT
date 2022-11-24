@@ -70,19 +70,19 @@ thresh <- 0.05 / (nrow(fisher) / 2)
 ```
 
 
-To visualize the genome wide `p`-values, we use a Manhattan plot. 
+To visualize the genome wide `p`-values, we use a Manhattan plot.
 The `p`-values are plotted after combining the results from the multivariate analysis using Fisher's method.
 
 ```{r manhattan_plots}
 manhplot <- ggplot(fisher, aes(x = 1:nrow(fisher), y = -log10(p))) +
-  geom_hline(yintercept = -log10(thresh), color = "grey40", linetype = "dashed") + 
+  geom_hline(yintercept = -log10(thresh), color = "grey40", linetype = "dashed") +
   geom_point(alpha = 0.75, color = "grey50") +
   geom_text_repel(aes(label=ifelse(p < thresh, as.character(id), '')))
 plot(manhplot)
 ```
 
 To control the type I error despite multiple testing, we recommend the conservative Bonferroni correction.
-The significant SNPs returned by the `mvMAPIT` analysis are shown in the output below. There are in total 6 significant SNPs after multiple test correction. Of the significant SNPs, 4 are true positives. 
+The significant SNPs returned by the `mvMAPIT` analysis are shown in the output below. There are in total 6 significant SNPs after multiple test correction. Of the significant SNPs, 4 are true positives.
 
 ```{r significant_snps}
 thresh <- 0.05 / (nrow(fisher) / 2)
@@ -95,7 +95,7 @@ truth <- simulated_data$epistatic %>%
   select(name, discovered) %>%
   unique()
 
-significant_snps %>% 
+significant_snps %>%
   mutate_if(is.numeric, ~(as.character(signif(., 3)))) %>%
   mutate(true_pos = id %in% truth$name) %>%
   kable(., linesep = "") %>%
@@ -107,7 +107,7 @@ significant_snps %>%
 To compare this list to the full list of causal epistatic SNPs of the simulations, refer to the following list. There are 5 causal SNPs. Of these 5 causal SNPs, 4 were succesfully discovered by mvMAPIT.
 
 ```{r simulated_snps}
-truth %>% 
+truth %>%
   kable(., linesep = "") %>%
   kable_material(c("striped"))
 ```
@@ -123,14 +123,14 @@ The search itself is a simple regression on the interaction terms between all si
 # exhaustive search for p-values
 pairs <- NULL
 if (nrow(significant_snps) > 1) {
-  pairnames <- comboGeneral(significant_snps$id, 2) 
-  # Generate unique pairs of SNP names; 
+  pairnames <- comboGeneral(significant_snps$id, 2)
+  # Generate unique pairs of SNP names;
   # for length(names) = n, the result is a (n * (n-1)) x 2 matrix with one row corresponding to a pair
   for (k in seq_len(nrow(pairnames))) {
     fit <- lm(y ~ X[, pairnames[k, 1]]:X[, pairnames[k, 2]])
     p_value1 <- coefficients(summary(fit))[[1]][2, 4]
     p_value2 <- coefficients(summary(fit))[[2]][2, 4]
-    tib <- tibble::tibble(
+    tib <- dplyr::tibble(
             x = p_value1,
             y = p_value2,
             u = pairnames[k, 1],
@@ -145,7 +145,7 @@ colnames(pairs) <- c(colnames(y), "var1", "var2")
 
 ## Visualize Exhaustive Search Results
 
-We plot the $-\mathrm{log}_{10}(p)$ of the `p`-values for the regression coefficients as tile plot to highlight the identified interaction structure. 
+We plot the $-\mathrm{log}_{10}(p)$ of the `p`-values for the regression coefficients as tile plot to highlight the identified interaction structure.
 
 ```{r trait1_plots_exhaustive}
 plotable <- pairs %>%
@@ -159,7 +159,7 @@ plotable <- pairs %>%
   mutate(trait = case_when(
     trait == "p_01" ~ "Trait 1",
     trait == "p_02"  ~ "Trait 2"))
-tiles <- ggplot(data = plotable, aes(x=var1, y=var2, fill=-log10(p)))+ 
+tiles <- ggplot(data = plotable, aes(x=var1, y=var2, fill=-log10(p)))+
   geom_tile() +
   facet_wrap(~trait) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
@@ -196,7 +196,7 @@ true_interactions[,c("var1", "var2")]  <- X
 epistatic_pairnames <- comboGeneral(simulated_data$epistatic$name %>% unique(), 2)
 true_pairs <- NULL
 for (k in seq_len(nrow(epistatic_pairnames))) {
-  tib <- tibble::tibble(var1 = epistatic_pairnames[k, 1],
+  tib <- dplyr::tibble(var1 = epistatic_pairnames[k, 1],
                         var2 = epistatic_pairnames[k, 2])
   true_pairs <- bind_rows(true_pairs, tib)
 }
@@ -207,7 +207,7 @@ true_int_plot <- true_interactions %>%
   bind_rows(anti %>% mutate(trait = "Trait 1")) %>%
   bind_rows(anti %>% mutate(trait = "Trait 2"))
 
-true_tiles <- ggplot(data = true_int_plot, aes(x=var1, y=var2, fill=effect_size)) + 
+true_tiles <- ggplot(data = true_int_plot, aes(x=var1, y=var2, fill=effect_size)) +
   geom_tile() +
   facet_wrap(~trait) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
