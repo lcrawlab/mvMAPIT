@@ -21,12 +21,22 @@ knitr::opts_chunk$set(
 library(knitr)
 ```
 
-**_NOTE:_** if you use mvMAPIT in published research, please cite:
+### Please Cite Us
 
-* Crawford, L., Zeng, P., Mukherjee, S., & Zhou, X. (2017). Detecting epistasis with the marginal epistasis test in genetic mapping studies of quantitative traits. PLoS genetics, 13(7), e1006869.
-* Stamp, J., DenAdel, A., Weinreich, D. & Crawford, L. (2022). Multivariate MAPIT.
-* Stamp J, Crawford L (2022). mvMAPIT: Multivariate Genome Wide Marginal Epistasis Test. https://github.com/lcrawlab/mvMAPIT, https://lcrawlab.github.io/mvMAPIT/
+If you use mvMAPIT in published research, please cite:
 
+>Crawford, L., Zeng, P., Mukherjee, S., & Zhou, X. (2017). Detecting epistasis
+>   with the marginal epistasis test in genetic mapping studies of quantitative
+>   traits. PLoS genetics, 13(7), e1006869.
+>
+>J. Stamp, A. DenAdel, D. Weinreich, L. Crawford (2022). Leveraging the
+>   Genetic Correlation between Traits Improves the Detection of Epistasis in
+>   Genome-wide Association Studies. bioRxiv xxxx.xx.xx.xxxxxx; doi:
+>   https://doi.org/10.xxx/xxxx.xx.xx.xxxxxx .
+>
+>Stamp J, Crawford L (2022). mvMAPIT: Multivariate Genome Wide Marginal
+>   Epistasis Test. https://github.com/lcrawlab/mvMAPIT,
+>   https://lcrawlab.github.io/mvMAPIT/
 
 # Getting Started
 Load necessary libraries. For the sake of getting started, `mvMAPIT` comes with
