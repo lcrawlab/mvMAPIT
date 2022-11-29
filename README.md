@@ -177,6 +177,6 @@ We appreciate any feedback you may have with our repository and instructions.
 
 [^2]: J. Stamp, A. DenAdel, D. Weinreich, L. Crawford (2022). Multivariate MAPIT.
 
-[^3]: X. Zhou (2017). A unified framework for variance component estimation with summary statistics 
-in genome-wide association studies. *Ann Appl Stat*. **11**(4): 2027-2051. 
-<https://projecteuclid.org/journals/annals-of-applied-statistics/volume-11/issue-4/A-unified-framework-for-variance-component-estimation-with-summary-statistics/10.1214/17-AOAS1052.full>
+[^3]: X. Zhou (2017). A unified framework for variance component estimation with summary statistics
+  in genome-wide association studies. *Ann Appl Stat*. **11**(4): 2027-2051.
+  <https://projecteuclid.org/journals/annals-of-applied-statistics/volume-11/issue-4/A-unified-framework-for-variance-component-estimation-with-summary-   statistics/10.1214/17-AOAS1052.full>
