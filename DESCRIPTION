@@ -22,7 +22,9 @@ Description: Epistasis, commonly defined as the interaction between genetic loci
   structures between traits to improve the identification of variants involved in epistasis. We formulate mvMAPIT as a
   multivariate linear mixed model and develop a multi-trait variance component estimation algorithm for efficient
   parameter inference and P-value computation. Together with reasonable model approximations, our proposed approach is
-  scalable to moderately sized GWA studies. Crawford et al. (2017) <doi:10.1371/journal.pgen.1006869>.
+  scalable to moderately sized GWA studies.
+  Crawford et al. (2017) <doi:10.1371/journal.pgen.1006869>.
+  Stamp et al. (2022) <doi:10.1101/2022.11.30.518547>.
 License: GPL (>= 3)
 Depends:
     R (>= 3.5)

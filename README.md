@@ -167,15 +167,16 @@ For questions or concerns with the MAPIT functions, please contact
 
 We appreciate any feedback you may have with our repository and instructions.
 
-
-
 ## References
 [^1]: L. Crawford, P. Zeng, S. Mukherjee, X. Zhou (2017). Detecting
     epistasis with the marginal epistasis test in genetic mapping
     studies of quantitative traits. *PLoS Genet*. **13**(7): e1006869.
     <https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869>
 
-[^2]: J. Stamp, A. DenAdel, D. Weinreich, L. Crawford (2022). Multivariate MAPIT.
+[^2]: J. Stamp, A. DenAdel, D. Weinreich, L. Crawford (2022). Leveraging the
+    Genetic Correlation between Traits Improves the Detection of Epistasis in
+    Genome-wide Association Studies. bioRxiv 2022.11.30.518547; doi:
+    <https://doi.org/10.1101/2022.11.30.518547>
 
 [^3]: X. Zhou (2017). A unified framework for variance component estimation with summary statistics
   in genome-wide association studies. *Ann Appl Stat*. **11**(4): 2027-2051.
