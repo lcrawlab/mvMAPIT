@@ -175,5 +175,5 @@ We appreciate any feedback you may have with our repository and instructions.
 
 [^2]: J. Stamp, A. DenAdel, D. Weinreich, L. Crawford (2022). Leveraging the
     Genetic Correlation between Traits Improves the Detection of Epistasis in
-    Genome-wide Association Studies. bioRxiv xxxx.xx.xx.xxxxxx; doi:
-    <https://doi.org/10.xxx/xxxx.xx.xx.xxxxxx>
+    Genome-wide Association Studies. bioRxiv 2022.11.30.518547; doi:
+    <https://doi.org/10.1101/2022.11.30.518547>
