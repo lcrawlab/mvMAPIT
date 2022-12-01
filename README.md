@@ -4,7 +4,7 @@
 [![R CMD check](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml)
 [![Docker Image CI](https://github.com/lcrawlab/mvMAPIT/actions/workflows/docker-image.yml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/docker-image.yml)
 
-Find the full package documentation including examples, and articles here: [Multivariate MAPIT Documentation](https://lcrawlab.github.io/mvMAPIT/).
+Find the full package documentation including examples and articles here: [Multivariate MAPIT Documentation](https://lcrawlab.github.io/mvMAPIT/).
 
 
 ## The multivariate MArginal ePIstasis Test (mvMAPIT)
@@ -35,7 +35,7 @@ epistatic effects, one can identify genetic variants that are involved in
 epistasis without the need to identify the exact partners with which the variants
 interact – thus, potentially alleviating much of the statistical and computational
 burden associated with conventional explicit search based methods. Our proposed
-mvMAPIT builds upon this strategy by taking of correlation structures between
+mvMAPIT builds upon this strategy by leveraging correlation structures between
 traits to improve the identification of variants involved in epistasis. We
 formulate mvMAPIT as a multivariate linear mixed model and develop a multi-trait
 variance component estimation algorithm for efficient parameter inference and
@@ -51,7 +51,7 @@ genetic variation that is shared between multiple traits. The key idea behind th
 concept of marginal epistasis is to identify variants that are involved in
 epistasis while avoiding the need to explicitly conduct an exhaustive search over
 all possible pairwise interactions. As an overview of mvMAPIT and its
-corresponding software implementation, we will assume that we have access to an
+corresponding software implementation, we will assume that we have access to a
 GWA study on `N` individuals denoted as `D = {X,Y}` where `X` is an `N x J` matrix
 of genotypes with `J` denoting the number of SNPs (each of which is encoded as
 `{0,1,2}` copies of a reference allele at each locus `j`) and `Y` denoting a `N x D`
@@ -60,8 +60,8 @@ individuals.
 
 The goal of mvMAPIT is to identify variants that have non-zero interaction effects
 with any other variant in the data. To accomplish this, we examine each SNP in
-turn and assess the null hypothesis that the variance component is zero. In
-practice, we use a computationally efficient method of moments algorithm calledMQS
+turn and assess the null hypothesis that its corresponding variance component is zero. In
+practice, we use a computationally efficient method of moments algorithm called MQS from Zhou (2017)[^3]
 to estimate model parameters and to carry out calibrated statistical tests within
 mvMAPIT.
 
@@ -71,7 +71,7 @@ mvMAPIT.
 R is a widely used, free, and open source software environment for
 statistical computing and graphics. The most recent version of R can be
 downloaded from the [Comprehensive R Archive Network
-(CRAN)](https://cran.r-project.org/) CRAN provides precompiled binary
+(CRAN)](https://cran.r-project.org/). CRAN provides precompiled binary
 versions of R for Windows, macOS, and select Linux distributions that
 are likely sufficient for many users' needs. Users can also install R
 from source code; however, this may require a significant amount of
@@ -145,7 +145,7 @@ Unfortunately, macOS does not currently support OpenMP under the default
 compiler. A work around to use OpenMP in R on macOS can be found
 [here](https://thecoatlessprofessor.com/programming/openmp-in-r-on-os-x/).
 mvMAPIT can be compiled without OpenMP, but we recommend using it if
-applicable.
+applicable for scalability.
 
 ### Known Issues
 - When your compiler changes, some R package dependencies might need to be recompiled. This is likely the case if the compilation error explicitly names an R package in the local library.
@@ -162,7 +162,7 @@ applicable.
 
 ## Questions and Feedback
 For questions or concerns with the MAPIT functions, please contact
-[Lorin Crawford](mailto:lorin_crawford@brown.edu) or
+[Lorin Crawford](mailto:lcrawford@microsoft.com) or
 [Julian Stamp](mailto:julian_stamp@brown.edu).
 
 We appreciate any feedback you may have with our repository and instructions.
@@ -170,10 +170,14 @@ We appreciate any feedback you may have with our repository and instructions.
 ## References
 [^1]: L. Crawford, P. Zeng, S. Mukherjee, X. Zhou (2017). Detecting
     epistasis with the marginal epistasis test in genetic mapping
-    studies of quantitative traits. *PLoS Genet*. **13** (7): e1006869.
+    studies of quantitative traits. *PLoS Genet*. **13**(7): e1006869.
     <https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869>
 
 [^2]: J. Stamp, A. DenAdel, D. Weinreich, L. Crawford (2022). Leveraging the
     Genetic Correlation between Traits Improves the Detection of Epistasis in
     Genome-wide Association Studies. bioRxiv 2022.11.30.518547; doi:
     <https://doi.org/10.1101/2022.11.30.518547>
+
+[^3]: X. Zhou (2017). A unified framework for variance component estimation with summary statistics
+  in genome-wide association studies. *Ann Appl Stat*. **11**(4): 2027-2051.
+  <https://projecteuclid.org/journals/annals-of-applied-statistics/volume-11/issue-4/A-unified-framework-for-variance-component-estimation-with-summary-statistics/10.1214/17-AOAS1052.full>
