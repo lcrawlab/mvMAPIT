@@ -30,8 +30,6 @@ docker build -t mvmapit .
 
 This will produce an image named `mvmapit` that contains `Rstudio`, `mvMAPIT`, and all dependencies.
 
-Alternatively, the image will be made available through Dockerhub.
-
 ## Run the mvMAPIT Image
 
 With a local copy of the docker image `mvmapit` available, run the following code.
@@ -49,5 +47,7 @@ container, `mvMAPIT` is already installed and can be imported and run in the R c
 
 ```{r run_mvmapit}
 library(mvMAPIT)
-mvmapit(t(simulated_data$genotype[1:100,1:10]), t(simulated_data$trait[1:100,]), cores = 4, logLevel = "DEBUG")
+mvmapit(t(simulated_data$genotype[1:100,1:10]),
+        t(simulated_data$trait[1:100,]),
+        cores = 2, logLevel = "DEBUG")
 ```

@@ -8,21 +8,29 @@ Authors@R: c(
     role = c("cre", "aut"), comment = c(ORCID = "0000-0003-3014-6249")),
     person("Lorin", "Crawford", email = "lorin_crawford@brown.edu",
     role = "aut", comment = c(ORCID = "0000-0003-0178-8242")))
-Description: Epistasis, commonly defined as the interaction between genetic loci, is known to play an important role in
-  the phenotypic variation of complex traits. As a result, many statistical methods have been developed to identify
-  genetic variants that are involved in epistasis, and nearly all of these approaches carry out this task by focusing on
-  analyzing one trait at a time. Previous studies have shown that jointly modeling multiple phenotypes can often
-  dramatically increase statistical power for association mapping. In this study, we present the
-  'multivariate MArginal ePIstasis Test' (mvMAPIT) – a multi-outcome generalization of a recently proposed epistatic
-  detection method which seeks to detect marginal epistasis or the combined pairwise interaction effects
-  between a given variant and all other variants. By searching for marginal epistatic effects, one can identify genetic
-  variants that are involved in epistasis without the need to identify the exact partners with which the variants
-  interact – thus, potentially alleviating much of the statistical and computational burden associated with
-  conventional explicit search based methods. Our proposed mvMAPIT builds upon this strategy by taking advantage of 
-  correlation structure between traits to improve the identification of variants involved in epistasis. We formulate mvMAPIT as a
-  multivariate linear mixed model and develop a multi-trait variance component estimation algorithm for efficient
-  parameter inference and P-value computation. Together with reasonable model approximations, our proposed approach is
-  scalable to moderately sized GWA studies.
+Description: Epistasis, commonly defined as the interaction between genetic
+  loci, is known to play an important role in the phenotypic variation of
+  complex traits. As a result, many statistical methods have been developed to
+  identify genetic variants that are involved in epistasis, and nearly all of
+  these approaches carry out this task by focusing on analyzing one trait at a
+  time. Previous studies have shown that jointly modeling multiple phenotypes
+  can often dramatically increase statistical power for association mapping. In
+  this  package, we present the 'multivariate MArginal ePIstasis Test'
+  ('mvMAPIT') – a multi-outcome generalization of a recently proposed epistatic
+  detection method which seeks to detect marginal epistasis or the combined
+  pairwise interaction effects between a given variant and all other variants.
+  By searching for marginal epistatic effects, one can identify genetic variants
+  that are involved in epistasis without the need to identify the exact
+  partners with which the variants interact – thus, potentially alleviating
+  much of the statistical and computational burden associated with conventional
+  explicit search based methods. Our proposed 'mvMAPIT' builds upon this
+  strategy by taking advantage of correlation structure between traits to
+  improve the identification of variants involved in epistasis.
+  We formulate 'mvMAPIT' as a  multivariate linear mixed model and develop a
+  multi-trait variance component estimation algorithm for efficient parameter
+  inference and P-value computation. Together with reasonable model
+  approximations, our proposed approach is scalable to moderately sized
+  genome-wide association studies.
   Crawford et al. (2017) <doi:10.1371/journal.pgen.1006869>.
   Stamp et al. (2022) <doi:10.1101/2022.11.30.518547>.
 License: GPL (>= 3)
