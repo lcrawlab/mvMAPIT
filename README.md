@@ -67,6 +67,13 @@ mvMAPIT.
 
 ## Installation
 
+The package needs compilation but the released version can be installed from
+CRAN.
+
+```R
+install.packages("mvMAPIT")
+```
+
 ### The R Environment
 R is a widely used, free, and open source software environment for
 statistical computing and graphics. The most recent version of R can be
@@ -120,7 +127,7 @@ install.packages(c( 'checkmate',
 Alternatively, one can also [install R packages from the
 command-line](https://cran.r-project.org/doc/manuals/r-release/R-admin.html#Installing-packages).
 
-### Installing mvMAPIT
+### Installing mvMAPIT from Sources
 The easiest way to install the package from sources is to change into
 the directory of mvMAPIT and run `R CMD INSTALL . --preclean`. The
 `--preclean` flag makes sure that the latest state is run.
