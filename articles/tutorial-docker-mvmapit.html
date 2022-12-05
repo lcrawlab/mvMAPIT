@@ -143,13 +143,13 @@
 <span><span class="fu"><a href="../reference/mvmapit.html">mvmapit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">simulated_data</span><span class="op">$</span><span class="va">genotype</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">simulated_data</span><span class="op">$</span><span class="va">trait</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>,<span class="op">]</span><span class="op">)</span>,</span>
 <span>        cores <span class="op">=</span> <span class="fl">2</span>, logLevel <span class="op">=</span> <span class="st">"DEBUG"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #0087AF;">2022-12-02 17:05:45 DEBUG:mvmapit:Running in normal test mode.</span></span></span>
-<span><span class="co">## <span style="color: #0087AF;">2022-12-02 17:05:45 DEBUG:mvmapit:Genotype matrix: 10 x 100</span></span></span>
-<span><span class="co">## <span style="color: #0087AF;">2022-12-02 17:05:45 DEBUG:mvmapit:Phenotype matrix: 2 x 100</span></span></span>
-<span><span class="co">## <span style="color: #0087AF;">2022-12-02 17:05:45 DEBUG:mvmapit:Number of zero variance variants: 0</span></span></span>
-<span><span class="co">## <span style="color: #0087AF;">2022-12-02 17:05:45 DEBUG:mvmapit:Genotype matrix after removing zero variance variants: 10 x 100</span></span></span>
-<span><span class="co">## <span style="color: #0087AF;">2022-12-02 17:05:45 DEBUG:mvmapit:Scale X matrix appropriately.</span></span></span>
-<span><span class="co">## <span style="color: #0087AF;">2022-12-02 17:05:45 DEBUG:mvmapit:Calculated mean time of execution. Return list.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #0087AF;">2022-12-05 15:43:03 DEBUG:mvmapit:Running in normal test mode.</span></span></span>
+<span><span class="co">## <span style="color: #0087AF;">2022-12-05 15:43:03 DEBUG:mvmapit:Genotype matrix: 10 x 100</span></span></span>
+<span><span class="co">## <span style="color: #0087AF;">2022-12-05 15:43:03 DEBUG:mvmapit:Phenotype matrix: 2 x 100</span></span></span>
+<span><span class="co">## <span style="color: #0087AF;">2022-12-05 15:43:03 DEBUG:mvmapit:Number of zero variance variants: 0</span></span></span>
+<span><span class="co">## <span style="color: #0087AF;">2022-12-05 15:43:03 DEBUG:mvmapit:Genotype matrix after removing zero variance variants: 10 x 100</span></span></span>
+<span><span class="co">## <span style="color: #0087AF;">2022-12-05 15:43:03 DEBUG:mvmapit:Scale X matrix appropriately.</span></span></span>
+<span><span class="co">## <span style="color: #0087AF;">2022-12-05 15:43:03 DEBUG:mvmapit:Calculated mean time of execution. Return list.</span></span></span></code></pre>
 <pre><code><span><span class="co">## $pvalues</span></span>
 <span><span class="co">## <span style="color: #949494;"># A tibble: 30 × 3</span></span></span>
 <span><span class="co">##    id        trait         p</span></span>
@@ -184,12 +184,12 @@
 <span><span class="co">## </span></span>
 <span><span class="co">## $duration</span></span>
 <span><span class="co">##       process duration_ms</span></span>
-<span><span class="co">## 1         cov           1</span></span>
-<span><span class="co">## 2 projections           1</span></span>
-<span><span class="co">## 3   vectorize           1</span></span>
-<span><span class="co">## 4           q           1</span></span>
-<span><span class="co">## 5           S           1</span></span>
-<span><span class="co">## 6          vc           1</span></span></code></pre>
+<span><span class="co">## 1         cov   0.0000000</span></span>
+<span><span class="co">## 2 projections   0.3333333</span></span>
+<span><span class="co">## 3   vectorize   0.0000000</span></span>
+<span><span class="co">## 4           q   0.6666667</span></span>
+<span><span class="co">## 5           S   0.0000000</span></span>
+<span><span class="co">## 6          vc   0.0000000</span></span></code></pre>
 </div>
   </div>
 
