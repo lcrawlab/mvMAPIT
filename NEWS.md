@@ -1,5 +1,10 @@
 # mvMAPIT (development version)
 
+
+# mvMAPIT 2.0.0.1 release
+
+* CRAN issue does not show up in `R CMD check`. Version upgrade for resubmission.
+
 # mvMAPIT 2.0.0 release
 
 * `fishers_combined` and `harmonic_combined` now take additional arguments in 
