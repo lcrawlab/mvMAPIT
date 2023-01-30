@@ -51,7 +51,7 @@ fishers_combined <- function(pvalues, group_col = "id", p_col = "p") {
         group_by(.data[[group_col]]) %>%
         summarize(p = sumlog(.data[[p_col]])) %>%
         mutate(trait = "fisher") %>%
-        relocate(.data[[group_col]], .data[["trait"]], .data[["p"]])
+        relocate(all_of(group_col), all_of("trait"), all_of("p"))
 }
 
 
@@ -93,5 +93,5 @@ harmonic_combined <- function(pvalues, group_col = "id", p_col = "p") {
         group_by(.data[[group_col]]) %>%
         summarize(p = as.numeric(hmp.stat(.data[[p_col]]))) %>%
         mutate(trait = "harmonic") %>%
-        relocate(.data[[group_col]], .data[["trait"]], .data[["p"]])
+        relocate(all_of(group_col), all_of("trait"), all_of("p"))
 }
