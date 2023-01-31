@@ -1,7 +1,11 @@
 # mvMAPIT (development version)
 
+# mvMAPIT 2.0.1 release
 
-# mvMAPIT 2.0.0.1 release
+* Fix LTO issues when submitting to CRAN. The testthat issue https://github.com/r-lib/testthat/issues/1230
+describes the solution chosen. Created this github gist to reproduce LTO errors: https://gist.github.com/jdstamp/056475683110aacdb1e6761872ab1e05.
+
+# mvMAPIT 2.0.0.1 pre-release
 
 * CRAN issue does not show up in `R CMD check`. Version upgrade for resubmission.
 
