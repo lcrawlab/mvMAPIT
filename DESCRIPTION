@@ -1,7 +1,7 @@
 Type: Package
 Package: mvMAPIT
 Title: Multivariate Genome Wide Marginal Epistasis Test
-Version: 2.0.0.1
+Version: 2.0.1
 URL: https://github.com/lcrawlab/mvMAPIT, https://lcrawlab.github.io/mvMAPIT/
 Authors@R: c(
     person("Julian", "Stamp", email = "julian_stamp@brown.edu",
