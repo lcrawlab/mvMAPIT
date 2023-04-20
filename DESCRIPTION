@@ -49,6 +49,7 @@ Imports:
     tidyr,
     utils
 Suggests:
+    GGally,
     ggplot2,
     ggrepel,
     kableExtra,
