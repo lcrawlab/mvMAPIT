@@ -3,6 +3,7 @@
 
 [![R CMD check](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml)
 [![Docker Image CI](https://github.com/lcrawlab/mvMAPIT/actions/workflows/docker-image.yml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/docker-image.yml)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/mvMAPIT)](https://cranlogs.r-pkg.org/badges/grand-total/mvMAPIT)
 
 Find the full package documentation including examples and articles here: [Multivariate MAPIT Documentation](https://lcrawlab.github.io/mvMAPIT/).
 
