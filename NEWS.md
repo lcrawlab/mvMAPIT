@@ -1,5 +1,7 @@
 # mvMAPIT (development version)
 
+* Added Cauchy combination test `cauchy_combined` including vignette that compares combination methods
+
 # mvMAPIT 2.0.1 release
 
 * Fix LTO issues when submitting to CRAN. The testthat issue https://github.com/r-lib/testthat/issues/1230
