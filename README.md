@@ -15,7 +15,7 @@ al. (2017)[^1] for any number of traits as described by Stamp et al. (2022)[^2].
 
 mvMAPIT is implemented as a set of R and C++ routines, which can be
 carried out within an R environment.
-
+ 
 ### Introduction
 Epistasis, commonly defined as the interaction between genetic loci, is known to
 play an important role in the phenotypic variation of complex traits. As a
