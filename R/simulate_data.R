@@ -124,8 +124,8 @@ simulate_traits <- function(
 
     pleiotropic_set <- sample(snp.ids.filtered, n_pleiotropic, replace = F)  # declare peleiotropic SNPs before since they have to be present in every trait
     pleio_split <- split(pleiotropic_set, f = f_pleiotropic)
-    X_pleio_group1 <- X[, pleio_split$group1]
-    X_pleio_group2 <- X[, pleio_split$group2]
+    X_pleio_group1 <- X[, pleio_split$group1, drop=FALSE]
+    X_pleio_group2 <- X[, pleio_split$group2, drop=FALSE]
     i <- NULL
     X_epi_pleio <- foreach(i = seq_len(n_group1_pleiotropic), .combine = cbind) %do% {
             # this step fails if there are too little pleiotropic SNPs; i.e. <=
