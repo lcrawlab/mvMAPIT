@@ -25,7 +25,7 @@ library(tidyr)
 library(dplyr)
 ```
 
-In Stamp et al. (2022)[^4] we discuss the meta analysis of the pariwise comparison $P$-values that mvMAPIT gives.
+In Stamp et al. (2023)[^4] we discuss the meta analysis of the pariwise comparison $P$-values that mvMAPIT gives.
 We provide three methods to compute a per-variant combined $P$-value:
 
   1. Fisher's Method[^1]
@@ -97,8 +97,8 @@ ggpairs(combined_wide, columns = 1:5,
 [^1]: Fisher, R.A. (1925). Statistical Methods for Research Workers. Oliver and Boyd (Edinburgh). ISBN 0-05-002170-2.
 [^2]: Wilson, D.J., 2019. The harmonic mean p-value for combining dependent tests. Proceedings of the National Academy of Sciences, 116(4), pp.1195-1200. <https://doi.org/10.1073/pnas.1814092116>
 [^3]: Liu, Y. and Xie, J., 2020. Cauchy combination test: a powerful test with analytic p-value calculation under arbitrary dependency structures. Journal of the American Statistical Association, 115(529), pp.393-402. <https://doi.org/10.1080/01621459.2018.1554485>
-[^4]: J. Stamp, A. DenAdel, D. Weinreich, L. Crawford (2022). Leveraging the
+[^4]: J. Stamp, A. DenAdel, D. Weinreich, L. Crawford (2023). Leveraging the
     Genetic Correlation between Traits Improves the Detection of Epistasis in
-    Genome-wide Association Studies. bioRxiv 2022.11.30.518547; doi:
-    <https://doi.org/10.1101/2022.11.30.518547>
+    Genome-wide Association Studies. G3 Genes|Genomes|Genetics, 13(8), jkad118; doi:
+    <https://doi.org/10.1093/g3journal/jkad118>
 

@@ -11,11 +11,11 @@ Find the full package documentation including examples and articles here: [Multi
 ## The multivariate MArginal ePIstasis Test (mvMAPIT)
 This R package is a generalization of the [MAPIT
 implementation](https://github.com/lorinanthony/MAPIT) by Crawford et
-al. (2017)[^1] for any number of traits as described by Stamp et al. (2022)[^2].
+al. (2017)[^1] for any number of traits as described by Stamp et al. (2023)[^2].
 
 mvMAPIT is implemented as a set of R and C++ routines, which can be
 carried out within an R environment.
- 
+
 ### Introduction
 Epistasis, commonly defined as the interaction between genetic loci, is known to
 play an important role in the phenotypic variation of complex traits. As a
@@ -181,10 +181,10 @@ We appreciate any feedback you may have with our repository and instructions.
     studies of quantitative traits. *PLoS Genet*. **13**(7): e1006869.
     <https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869>
 
-[^2]: J. Stamp, A. DenAdel, D. Weinreich, L. Crawford (2022). Leveraging the
+[^2]: J. Stamp, A. DenAdel, D. Weinreich, L. Crawford (2023). Leveraging the
     Genetic Correlation between Traits Improves the Detection of Epistasis in
-    Genome-wide Association Studies. bioRxiv 2022.11.30.518547; doi:
-    <https://doi.org/10.1101/2022.11.30.518547>
+    Genome-wide Association Studies. *G3 Genes|Genomes|Genetics*, **13**(8), jkad118. doi:
+    <https://doi.org/10.1093/g3journal/jkad118>
 
 [^3]: X. Zhou (2017). A unified framework for variance component estimation with summary statistics
   in genome-wide association studies. *Ann Appl Stat*. **11**(4): 2027-2051.
