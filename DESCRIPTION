@@ -32,7 +32,7 @@ Description: Epistasis, commonly defined as the interaction between genetic
   approximations, our proposed approach is scalable to moderately sized
   genome-wide association studies.
   Crawford et al. (2017) <doi:10.1371/journal.pgen.1006869>.
-  Stamp et al. (2022) <doi:10.1101/2022.11.30.518547>.
+  Stamp et al. (2023) <doi:10.1093/g3journal/jkad118>.
 License: GPL (>= 3)
 Depends:
     R (>= 3.5)

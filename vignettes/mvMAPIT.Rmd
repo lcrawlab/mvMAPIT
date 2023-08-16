@@ -30,10 +30,10 @@ If you use mvMAPIT in published research, please cite:
 >   traits. PLoS genetics, 13(7), e1006869.
 >   <https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869>
 >
-> * Stamp J, DenAdel A, Weinreich D, Crawford, L (2022). Leveraging the
+> * Stamp J, DenAdel A, Weinreich D, Crawford, L (2023). Leveraging the
 >    Genetic Correlation between Traits Improves the Detection of Epistasis in
->    Genome-wide Association Studies. bioRxiv 2022.11.30.518547; doi:
->    <https://doi.org/10.1101/2022.11.30.518547>
+>    Genome-wide Association Studies. G3 Genes|Genomes|Genetics 13(8), jkad118; doi:
+>    <https://doi.org/10.1093/g3journal/jkad118>
 >
 > * Stamp J, Crawford L (2022). mvMAPIT: Multivariate Genome Wide Marginal
 >   Epistasis Test. <https://github.com/lcrawlab/mvMAPIT>,
