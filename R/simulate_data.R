@@ -291,6 +291,9 @@ simulate_traits <- function(
         interactions <- NULL
     }
 
+    colnames(Y) <- seq_len(ncol(Y)) %>%
+        sprintf(fmt = "p_%02d")  # column names names for traits
+
     log$debug("trait data: %s", head(Y))
     log$debug("trait correlation: %s", cor(Y))
     log$debug("Correlation of simulated epistatic effects: %s", cor(alpha))

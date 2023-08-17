@@ -1,6 +1,7 @@
 # mvMAPIT (development version)
 
 * Added Cauchy combination test `cauchy_combined` including vignette that compares combination methods
+* `simulate_traits` now returns genotype matrix with causal epistatic variants named according to the trait they affect
 
 # mvMAPIT 2.0.1 release
 

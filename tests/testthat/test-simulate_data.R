@@ -343,9 +343,6 @@ test_that(
         epistatic_trait1 <- snp_names[grepl("p01epi", snp_names)]
         epistatic_trait2 <- snp_names[grepl("p02epi", snp_names)]
         epistatic_trait3 <- snp_names[grepl("p03epi", snp_names)]
-        print(epistatic_trait1)
-        print(epistatic_trait2)
-        print(epistatic_trait3)
         # then
         expect_equal(length(epistatic_trait1), correct_1)
         expect_equal(length(epistatic_trait2), correct_2)
