@@ -317,6 +317,43 @@ test_that(
 )
 
 test_that(
+    "simulate_traits modifies snp names of epistatic snps.", {
+        # given
+        p <- 50
+        f <- 30
+        g <- 5
+        h <- 10
+        n <- 5
+        d <- 3
+        X <- matrix(
+            runif(p * n),
+            ncol = p
+        )
+        total_causal <- (f)  # single trait SNPs plus pleiotropic SNPs
+        correct_1 <- h + g
+        correct_2 <- h + g
+        correct_3 <- h + g
+
+        # when
+        data <- simulate_traits(
+            X, n_causal = f, n_trait_specific = g, n_pleiotropic = h, d = d, group_ratio_trait = 3,
+            group_ratio_pleiotropic = 4, maf_threshold = 0, logLevel = "ERROR"
+        )
+        snp_names <- colnames(data$genotype)
+        epistatic_trait1 <- snp_names[grepl("p01epi", snp_names)]
+        epistatic_trait2 <- snp_names[grepl("p02epi", snp_names)]
+        epistatic_trait3 <- snp_names[grepl("p03epi", snp_names)]
+        print(epistatic_trait1)
+        print(epistatic_trait2)
+        print(epistatic_trait3)
+        # then
+        expect_equal(length(epistatic_trait1), correct_1)
+        expect_equal(length(epistatic_trait2), correct_2)
+        expect_equal(length(epistatic_trait3), correct_3)
+    }
+)
+
+test_that(
     "test run", {
         ind <- 100
         nsnp <- 100
