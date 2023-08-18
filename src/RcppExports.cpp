@@ -12,19 +12,19 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // MAPITCpp
-Rcpp::List MAPITCpp(const arma::mat X, const arma::mat Y, Rcpp::Nullable<Rcpp::NumericMatrix> Z, Rcpp::Nullable<Rcpp::NumericMatrix> C, Rcpp::Nullable<Rcpp::NumericVector> variantIndices, std::string testMethod, int cores, Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix);
+Rcpp::List MAPITCpp(const arma::mat X, const arma::mat Y, Rcpp::Nullable <Rcpp::NumericMatrix> Z, Rcpp::Nullable <Rcpp::NumericMatrix> C, Rcpp::Nullable <Rcpp::NumericVector> variantIndices, std::string testMethod, int cores, Rcpp::Nullable <Rcpp::NumericMatrix> GeneticSimilarityMatrix);
 RcppExport SEXP _mvMAPIT_MAPITCpp(SEXP XSEXP, SEXP YSEXP, SEXP ZSEXP, SEXP CSEXP, SEXP variantIndicesSEXP, SEXP testMethodSEXP, SEXP coresSEXP, SEXP GeneticSimilarityMatrixSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type Z(ZSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type C(CSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type variantIndices(variantIndicesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable <Rcpp::NumericMatrix> >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable <Rcpp::NumericMatrix> >::type C(CSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable <Rcpp::NumericVector> >::type variantIndices(variantIndicesSEXP);
     Rcpp::traits::input_parameter< std::string >::type testMethod(testMethodSEXP);
     Rcpp::traits::input_parameter< int >::type cores(coresSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type GeneticSimilarityMatrix(GeneticSimilarityMatrixSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable <Rcpp::NumericMatrix> >::type GeneticSimilarityMatrix(GeneticSimilarityMatrixSEXP);
     rcpp_result_gen = Rcpp::wrap(MAPITCpp(X, Y, Z, C, variantIndices, testMethod, cores, GeneticSimilarityMatrix));
     return rcpp_result_gen;
 END_RCPP
