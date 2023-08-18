@@ -155,7 +155,8 @@ Rcpp::List MAPITCpp(
             G = compute_g_matrix(K, x_k);
 
             auto end = steady_clock::now();
-            execution_t(i, 0) = duration_cast<milliseconds>(end - start).count();
+            execution_t(i, 0) = duration_cast<milliseconds>(
+                    end - start).count();
 
 #ifdef WITH_LOGGER_FINE
             logger->info("Dimensions of polygenic background: {} x {}.", K.n_cols,
@@ -182,7 +183,8 @@ Rcpp::List MAPITCpp(
 
             const arma::mat Yc = Y * M;
             end = steady_clock::now();
-            execution_t(i, 1) = duration_cast<milliseconds>(end - start).count();
+            execution_t(i, 1) = duration_cast<milliseconds>(
+                    end - start).count();
 
             arma::mat q;
             std::vector <arma::vec> phenotypes;
@@ -195,17 +197,20 @@ Rcpp::List MAPITCpp(
                 phenotypes = matrix_to_vector_of_rows(yc.as_row());
             }
             end = steady_clock::now();
-            execution_t(i, 2) = duration_cast<milliseconds>(end - start).count();
+            execution_t(i, 2) = duration_cast<milliseconds>(
+                    end - start).count();
 
             start = steady_clock::now();
             q = compute_q_matrix(phenotypes, matrices);
             end = steady_clock::now();
-            execution_t(i, 3) = duration_cast<milliseconds>(end - start).count();
+            execution_t(i, 3) = duration_cast<milliseconds>(
+                    end - start).count();
 
             start = steady_clock::now();
             arma::mat S = compute_s_matrix(matrices);
             end = steady_clock::now();
-            execution_t(i, 4) = duration_cast<milliseconds>(end - start).count();
+            execution_t(i, 4) = duration_cast<milliseconds>(
+                    end - start).count();
 
             // Compute delta and Sinv
             const float det_S = arma::det(S);
@@ -230,7 +235,8 @@ Rcpp::List MAPITCpp(
             start = steady_clock::now();
             if (testMethod == "normal") {
                 arma::vec var_delta =
-                        compute_variance_delta(phenotypes, Sinv, delta, matrices);
+                        compute_variance_delta(phenotypes, Sinv, delta,
+                                               matrices);
                 // Save SE of the epistasis component
                 sigma_se.row(i) = arma::trans(sqrt(var_delta));
 #ifdef WITH_LOGGER_FINE
@@ -254,7 +260,8 @@ Rcpp::List MAPITCpp(
                 }
             }
             end = ::steady_clock::now();
-            execution_t(i, 5) = duration_cast<milliseconds>(end - start).count();
+            execution_t(i, 5) = duration_cast<milliseconds>(
+                    end - start).count();
             // Compute the PVE
             pve.row(i) = compute_pve(delta, 0);
 #ifdef WITH_LOGGER_FINE
@@ -271,7 +278,8 @@ Rcpp::List MAPITCpp(
         logger->info("Return from davies method.");
 #endif
         return Rcpp::List::create(
-                Rcpp::Named("Est") = sigma_est, Rcpp::Named("Eigenvalues") = Lambda,
+                Rcpp::Named("Est") = sigma_est,
+                Rcpp::Named("Eigenvalues") = Lambda,
                 Rcpp::Named("PVE") = pve, Rcpp::Named("timings") = execution_t);
     } else {
 #ifdef WITH_LOGGER
