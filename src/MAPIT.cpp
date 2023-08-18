@@ -49,7 +49,7 @@ Rcpp::List MAPITCpp(
         Rcpp::Nullable <Rcpp::NumericMatrix> C = R_NilValue,
         Rcpp::Nullable <Rcpp::NumericVector> variantIndices = R_NilValue,
         std::string testMethod = "normal", int cores = 1,
-        Rcpp::Nullable <Rcpp::NumericMatrix> GeneticSimilarityMatrix = R_NilValue) {
+    Rcpp::Nullable <Rcpp::NumericMatrix> GeneticSimilarityMatrix = R_NilValue) {
     int i;
     const int n = X.n_cols;
     const int p = X.n_rows;
@@ -130,7 +130,7 @@ Rcpp::List MAPITCpp(
 
             if (skip_variant(ind, i)) {
 #ifdef WITH_LOGGER
-                logger->info("Variant {}/{} not of interest. Skip to next.", i + 1, p);
+        logger->info("Variant {}/{} not of interest. Skip to next.", i + 1, p);
 #endif
                 continue;
             }
@@ -159,7 +159,7 @@ Rcpp::List MAPITCpp(
                     end - start).count();
 
 #ifdef WITH_LOGGER_FINE
-            logger->info("Dimensions of polygenic background: {} x {}.", K.n_cols,
+        logger->info("Dimensions of polygenic background: {} x {}.", K.n_cols,
                          K.n_rows);
 #endif
 
@@ -289,9 +289,9 @@ Rcpp::List MAPITCpp(
         arma::mat pvalues = normal_pvalues(sigma_est, sigma_se);
         // H0: sigma = 0 vs. H1: sigma != 0
 #ifdef WITH_LOGGER_FINE
-        logger->info("sigma_est({}):\n {}.", i + 1, matrix_to_string(sigma_est));
-        logger->info("sigma_se({}):\n {}.", i + 1, matrix_to_string(sigma_se));
-        logger->info("pvalues({}):\n {}.", i + 1, matrix_to_string(pvalues));
+    logger->info("sigma_est({}):\n {}.", i + 1, matrix_to_string(sigma_est));
+    logger->info("sigma_se({}):\n {}.", i + 1, matrix_to_string(sigma_se));
+    logger->info("pvalues({}):\n {}.", i + 1, matrix_to_string(pvalues));
 #endif
         return Rcpp::List::create(
                 Rcpp::Named("Est") = sigma_est, Rcpp::Named("SE") = sigma_se,
