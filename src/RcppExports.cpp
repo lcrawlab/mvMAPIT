@@ -30,11 +30,11 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP run_testthat_tests(SEXP use_xml_sxp);
+RcppExport SEXP run_testthat_tests(void);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_mvMAPIT_MAPITCpp", (DL_FUNC) &_mvMAPIT_MAPITCpp, 8},
-    {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
+    {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},
     {NULL, NULL, 0}
 };
 

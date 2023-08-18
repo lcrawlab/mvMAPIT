@@ -62,6 +62,7 @@ LinkingTo:
     Rcpp,
     RcppArmadillo,
     RcppParallel,
+    RcppProgress,
     RcppSpdlog,
     testthat
 VignetteBuilder:

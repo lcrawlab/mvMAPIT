@@ -2,6 +2,7 @@
 
 * Added Cauchy combination test `cauchy_combined` including vignette that compares combination methods
 * `simulate_traits` now returns genotype matrix with causal epistatic variants named according to the trait they affect
+* Added progress bar and possibility to interrupt C++ routine using `RcppProgress`
 
 # mvMAPIT 2.0.1 release
 
