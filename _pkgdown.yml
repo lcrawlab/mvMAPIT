@@ -1,4 +1,9 @@
 url: https://lcrawlab.github.io/mvMAPIT/
+
+template:
+  params:
+    google_site_verification: 7EMmOVQ0-Feh--5i1ogdQqVYz7Azip5Je-UeBYXP6fA
+
 reference:
 - title: "Multivariate MAPIT Analysis"
   desc: >
