@@ -257,6 +257,10 @@ simulate_traits <- function(
         )
         additive <- bind_rows(additive, trait_additive)
         epistatic_idx <- c(pleiotropic_set, trait_specific_epistatic)
+        additive_idx <- c(pleiotropic_set, trait_specific_additive)
+        colnames(genotype_matrix)[additive_idx] <- paste0(colnames(genotype_matrix[, additive_idx]),
+                                               rep(sprintf(j, fmt = "_p%02dadd"),
+                                               length(additive_idx)))
         colnames(genotype_matrix)[epistatic_idx] <- paste0(colnames(genotype_matrix[, epistatic_idx]),
                                                rep(sprintf(j, fmt = "_p%02depi"),
                                                length(epistatic_idx)))
