@@ -1,8 +1,11 @@
 # mvMAPIT (development version)
 
+# mvMAPIT 2.0.2 release
+
 * Added Cauchy combination test `cauchy_combined` including vignette that compares combination methods
 * `simulate_traits` now returns genotype matrix with causal epistatic variants named according to the trait they affect
 * Added progress bar and possibility to interrupt C++ routine using `RcppProgress`
+* Fixed "incorrect number of dimensions" error in `simulate_data.R`
 
 # mvMAPIT 2.0.1 release
 

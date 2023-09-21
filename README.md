@@ -12,6 +12,8 @@ Find the full package documentation including examples and articles here: [Multi
 This R package is a generalization of the [MAPIT
 implementation](https://github.com/lorinanthony/MAPIT) by Crawford et
 al. (2017)[^1] for any number of traits as described by Stamp et al. (2023)[^2].
+The univariate MAPIT test for marginal epistasis is implemented as the special
+case of running multivariate MAPIT with a single trait.
 
 mvMAPIT is implemented as a set of R and C++ routines, which can be
 carried out within an R environment.
