@@ -1,12 +1,12 @@
 ---
-title: "Illustrating mvMAPIT with Simulated Data"
+title: "Illustrating multivariate MAPIT with Simulated Data"
 author: "Julian Stamp"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 description: >
-  Learn how to analyze data with mvMAPIT.
+  Learn how to test quantitative traits and genetics data for epistasis with multivariate MAPIT.
 vignette: >
-  %\VignetteIndexEntry{Illustrating mvMAPIT with Simulated Data}
+  %\VignetteIndexEntry{Illustrating multivariate MAPIT with Simulated Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -23,7 +23,7 @@ library(knitr)
 
 ### Please Cite Us
 
-If you use mvMAPIT in published research, please cite:
+If you use multivariate MAPIT in published research, please cite:
 
 > * Crawford L, Zeng P, Mukherjee S, & Zhou X (2017). Detecting epistasis
 >   with the marginal epistasis test in genetic mapping studies of quantitative
