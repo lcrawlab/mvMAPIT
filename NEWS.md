@@ -1,5 +1,11 @@
 # mvMAPIT (development version)
 
+
+# mvMAPIT 2.0.3 release
+
+* Fix LTO issues again. The R dev automation generates RcppExport.cpp files 
+  that cause LTO issues in this package on CRAN.
+
 # mvMAPIT 2.0.2 release
 
 * Added Cauchy combination test `cauchy_combined` including vignette that compares combination methods
