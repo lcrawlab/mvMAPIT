@@ -13,6 +13,7 @@ RUN R -e "install.packages(c( 'checkmate', \
                               'RcppAlgos', \
                               'RcppArmadillo', \
                               'RcppParallel', \
+                              'RcppProgress', \
                               'RcppSpdlog', \
                               'stats', \
                               'testthat', \
