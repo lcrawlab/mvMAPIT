@@ -1,5 +1,6 @@
 # mvMAPIT (development version)
 
+* Fix Bonferroni correction in the `mvMAPIT.Rmd` vignette. 
 
 # mvMAPIT 2.0.3 release
 

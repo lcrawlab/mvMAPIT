@@ -77,7 +77,7 @@ fisher <- fishers_combined(mvmapit_hybrid$pvalues)
 ```{r assign_data, include = FALSE}
 fisher <- mvmapit_data$fisher
 pairs <- mvmapit_data$exhaustive_search
-thresh <- 0.05 / (nrow(fisher) / 2)
+thresh <- 0.05 / nrow(fisher)
 ```
 
 
@@ -96,7 +96,7 @@ To control the type I error despite multiple testing, we recommend the conservat
 The significant SNPs returned by the `mvMAPIT` analysis are shown in the output below. There are in total 6 significant SNPs after multiple test correction. Of the significant SNPs, 4 are true positives.
 
 ```{r significant_snps}
-thresh <- 0.05 / (nrow(fisher) / 2)
+thresh <- 0.05 / nrow(fisher)
 significant_snps <-  fisher %>%
     filter(p < thresh) # Call only marginally significant SNPs
 
@@ -179,11 +179,11 @@ plot(tiles)
 ```
 
 The only significant interactions after multiple testing correction are the interaction
-between `snp00068` and `snp_00665` as well as `snp_00465` and `snp_00917`.
+between `snp00068` and `snp_00665` as well as `snp_00469` and `snp_00917`.
 
 ```{r significant_exhaustive}
 pairs %>%
-  filter(p_01 < 0.05/15 | p_02 < 0.05/15) %>%
+  filter(p_01 < 0.05/nrow(pairs) | p_02 < 0.05/nrow(pairs)) %>%
   kable(., linesep = "", digits = 14) %>%
   kable_material(c("striped"))
 ```
