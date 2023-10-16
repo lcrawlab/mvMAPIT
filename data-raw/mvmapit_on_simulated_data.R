@@ -22,7 +22,7 @@ mvmapit_hybrid <- mvmapit(
 fisher <- fishers_combined(mvmapit_hybrid$pvalues)
 
 # exhaustive search for p-values
-thresh <- 0.05 / nrow(X) # Set a significance threshold
+thresh <- 0.05 / nrow(t(X)) # Set a significance threshold
 
 significant_snps <-  fisher %>%
     filter(p < thresh) # Call only marginally significant SNPs
