@@ -112,7 +112,7 @@
       <h1 data-toc-skip>Illustrating multivariate MAPIT with Simulated Data</h1>
                         <h4 data-toc-skip class="author">Julian Stamp</h4>
             
-            <h4 data-toc-skip class="date">2023-10-05</h4>
+            <h4 data-toc-skip class="date">2023-10-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/lcrawlab/mvMAPIT/blob/HEAD/vignettes/mvMAPIT.Rmd" class="external-link"><code>vignettes/mvMAPIT.Rmd</code></a></small>
       <div class="hidden name"><code>mvMAPIT.Rmd</code></div>
@@ -171,7 +171,7 @@
 <p><img src="mvMAPIT_files/figure-html/manhattan_plots-1.png" width="672"></p>
 <p>To control the type I error despite multiple testing, we recommend the conservative Bonferroni correction. The significant SNPs returned by the <code>mvMAPIT</code> analysis are shown in the output below. There are in total 6 significant SNPs after multiple test correction. Of the significant SNPs, 4 are true positives.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">thresh</span> <span class="op">&lt;-</span> <span class="fl">0.05</span> <span class="op">/</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">fisher</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">thresh</span> <span class="op">&lt;-</span> <span class="fl">0.05</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">fisher</span><span class="op">)</span></span>
 <span><span class="va">significant_snps</span> <span class="op">&lt;-</span>  <span class="va">fisher</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">p</span> <span class="op">&lt;</span> <span class="va">thresh</span><span class="op">)</span> <span class="co"># Call only marginally significant SNPs</span></span>
 <span></span>
@@ -214,20 +214,6 @@ fisher
 </td>
 <td style="text-align:left;">
 TRUE
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-snp_00343
-</td>
-<td style="text-align:left;">
-fisher
-</td>
-<td style="text-align:left;">
-5.27e-05
-</td>
-<td style="text-align:left;">
-FALSE
 </td>
 </tr>
 <tr>
@@ -400,10 +386,10 @@ TRUE
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tiles</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mvMAPIT_files/figure-html/trait1_plots_exhaustive-1.png" width="672"></p>
-<p>The only significant interactions after multiple testing correction are the interaction between <code>snp00068</code> and <code>snp_00665</code> as well as <code>snp_00465</code> and <code>snp_00917</code>.</p>
+<p>The only significant interactions after multiple testing correction are the interaction between <code>snp00068</code> and <code>snp_00665</code> as well as <code>snp_00469</code> and <code>snp_00917</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pairs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">p_01</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">/</span><span class="fl">15</span> <span class="op">|</span> <span class="va">p_02</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">/</span><span class="fl">15</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">p_01</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">pairs</span><span class="op">)</span> <span class="op">|</span> <span class="va">p_02</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">pairs</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">.</span>, linesep <span class="op">=</span> <span class="st">""</span>, digits <span class="op">=</span> <span class="fl">14</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_classic.html" class="external-link">kable_material</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"striped"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table  lightable-material lightable-striped" style='font-family: "Source Sans Pro", helvetica, sans-serif; margin-left: auto; margin-right: auto;'>
