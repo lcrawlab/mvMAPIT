@@ -169,6 +169,7 @@ applicable for scalability.
 - For tips on how to avoid errors dealing with `-lgfortran` or `-lquadmath`, please visit
 <https://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/>.
 
+
 ------------------------------------------------------------------------
 
 ## Questions and Feedback
