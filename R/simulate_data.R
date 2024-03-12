@@ -47,9 +47,15 @@
 #' @import parallel
 #' @importFrom utils head
 #' @importFrom stats var cor sd complete.cases
+# simulate_traits <- function(
+#     genotype_matrix, n_causal = 1000, n_trait_specific = 10, n_pleiotropic = 10,
+#     H2 = 0.6, d = 2, rho = 0.8, marginal_correlation = 0.3, epistatic_correlation = 0.3,
+#     group_ratio_trait = 1, group_ratio_pleiotropic = 1, maf_threshold = 0.01, seed = 67132,
+#     logLevel = "INFO", logFile = NULL
+# ) {
 simulate_traits <- function(
-    genotype_matrix, n_causal = 1000, n_trait_specific = 10, n_pleiotropic = 10,
-    H2 = 0.6, d = 2, rho = 0.8, marginal_correlation = 0.3, epistatic_correlation = 0.3,
+    genotype_matrix, n_causal = 1000, n_trait_specific = 0, n_pleiotropic = 0,
+    H2 = 0.6, d = 1, rho = 1, marginal_correlation = 0, epistatic_correlation = 0,
     group_ratio_trait = 1, group_ratio_pleiotropic = 1, maf_threshold = 0.01, seed = 67132,
     logLevel = "INFO", logFile = NULL
 ) {

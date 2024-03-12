@@ -48,7 +48,7 @@ Rcpp::List MAPITCpp(
     Rcpp::Nullable<Rcpp::NumericMatrix> Z = R_NilValue,
     Rcpp::Nullable<Rcpp::NumericMatrix> C = R_NilValue,
     Rcpp::Nullable<Rcpp::NumericVector> variantIndices = R_NilValue,
-    std::string testMethod = "normal", int cores = 1,
+    std::string testMethod = "normal", int cores = 1, bool SKIPPROJECTIONS = false,
     Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix = R_NilValue) {
   int i;
   const int n = X.n_cols;
@@ -161,26 +161,34 @@ Rcpp::List MAPITCpp(
       logger->info("Dimensions of polygenic background: {} x {}.", K.n_cols,
                    K.n_rows);
 #endif
-
+    
       // Transform K and G using projection M
       start = steady_clock::now();
-      arma::mat b = arma::zeros(n, z + 2);
+      arma::mat Yc = Y;
+      arma::mat b = arma::zeros(n, z + 2); 
+    
       b.col(0) = arma::ones<arma::vec>(n);
       if (z > 0) {
-        b.cols(1, z) = Zz.t();
+          b.cols(1, z) = Zz.t();
       }
       b.col(z + 1) = arma::trans(x_k);
-
       M = compute_projection_matrix(n, b);
-      K = project_matrix(K, b);
-      G = project_matrix(G, b);
+    
+      if(SKIPPROJECTIONS == false) {
+      
+        K = project_matrix(K, b);
+        G = project_matrix(G, b);
 
-      if (C.isNotNull()) {
-        Cc = project_matrix(Cc, b);
+        if (C.isNotNull()) {
+            Cc = project_matrix(Cc, b);
+        } 
+        b.reset();
+
+        Yc = Y * M; //hereP - Yc called a lot in other lines
+      } else {
+          Yc = Y;
       }
-      b.reset();
-
-      const arma::mat Yc = Y * M;
+      
       end = steady_clock::now();
       execution_t(i, 1) = duration_cast<milliseconds>(end - start).count();
 

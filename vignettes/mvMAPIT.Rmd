@@ -134,7 +134,7 @@ The search itself is a simple regression on the interaction terms between all si
 # exhaustive search for p-values
 pairs <- NULL
 if (nrow(significant_snps) > 1) {
-  pairnames <- comboGeneral(significant_snps$id, 2)
+  pairnames <- comdevtoboGeneral(significant_snps$id, 2)
   # Generate unique pairs of SNP names;
   # for length(names) = n, the result is a (n * (n-1)) x 2 matrix with one row corresponding to a pair
   for (k in seq_len(nrow(pairnames))) {

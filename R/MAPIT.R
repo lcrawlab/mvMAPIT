@@ -44,6 +44,7 @@
 #' @param variantIndex is a vector containing indices of variants to be included in the computation.
 #' @param logLevel is a string parameter defining the log level for the logging package.
 #' @param logFile is a string parameter defining the name of the log file for the logging output. Default is stdout.
+#' @param skipProjection is a boolean parameter that toggles projections
 #'
 #' @return A list of P values and PVEs
 #' @examples
@@ -71,7 +72,7 @@
 #' @import Rcpp
 mvmapit <- function(
     X, Y, Z = NULL, C = NULL, threshold = 0.05, accuracy = 1e-08, test = c("normal", "davies", "hybrid"),
-    cores = 1, variantIndex = NULL, logLevel = "WARN", logFile = NULL
+    cores = 1, variantIndex = NULL, logLevel = "WARN", logFile = NULL, skipProjection = FALSE
 ) {
 
     test <- match.arg(test)
@@ -121,7 +122,7 @@ mvmapit <- function(
     variance_components_ind <- get_variance_components_ind(Y)
     if (test == "hybrid") {
         log$info("Running normal C++ routine.")
-        vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, NULL)  # Normal Z-Test
+        vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, skipProjection = skipProjection, NULL)  # Normal Z-Test
         pvals <- vc.mod$pvalues
         # row.names(pvals) <- rownames(X)
         pves <- vc.mod$PVE
@@ -145,19 +146,19 @@ mvmapit <- function(
         )
 
         log$info("Running davies C++ routine on selected SNPs.")
-        vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL)
+        vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, skipProjection = skipProjection, NULL)
         davies.pvals <- mvmapit_pvalues(vc.mod, X, accuracy)
         pvals[, variance_components_ind][ind_matrix] <- davies.pvals[, variance_components_ind][ind_matrix]
     } else if (test == "normal") {
         log$info("Running normal C++ routine.")
-        vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, NULL)
+        vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, skipProjection = skipProjection, NULL)
         pvals <- vc.mod$pvalues
         pves <- vc.mod$PVE
         timings <- vc.mod$timings
     } else {
         ind <- ifelse(variantIndex, variantIndex, 1:nrow(X))
         log$info("Running davies C++ routine.")
-        vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, NULL)
+        vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, skipProjection = skipProjection, NULL)
         pvals <- mvmapit_pvalues(vc.mod, X, accuracy)
         pvals <- set_covariance_components(variance_components_ind, pvals)
         pves <- vc.mod$PVE
@@ -188,7 +189,7 @@ mvmapit <- function(
         tidyr::pivot_longer(cols = !id,
                      names_to = "trait", values_to = "PVE")
     duration_ms <- timings_mean
-    process <- c("cov", "projections", "vectorize", "q", "S", "vc")
+    process <- c("cov", "projections", "vectorize", "q", "S", "vc")  #hereP
     timings_mean <- data.frame(process, duration_ms)
     return(list(pvalues = pvals, pves = pves, duration = timings_mean))
 }
