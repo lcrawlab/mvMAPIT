@@ -11,21 +11,22 @@ mvmapit_simulation <- function(data_type = c("null", "alternative")) {
     
     df <- NULL
     df_statistics <- data.frame(trial = c(), correlation_p = c()) #add heretibility and hypo 
+    genotype_data <- readRDS("/oscar/data/lcrawfo1/sli347/biobank_1_10000.rds")
     
     if (data_type == "null"){
         n_pleiotropic = 0
         n_trait_specific = 0
-        print("null")
     } else {
         n_pleiotropic = 10
         n_trait_specific = 10
-        print("alternative")
     }
     
     for (x in 1:5) {
         
+        sample_ids <- sample(1:10000, 5000, replace = FALSE) 
+
         simulated_data <- simulate_traits(
-            genotype_data,
+            genotype_data[sample_ids, 1:5000],
             n_causal = 1000,
             n_trait_specific,
             n_pleiotropic, 
@@ -44,16 +45,18 @@ mvmapit_simulation <- function(data_type = c("null", "alternative")) {
         
         #run on smaller data set -- to test
         #might want to randomize columns
+       
+
         mvmapit <- mvmapit(
-            t(simulated_data$genotype[1:100, 1:100]),
-            t(simulated_data$trait[1:100, ]),
+            t(simulated_data$genotype),
+            t(simulated_data$trait),
             test = "normal", #could add into method inputs the type of test we want to run - matcharg
             skipProjection = FALSE
         )
         
         mvmapit_projection <- mvmapit(
-            t(simulated_data$genotype[1:100, 1:100]),
-            t(simulated_data$trait[1:100, ]),
+            t(simulated_data$genotype),
+            t(simulated_data$trait),
             test = "normal", 
             skipProjection = TRUE
         )
@@ -74,7 +77,6 @@ mvmapit_simulation <- function(data_type = c("null", "alternative")) {
     di <- "exp"
     de <- FALSE # enabling the detrend option
     
-    # TODO: change causal snp facet labels
     gg <- df %>% ggplot(mapping = aes(
         sample = -log10(p)
     )) +
@@ -89,22 +91,21 @@ mvmapit_simulation <- function(data_type = c("null", "alternative")) {
         labs(x = bquote("Theoretical Quantiles " -log[10](p)),
              y = bquote("Sample Quantiles " -log[10](p))) + 
         facet_wrap(~projections) # check this one
-    show(gg)
+    ggsave("/oscar/data/lcrawfo1/sli347/repeated_qqplot.png", plot = gg, width = 6, height = 4, unit = "in", dpi = 300)
+
     
     #evaluate distribution of p-value correlations
     colnames(df_statistics) <- c('trial', 'correlation_p')
     
-    box<- ggplot(df_statistics, aes(y = correlation_p)) +
+    box <- ggplot(df_statistics, aes(y = correlation_p)) +
         geom_boxplot() + scale_x_discrete() +
         labs(title = "Projection correlation distribution",
              y = "correlation coefficent")
-    show(box)
-    return(box)
+    ggsave("/oscar/data/lcrawfo1/sli347/repeated_boxplot.png", plot = box, width = 6, height = 4, unit = "in", dpi = 300)
+    
 }   
 
-box <- mvmapit_simulation("null")
-show(box)
-
+mvmapit_simulation("normal")
 
 
 

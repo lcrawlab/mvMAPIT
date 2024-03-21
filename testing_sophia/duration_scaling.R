@@ -1,4 +1,8 @@
+library(tidyr)
+library(tidyverse)
 library(dplyr)
+library(mvMAPIT)
+library(ggplot2)
 
 set.seed(1234)
 
@@ -43,8 +47,8 @@ for(i in 1:nrow(pairs)) {
         skipProjection = TRUE
     )
     
-    df <- rbind(df, mvmapit_normal$duration %>% mutate(n_samples = n_samples, n_snps = n_snps, projections = "False")) 
-    df <- rbind(df, mvmapit_normal_projection$duration %>% mutate(n_samples = n_samples, n_snps = n_snps, projections = "True")) 
+    df <- rbind(df, mvmapit_normal$duration %>% mutate(n_samples = n_samples, n_snp = n_snp, projection = "False")) 
+    df <- rbind(df, mvmapit_normal_projection$duration %>% mutate(n_samples = n_samples, n_snp = n_snp, projection = "True")) 
     
     #df <- rbind(df, c(mvmapit_normal$duration$duration_ms, n_samples = n_samples,
                       #n_snps = n_snps, projections = "False"))
@@ -59,5 +63,7 @@ for(i in 1:nrow(pairs)) {
 
 #df$total_duration <- rowSums(df[ , c(1, 2, 3, 4, 5, 6)], na.rm=TRUE)
 
-result <- df %>% group_by(n_samples, n_snps, projections) %>% summarise(total = sum(duration_ms))
-view(result)
+result <- df %>% group_by(n_sample, n_snp, projection) %>% summarise(total = sum(duration_ms))
+
+saveRDS(result, "/oscar/data/lcrawfo1/sli347/duration_scaling.RDS")
+
