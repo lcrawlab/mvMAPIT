@@ -1,59 +1,110 @@
-# Setup a trial specification using a binary, binomially
-# distributed, undesirable outcome
-binom_trial <- setup_trial_binom(
-    arms = c("Arm A", "Arm B", "Arm C"), 
-    true_ys = c(0.25, 0.20, 0.30),
-    # Minimum allocation of 15% in all arms
-    min_probs = rep(0.15, 3),
-    data_looks = seq(from = 300, to = 2000, by = 100),
-    # Stop for equivalence if > 90% probability of
-    # absolute differences < 5 percentage points
-    equivalence_prob = 0.9,
-    equivalence_diff = 0.05,
-    soften_power = 0.5 # Limit extreme allocation ratios
-)
+library(tidyr)
+library(tidyverse)
+library(dplyr)
+library(mvMAPIT)
+library(ggplot2)
+library(qqplotr)
 
+# for alternative data -- need to toggle to find a way to run for null data or could write separate script
 
-# Run 10 simulations with a specified random base seed
-res <- run_trials(binom_trial, n_rep = 10, base_seed = 12345) #how to implement simulation and ohter code?? 
-# in the mix?
-
-# See ?extract_results, ?check_performance, ?summary and ?print for details
-# on extracting resutls, summarising and printing
-
-p-values <- list()
-
-for (x in 1:100) {
-    file_name <- alt_data + str(x)
-    alt_data <- simulate_traits(
-        genotype_data,
-        n_causal = 1000,
-        n_trait_specific = runif(n=1, min=1, max=20), #random 
-        n_pleiotropic = 0, 
-        H2 = 0.6,
-        d = 1,
-        rho = runif(1), #random
-        marginal_correlation = 0.2, 
-        epistatic_correlation = 0.2,
-        group_ratio_trait = 1,
-        group_ratio_pleiotropic = 1,
-        maf_threshold = 0.01,
-        seed = 67132,
-        logLevel = "INFO",
-        logFile = NULL
-    )
+mvmapit_simulation <- function(data_type = c("null", "alternative")) {
     
-    # Save an object to a file
-    saveRDS(alt_data, file = file_name + ".rds")
-    # Restore the object
-    my_data <- readRDS(file = "~/mvMAPIT/" + file_name + ".rds")
+    df <- NULL
+    df_statistics <- data.frame(trial = c(), correlation_p = c()) #add heretibility and hypo 
     
-    mvmapit_normal_alt <- mvmapit(
-        t(null_data$genotype),
-        t(null_data$trait),
-        test = "normal"
-    )
-    fisher <- fishers_combined(mvmapit_normal_alt$pvalues) #do we need this part
+    if (data_type == "null"){
+        n_pleiotropic = 0
+        n_trait_specific = 0
+        print("null")
+    } else {
+        n_pleiotropic = 10
+        n_trait_specific = 10
+        print("alternative")
+    }
     
+    for (x in 1:5) {
+        
+        simulated_data <- simulate_traits(
+            genotype_data,
+            n_causal = 1000,
+            n_trait_specific,
+            n_pleiotropic, 
+            H2 = 0.6, #error = 1-H^2 -- could vary 
+            d = 1,
+            rho = 0.2, #decrease number means easier to find snp
+            marginal_correlation = 0.2, 
+            epistatic_correlation = 0.2,
+            group_ratio_trait = 1,
+            group_ratio_pleiotropic = 1,
+            maf_threshold = 0.01,
+            seed = sample(c(1:1e6), 1), #random generate
+            logLevel = "INFO",
+            logFile = NULL
+        )
+        
+        #run on smaller data set -- to test
+        #might want to randomize columns
+        mvmapit <- mvmapit(
+            t(simulated_data$genotype[1:100, 1:100]),
+            t(simulated_data$trait[1:100, ]),
+            test = "normal", #could add into method inputs the type of test we want to run - matcharg
+            skipProjection = FALSE
+        )
+        
+        mvmapit_projection <- mvmapit(
+            t(simulated_data$genotype[1:100, 1:100]),
+            t(simulated_data$trait[1:100, ]),
+            test = "normal", 
+            skipProjection = TRUE
+        )
+        
+        #store data in tidyr where p-value lists are diff for each trial
+        df <- rbind(df, mvmapit$pvalues %>% mutate(trial = x, projections = "False")) 
+        df <- rbind(df, mvmapit_projection$pvalues %>% mutate(trial = x, projections = "True")) 
+        
+        #print(cor(mvmapit$pvalues$p, mvmapit_projection$pvalues$p))
+        df_statistics <- rbind(df_statistics, c(trial = x, correlation_p = cor(mvmapit$pvalues$p, mvmapit_projection$pvalues$p)))
+    }
+  
+    #compare p-values af entire 
     
-}
+
+    #expectation under null -- pvalue uniform distribution (compare between proj and not)
+    dp <- list(rate=log(10))
+    di <- "exp"
+    de <- FALSE # enabling the detrend option
+    
+    # TODO: change causal snp facet labels
+    gg <- df %>% ggplot(mapping = aes(
+        sample = -log10(p)
+    )) +
+        theme_bw() +
+        stat_qq_band(distribution = di,
+                     dparams = dp,
+                     detrend = de,
+                     alpha = 0.5) +
+        stat_qq_line(distribution = di, dparams = dp, detrend = de) +
+        stat_qq_point(distribution = di, dparams = dp, detrend = de) +
+        theme(legend.position = "none") +
+        labs(x = bquote("Theoretical Quantiles " -log[10](p)),
+             y = bquote("Sample Quantiles " -log[10](p))) + 
+        facet_wrap(~projections) # check this one
+    show(gg)
+    
+    #evaluate distribution of p-value correlations
+    colnames(df_statistics) <- c('trial', 'correlation_p')
+    
+    box<- ggplot(df_statistics, aes(y = correlation_p)) +
+        geom_boxplot() + scale_x_discrete() +
+        labs(title = "Projection correlation distribution",
+             y = "correlation coefficent")
+    show(box)
+    return(box)
+}   
+
+box <- mvmapit_simulation("null")
+show(box)
+
+
+
+

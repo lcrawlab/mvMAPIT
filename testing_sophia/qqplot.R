@@ -25,3 +25,5 @@ gg <- df %>% ggplot(mapping = aes(
 
 # # TODO: do we need to produce a different file format?
 # ggsave(paste0(args$file_path, ".png"), plot = gg, width = 6, height = 4, dpi = 300)
+
+#null just combine all data --> a lot of data points

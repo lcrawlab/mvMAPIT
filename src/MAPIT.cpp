@@ -174,7 +174,7 @@ Rcpp::List MAPITCpp(
       b.col(z + 1) = arma::trans(x_k);
       M = compute_projection_matrix(n, b);
     
-      if(SKIPPROJECTIONS == false) {
+      if(SKIPPROJECTIONS == false) { //need to fix name of skip projections variable 
       
         K = project_matrix(K, b);
         G = project_matrix(G, b);
