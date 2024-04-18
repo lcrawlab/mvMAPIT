@@ -122,7 +122,7 @@ mvmapit <- function(
     variance_components_ind <- get_variance_components_ind(Y)
     if (test == "hybrid") {
         log$info("Running normal C++ routine.")
-        vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, skipProjection = skipProjection, NULL)  # Normal Z-Test
+        vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, SKIPPROJECTIONS = skipProjection, NULL)  # Normal Z-Test
         pvals <- vc.mod$pvalues
         # row.names(pvals) <- rownames(X)
         pves <- vc.mod$PVE
@@ -146,19 +146,19 @@ mvmapit <- function(
         )
 
         log$info("Running davies C++ routine on selected SNPs.")
-        vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, skipProjection = skipProjection, NULL)
+        vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, SKIPPROJECTIONS = skipProjection, NULL)
         davies.pvals <- mvmapit_pvalues(vc.mod, X, accuracy)
         pvals[, variance_components_ind][ind_matrix] <- davies.pvals[, variance_components_ind][ind_matrix]
     } else if (test == "normal") {
         log$info("Running normal C++ routine.")
-        vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, skipProjection = skipProjection, NULL)
+        vc.mod <- MAPITCpp(X, Y, Z, C, variantIndex, "normal", cores = cores, SKIPPROJECTIONS = skipProjection, NULL)
         pvals <- vc.mod$pvalues
         pves <- vc.mod$PVE
         timings <- vc.mod$timings
     } else {
         ind <- ifelse(variantIndex, variantIndex, 1:nrow(X))
         log$info("Running davies C++ routine.")
-        vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, skipProjection = skipProjection, NULL)
+        vc.mod <- MAPITCpp(X, Y, Z, C, ind, "davies", cores = cores, SKIPPROJECTIONS = skipProjection, NULL)
         pvals <- mvmapit_pvalues(vc.mod, X, accuracy)
         pvals <- set_covariance_components(variance_components_ind, pvals)
         pves <- vc.mod$PVE

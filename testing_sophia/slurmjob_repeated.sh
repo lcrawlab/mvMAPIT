@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --time=0-01:00 # Runtime in D-HH:MM
+#SBATCH --time=2-00:00 # Runtime in D-HH:MM
 #SBATCH --job-name="simulating trials"
 #SBATCH --mem-per-cpu=10G
 #SBATCH --cpus-per-task=2

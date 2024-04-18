@@ -26,6 +26,8 @@ test_that(
             t(Y),
             test = "normal", cores = 1, logLevel = "DEBUG", skipProjection = TRUE
         )
+        print(mapit$pvalues$p)
+        print( mapit_no_projections$pvalues$p)
         correlation <- cor(mapit$pvalues$p, mapit_no_projections$pvalues$p)
         print(correlation)
         

@@ -172,10 +172,9 @@ Rcpp::List MAPITCpp(
           b.cols(1, z) = Zz.t();
       }
       b.col(z + 1) = arma::trans(x_k);
-      M = compute_projection_matrix(n, b);
     
       if(SKIPPROJECTIONS == false) { //need to fix name of skip projections variable 
-      
+        M = compute_projection_matrix(n, b);
         K = project_matrix(K, b);
         G = project_matrix(G, b);
 
@@ -187,6 +186,7 @@ Rcpp::List MAPITCpp(
         Yc = Y * M; //hereP - Yc called a lot in other lines
       } else {
           Yc = Y;
+          M = arma::eye(n, n); //assume identity -- indep
       }
       
       end = steady_clock::now();

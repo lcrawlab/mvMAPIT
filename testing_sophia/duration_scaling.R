@@ -63,7 +63,7 @@ for(i in 1:nrow(pairs)) {
 
 #df$total_duration <- rowSums(df[ , c(1, 2, 3, 4, 5, 6)], na.rm=TRUE)
 
-result <- df %>% group_by(n_sample, n_snp, projection) %>% summarise(total = sum(duration_ms))
+result <- df %>% group_by(n_samples, n_snp, projection) %>% summarise(total = sum(duration_ms))
 
-saveRDS(result, "/oscar/data/lcrawfo1/sli347/duration_scaling.RDS")
-
+saveRDS(df, "/oscar/data/lcrawfo1/sli347/duration_scaling_df2.RDS")
+saveRDS(result, "/oscar/data/lcrawfo1/sli347/duration_scaling2.RDS")

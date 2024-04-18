@@ -12,8 +12,8 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // MAPITCpp
-Rcpp::List MAPITCpp(const arma::mat X, const arma::mat Y, Rcpp::Nullable<Rcpp::NumericMatrix> Z, Rcpp::Nullable<Rcpp::NumericMatrix> C, Rcpp::Nullable<Rcpp::NumericVector> variantIndices, std::string testMethod, int cores, bool skipProjection, Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix);
-RcppExport SEXP _mvMAPIT_MAPITCpp(SEXP XSEXP, SEXP YSEXP, SEXP ZSEXP, SEXP CSEXP, SEXP variantIndicesSEXP, SEXP testMethodSEXP, SEXP coresSEXP, SEXP skipProjectionSEXP, SEXP GeneticSimilarityMatrixSEXP) {
+Rcpp::List MAPITCpp(const arma::mat X, const arma::mat Y, Rcpp::Nullable<Rcpp::NumericMatrix> Z, Rcpp::Nullable<Rcpp::NumericMatrix> C, Rcpp::Nullable<Rcpp::NumericVector> variantIndices, std::string testMethod, int cores, bool SKIPPROJECTIONS, Rcpp::Nullable<Rcpp::NumericMatrix> GeneticSimilarityMatrix);
+RcppExport SEXP _mvMAPIT_MAPITCpp(SEXP XSEXP, SEXP YSEXP, SEXP ZSEXP, SEXP CSEXP, SEXP variantIndicesSEXP, SEXP testMethodSEXP, SEXP coresSEXP, SEXP SKIPPROJECTIONSSEXP, SEXP GeneticSimilarityMatrixSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -24,9 +24,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type variantIndices(variantIndicesSEXP);
     Rcpp::traits::input_parameter< std::string >::type testMethod(testMethodSEXP);
     Rcpp::traits::input_parameter< int >::type cores(coresSEXP);
-    Rcpp::traits::input_parameter< bool >::type skipProjection(skipProjectionSEXP);
+    Rcpp::traits::input_parameter< bool >::type SKIPPROJECTIONS(SKIPPROJECTIONSSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericMatrix> >::type GeneticSimilarityMatrix(GeneticSimilarityMatrixSEXP);
-    rcpp_result_gen = Rcpp::wrap(MAPITCpp(X, Y, Z, C, variantIndices, testMethod, cores, skipProjection, GeneticSimilarityMatrix));
+    rcpp_result_gen = Rcpp::wrap(MAPITCpp(X, Y, Z, C, variantIndices, testMethod, cores, SKIPPROJECTIONS, GeneticSimilarityMatrix));
     return rcpp_result_gen;
 END_RCPP
 }
