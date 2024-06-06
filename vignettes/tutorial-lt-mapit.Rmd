@@ -1,0 +1,105 @@
+---
+title: "Liability threshold MAPIT"
+output: rmarkdown::html_vignette
+description: >
+  Learn how to convert binary traits to liabilities.
+vignette: >
+  %\VignetteIndexEntry{Liability threshold MAPIT}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(mvMAPIT)
+```
+In this tutorial we will illustrate how to use the Liability Threshold MArginal ePIstasis Test (LT-MAPIT) by [Crawford and Zhou (2018)](https://doi.org/10.1101/374983)$^1$. For this purpose we will first simulate synthetic data
+and then analyze it.
+
+The data are single nucleotide polymorphisms (SNPs) with simulated genotypes.
+For the simulation we choose the following set of parameters:
+
+  1. **population_size** - # of samples in the population
+  2. **n_snps** - number of SNPs or variants
+  3. **PVE** - phenotypic variance explained/broad-sense heritability ($H^2$)
+  4. **rho** - measures the portion of $H^2$ that is contributed by the marignal (additive) effects
+  5. **disease_prevalence** - assumed disease prevelance in the population
+  6. **sample_size** - # of samples to analyze
+
+```{r parameters, eval = F}
+population_size <- 1e4
+n_snps <- 2e3
+pve <- 0.6
+rho <- 0.5
+disease_prevalence <- 0.3
+sample_size <- 500
+```
+
+## Simulate random genotypes
+
+Simulate the genotypes such that all variants have minor allele frequency (MAF) > 0.05.
+**NOTE:** As in the paper, we center and scale each genotypic vector such that every SNP has mean 0 and standard deviation 1.
+
+```{r random_genotypes, eval = F}
+maf <- 0.05 + 0.45 * runif(n_snps)
+random_genotypes   <- (runif(population_size * n_snps) < maf) + (runif(population_size *
+                                                                         n_snps) < maf)
+random_genotypes   <- matrix(as.double(random_genotypes), population_size, n_snps, byrow = TRUE)
+```
+
+## Simulate liabilities
+
+We can use the mvMAPIT function `simulate_traits` to simulate the liabilities.
+See the tutorial on simulations for more details on that.
+
+```{r simulate_traits, eval = F}
+n_causal <- 100
+n_epistatic <- 10
+simulated_data <- simulate_traits(
+    random_genotypes,
+    n_causal = n_causal,
+    n_trait_specific = n_epistatic,
+    n_pleiotropic = 0,
+    d = 1,
+    H2 = pve,
+    rho = rho
+)
+```
+Now that we have the liabilities, we can assign case-control labels according to the disease prevelance parameter. We will treat this like the LT-MAPIT paper and take an equal number of cases and controls.
+
+```{r case_control, eval = F}
+liabilities <- simulated_data$trait
+threshold <- qnorm(1 - disease_prevalence, mean = 0, sd = 1)
+case_control_trait <- rep(0, population_size)
+case_control_trait[liabilities > threshold] <- 1
+
+# Subsample a particular number of cases and controls
+cases <- sample(which(liabilities > threshold), sample_size / 2, replace = FALSE)
+controls <- sample(which(liabilities <= threshold), sample_size / 2, replace = FALSE)
+y <- as.integer(case_control_trait[c(cases, controls)])
+X <- simulated_data$genotype[c(cases, controls), ]
+```
+
+## Run MAPIT with Case-Control trait
+
+To run MAPIT with case-control traits, we need to convert the traits back to liabilities.
+The function `binary_to_liability` provides this conversion.
+
+```{r mapit, eval = F}
+y_liabilities <- binary_to_liability(y, disease_prevalence)
+
+lt_mapit <- mvmapit(
+        t(X),
+        t(y_liabilities),
+        test = "hybrid"
+)
+```
+
+# References
+1: Lorin Crawford, Xiang Zhou (2018) Genome-wide Marginal Epistatic Association Mapping in Case-Control Studies bioRxiv 374983; <https://doi.org/10.1101/374983>

@@ -122,9 +122,11 @@ install.packages(c( 'checkmate',
                     'RcppAlgos', 
                     'RcppArmadillo', 
                     'RcppParallel', 
+                    'RcppProgress', 
                     'RcppSpdlog', 
                     'testthat', 
-                    'tidyr'), 
+                    'tidyr', 
+                    'truncnorm'), 
                     dependencies = TRUE);
 ```
 
