@@ -1,8 +1,9 @@
-#' Convert binary traits to liabilities
+#' Convert binary traits to liabilities for low prevalence
 #'
-#' This function implements the conversion of binary traits to liabilties as
+#' @description
+#' This function implements an approximate conversion of binary traits to liabilties as
 #' proposed in the LT-MAPIT model (Crawford and Zhou 2018,
-#' https://doi.org/10.1101/374983).
+#' https://doi.org/10.1101/374983). Note that this is only good for low prevalence. 
 #' To run LT-MAPIT (MAPIT on case-control traits), convert the binary traits to
 #' liabilities using this function and pass the liabilities to mvmapit as trait.
 #'

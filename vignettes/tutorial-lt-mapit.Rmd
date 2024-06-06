@@ -44,7 +44,6 @@ sample_size <- 500
 ## Simulate random genotypes
 
 Simulate the genotypes such that all variants have minor allele frequency (MAF) > 0.05.
-**NOTE:** As in the paper, we center and scale each genotypic vector such that every SNP has mean 0 and standard deviation 1.
 
 ```{r random_genotypes, eval = F}
 maf <- 0.05 + 0.45 * runif(n_snps)
@@ -90,6 +89,7 @@ X <- simulated_data$genotype[c(cases, controls), ]
 
 To run MAPIT with case-control traits, we need to convert the traits back to liabilities.
 The function `binary_to_liability` provides this conversion.
+**NOTE:** The `binary_to_liability` function is an approximation that is only suited for low prevalence in the disease trait.
 
 ```{r mapit, eval = F}
 y_liabilities <- binary_to_liability(y, disease_prevalence)
