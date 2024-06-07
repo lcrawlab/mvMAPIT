@@ -10,6 +10,11 @@ reference:
     Functions for the marginal epistasis analysis.
   contents: 
   - mvmapit
+- title: "LT-MAPIT Analysis"
+  desc: >
+    Functions for the marginal epistasis analysis of case-control traits.
+  contents: 
+  - binary_to_liability
 - title: "Combining P-values"
   desc: >
     Functions for combining the variance component p-values.

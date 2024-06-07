@@ -47,6 +47,7 @@ Imports:
     Rcpp,
     stats,
     tidyr,
+    truncnorm,
     utils
 Suggests:
     GGally,
@@ -70,4 +71,4 @@ VignetteBuilder:
 Encoding: UTF-8
 LazyData: true
 LazyDataCompression: xz
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1

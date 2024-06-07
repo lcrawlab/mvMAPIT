@@ -1,6 +1,7 @@
 # mvMAPIT (development version)
 
 * Fix Bonferroni correction in the `mvMAPIT.Rmd` vignette. 
+* New function `binary_to_liability` for LT-MAPIT support and corresponding vignette
 
 # mvMAPIT 2.0.3 release
 
