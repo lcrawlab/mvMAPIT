@@ -1,5 +1,5 @@
 pandoc: 2.9.2.1
-pkgdown: 2.0.7
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   mvMAPIT: mvMAPIT.html
@@ -7,8 +7,9 @@ articles:
   study-phillips-bnabs: study-phillips-bnabs.html
   study-wtccc-mice: study-wtccc-mice.html
   tutorial-docker-mvmapit: tutorial-docker-mvmapit.html
+  tutorial-lt-mapit: tutorial-lt-mapit.html
   tutorial-simulations: tutorial-simulations.html
-last_built: 2023-10-16T16:39Z
+last_built: 2024-06-07T08:30Z
 urls:
   reference: https://lcrawlab.github.io/mvMAPIT/reference
   article: https://lcrawlab.github.io/mvMAPIT/articles
