@@ -4,7 +4,7 @@
 [![R CMD check](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml)
 [![Docker Image CI](https://github.com/lcrawlab/mvMAPIT/actions/workflows/docker-image.yml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/docker-image.yml)
 [![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/mvMAPIT)](https://cranlogs.r-pkg.org/badges/grand-total/mvMAPIT)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/mvMAPIT)](https://cran.r-project.org/package=mvMAPIT)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/mvMAPIT)](https://cran.r-project.org/package=mvMAPIT)
 
 Find the full package documentation including examples and articles here: [Multivariate MAPIT Documentation](https://lcrawlab.github.io/mvMAPIT/).
 
