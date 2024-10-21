@@ -6,12 +6,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Synergistic epistasis in binding affinity landscapes • mvMAPIT</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -28,7 +22,7 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -57,7 +51,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -95,7 +89,7 @@
 <li>
   <a href="https://github.com/lcrawlab/mvMAPIT/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -106,7 +100,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><script src="study-phillips-bnabs_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
@@ -114,7 +108,7 @@
       <h1 data-toc-skip>Synergistic epistasis in binding affinity landscapes</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/lcrawlab/mvMAPIT/blob/HEAD/vignettes/study-phillips-bnabs.Rmd" class="external-link"><code>vignettes/study-phillips-bnabs.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/lcrawlab/mvMAPIT/blob/main/vignettes/study-phillips-bnabs.Rmd" class="external-link"><code>vignettes/study-phillips-bnabs.Rmd</code></a></small>
       <div class="hidden name"><code>study-phillips-bnabs.Rmd</code></div>
 
     </div>
@@ -125,11 +119,11 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lcrawlab/mvMAPIT" class="external-link">mvMAPIT</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
-<p>This study uses the data of the binding affinites published by <a href="https://doi.org/10.7554/eLife.71393" class="external-link">Phillips et al. (2021)</a><span class="math inline">\(^1\)</span>.</p>
+<p>This study uses the data of the binding affinites published by <a href="https://doi.org/10.7554/eLife.71393" class="external-link">Phillips et al. (2021)</a><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>1</mn></msup><annotation encoding="application/x-tex">^1</annotation></semantics></math>.</p>
 <div class="section level2">
 <h2 id="the-data">The Data<a class="anchor" aria-label="anchor" href="#the-data"></a>
 </h2>
-<p>The data is comprised of a nearly combinatorially complete library for two broadly neutralizing anti-influenza antibodies (bnAbs), CR6261 and CR9114. This dataset includes almost all combinations of one-off mutations that distinguish between germline and somatic sequences which total to 11 heavy-chain mutations for CR6261 and 16 heavy-chain mutations for CR9114. Theoretically, a combinatorially complete dataset for 11 and 16 mutations will have 2,048 and 65,536 samples, respectively. In this particular study, we have have access to <span class="math inline">\(N =\)</span> 1,812 complete observations for CR6261 and <span class="math inline">\(N =\)</span> 65,091 complete measurements for CR9114. The traits are binding affinities of the two antibodies to different influenza strains.</p>
+<p>The data is comprised of a nearly combinatorially complete library for two broadly neutralizing anti-influenza antibodies (bnAbs), CR6261 and CR9114. This dataset includes almost all combinations of one-off mutations that distinguish between germline and somatic sequences which total to 11 heavy-chain mutations for CR6261 and 16 heavy-chain mutations for CR9114. Theoretically, a combinatorially complete dataset for 11 and 16 mutations will have 2,048 and 65,536 samples, respectively. In this particular study, we have have access to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo></mrow><annotation encoding="application/x-tex">N =</annotation></semantics></math> 1,812 complete observations for CR6261 and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo></mrow><annotation encoding="application/x-tex">N =</annotation></semantics></math> 65,091 complete measurements for CR9114. The traits are binding affinities of the two antibodies to different influenza strains.</p>
 <p>Download the data for the broadly neutralizing antibodies here:</p>
 <ul>
 <li>
@@ -141,7 +135,7 @@
 <div class="section level2">
 <h2 id="multivariate-mapit-analysis">Multivariate MAPIT Analysis<a class="anchor" aria-label="anchor" href="#multivariate-mapit-analysis"></a>
 </h2>
-<p>For our analysis with mvMAPIT, residue sequence information was encoded as a binary matrix with the germline sequence residues marked by zeros and the somatic mutations represented as ones. As quantitative traits, Phillips et al. (2021) measure the binding affinity of the two antibodies to different influenza strains. Here, we assess the contribution of epistatic effects when binding to <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_9\)</span> for CR6261, and <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_3\)</span> for CR9114.</p>
+<p>For our analysis with mvMAPIT, residue sequence information was encoded as a binary matrix with the germline sequence residues marked by zeros and the somatic mutations represented as ones. As quantitative traits, Phillips et al. (2021) measure the binding affinity of the two antibodies to different influenza strains. Here, we assess the contribution of epistatic effects when binding to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>1</mn></msub><annotation encoding="application/x-tex">H_1</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>9</mn></msub><annotation encoding="application/x-tex">H_9</annotation></semantics></math> for CR6261, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>1</mn></msub><annotation encoding="application/x-tex">H_1</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>3</mn></msub><annotation encoding="application/x-tex">H_3</annotation></semantics></math> for CR9114.</p>
 <div class="section level3">
 <h3 id="load-the-data">Load the data<a class="anchor" aria-label="anchor" href="#load-the-data"></a>
 </h3>
@@ -177,7 +171,7 @@
 <div class="section level3">
 <h3 id="apply-mvmapit">Apply mvMAPIT<a class="anchor" aria-label="anchor" href="#apply-mvmapit"></a>
 </h3>
-<p>We apply the mvMAPIT framework to protein sequence data from Phillips et al (2021)<span class="math inline">\(^1\)</span>.</p>
+<p>We apply the mvMAPIT framework to protein sequence data from Phillips et al (2021)<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>1</mn></msup><annotation encoding="application/x-tex">^1</annotation></semantics></math>.</p>
 <p>Apply <code><a href="../reference/mvmapit.html">mvmapit()</a></code> to the data by running the following.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mvmapit_CR9114</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mvmapit.html">mvmapit</a></span><span class="op">(</span></span>
@@ -194,8 +188,8 @@
 <div class="section level3">
 <h3 id="plot-the-mvmapit-results">Plot the mvMAPIT results<a class="anchor" aria-label="anchor" href="#plot-the-mvmapit-results"></a>
 </h3>
-<p>The package contains a data object with the results. This data is part of the namespace and accessible as <code>phillips_data</code>. It contains tibbles with the main column for inference being the <span class="math inline">\(P\)</span>-values.</p>
-<p>We report results after running mvMAPIT and combined <span class="math inline">\(P\)</span>-values with Fisher’s method. We show Manhattan plots for <span class="math inline">\(P\)</span>-values corresponding to the trait-specific marginal epistatic tests (i.e., the univariate MAPIT model), the covariance test, and the mvMAPIT approach. Here, green colored dots are positions that have significant marginal epistatic effects beyond a Bonferroni corrected threshold for multiple testing (<span class="math inline">\(P = 0.05/11 = 4.55\times 10^{-3}\)</span> for CR6261 and <span class="math inline">\(P = 0.05/16 = 3.13\times 10^{-3}\)</span> for CR9114, respectively).</p>
+<p>The package contains a data object with the results. This data is part of the namespace and accessible as <code>phillips_data</code>. It contains tibbles with the main column for inference being the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>-values.</p>
+<p>We report results after running mvMAPIT and combined <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>-values with Fisher’s method. We show Manhattan plots for <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>-values corresponding to the trait-specific marginal epistatic tests (i.e., the univariate MAPIT model), the covariance test, and the mvMAPIT approach. Here, green colored dots are positions that have significant marginal epistatic effects beyond a Bonferroni corrected threshold for multiple testing (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mn>0.05</mn><mi>/</mi><mn>11</mn><mo>=</mo><mn>4.55</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>3</mn></mrow></msup></mrow><annotation encoding="application/x-tex">P = 0.05/11 = 4.55\times 10^{-3}</annotation></semantics></math> for CR6261 and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mn>0.05</mn><mi>/</mi><mn>16</mn><mo>=</mo><mn>3.13</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>3</mn></mrow></msup></mrow><annotation encoding="application/x-tex">P = 0.05/16 = 3.13\times 10^{-3}</annotation></semantics></math> for CR9114, respectively).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">for_facetgrid_row</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/as_labeller.html" class="external-link">as_labeller</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
@@ -256,7 +250,7 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="fu">show</span><span class="op">(</span><span class="va">gg_CR6261</span><span class="op">)</span></span></code></pre></div>
 <p><img src="study-phillips-bnabs_files/figure-html/CR6261-1.png" width="672"></p>
-<p>This plot illustrates interaction coefficients when assessing binding of CR6261with <span class="math inline">\(H_1\)</span> (lower left triangle) and <span class="math inline">\(H_9\)</span> (upper right triangle).</p>
+<p>This plot illustrates interaction coefficients when assessing binding of CR6261with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>1</mn></msub><annotation encoding="application/x-tex">H_1</annotation></semantics></math> (lower left triangle) and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>9</mn></msub><annotation encoding="application/x-tex">H_9</annotation></semantics></math> (upper right triangle).</p>
 </div>
 <div class="section level4">
 <h4 id="cr9114">CR9114<a class="anchor" aria-label="anchor" href="#cr9114"></a>
@@ -280,7 +274,7 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="fu">show</span><span class="op">(</span><span class="va">gg_CR9114</span><span class="op">)</span></span></code></pre></div>
 <p><img src="study-phillips-bnabs_files/figure-html/CR9114-1.png" width="672"></p>
-<p>This plot shows interaction coefficients when assessing binding of CR9114 with <span class="math inline">\(H_1\)</span> (lower left triangle) and <span class="math inline">\(H_3\)</span> (upper right triangle). Required mutations (indicated by R) are plotted in gray and left out of the analysis[^1].</p>
+<p>This plot shows interaction coefficients when assessing binding of CR9114 with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>1</mn></msub><annotation encoding="application/x-tex">H_1</annotation></semantics></math> (lower left triangle) and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>3</mn></msub><annotation encoding="application/x-tex">H_3</annotation></semantics></math> (upper right triangle). Required mutations (indicated by R) are plotted in gray and left out of the analysis[^1].</p>
 <p>Our results show that mvMAPIT identifies all required mutations in these systems as well as most positions involved in at least one epistatic pair.</p>
 </div>
 </div>
@@ -294,9 +288,7 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -309,16 +301,16 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

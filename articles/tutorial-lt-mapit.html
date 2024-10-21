@@ -6,12 +6,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Liability threshold MAPIT • mvMAPIT</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -28,7 +22,7 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -57,7 +51,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -95,7 +89,7 @@
 <li>
   <a href="https://github.com/lcrawlab/mvMAPIT/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -106,7 +100,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><script src="tutorial-lt-mapit_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
@@ -114,7 +108,7 @@
       <h1 data-toc-skip>Liability threshold MAPIT</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/lcrawlab/mvMAPIT/blob/HEAD/vignettes/tutorial-lt-mapit.Rmd" class="external-link"><code>vignettes/tutorial-lt-mapit.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/lcrawlab/mvMAPIT/blob/main/vignettes/tutorial-lt-mapit.Rmd" class="external-link"><code>vignettes/tutorial-lt-mapit.Rmd</code></a></small>
       <div class="hidden name"><code>tutorial-lt-mapit.Rmd</code></div>
 
     </div>
@@ -123,7 +117,7 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lcrawlab/mvMAPIT" class="external-link">mvMAPIT</a></span><span class="op">)</span></span></code></pre></div>
-<p>In this tutorial we will illustrate how to use the Liability Threshold MArginal ePIstasis Test (LT-MAPIT) by <a href="https://doi.org/10.1101/374983" class="external-link">Crawford and Zhou (2018)</a><span class="math inline">\(^1\)</span>. For this purpose we will first simulate synthetic data and then analyze it.</p>
+<p>In this tutorial we will illustrate how to use the Liability Threshold MArginal ePIstasis Test (LT-MAPIT) by <a href="https://doi.org/10.1101/374983" class="external-link">Crawford and Zhou (2018)</a><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>1</mn></msup><annotation encoding="application/x-tex">^1</annotation></semantics></math>. For this purpose we will first simulate synthetic data and then analyze it.</p>
 <p>The data are single nucleotide polymorphisms (SNPs) with simulated genotypes. For the simulation we choose the following set of parameters:</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -131,9 +125,9 @@
 <li>
 <strong>n_snps</strong> - number of SNPs or variants</li>
 <li>
-<strong>PVE</strong> - phenotypic variance explained/broad-sense heritability (<span class="math inline">\(H^2\)</span>)</li>
+<strong>PVE</strong> - phenotypic variance explained/broad-sense heritability (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>H</mi><mn>2</mn></msup><annotation encoding="application/x-tex">H^2</annotation></semantics></math>)</li>
 <li>
-<strong>rho</strong> - measures the portion of <span class="math inline">\(H^2\)</span> that is contributed by the marignal (additive) effects</li>
+<strong>rho</strong> - measures the portion of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>H</mi><mn>2</mn></msup><annotation encoding="application/x-tex">H^2</annotation></semantics></math> that is contributed by the marignal (additive) effects</li>
 <li>
 <strong>disease_prevalence</strong> - assumed disease prevelance in the population</li>
 <li>
@@ -207,9 +201,7 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -222,16 +214,16 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

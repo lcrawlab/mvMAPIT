@@ -6,12 +6,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Simulate Traits • mvMAPIT</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -28,7 +22,7 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -57,7 +51,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -95,7 +89,7 @@
 <li>
   <a href="https://github.com/lcrawlab/mvMAPIT/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -106,7 +100,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><script src="tutorial-simulations_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
@@ -114,7 +108,7 @@
       <h1 data-toc-skip>Simulate Traits</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/lcrawlab/mvMAPIT/blob/HEAD/vignettes/tutorial-simulations.Rmd" class="external-link"><code>vignettes/tutorial-simulations.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/lcrawlab/mvMAPIT/blob/main/vignettes/tutorial-simulations.Rmd" class="external-link"><code>vignettes/tutorial-simulations.Rmd</code></a></small>
       <div class="hidden name"><code>tutorial-simulations.Rmd</code></div>
 
     </div>
@@ -123,7 +117,7 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lcrawlab/mvMAPIT" class="external-link">mvMAPIT</a></span><span class="op">)</span></span></code></pre></div>
-<p>Data are simulated sample genotypes with <span class="math inline">\(p\)</span> single nucleotide polymorphisms (SNPs) and <span class="math inline">\(n\)</span> samples togeter with some quantitative traits.</p>
+<p>Data are simulated sample genotypes with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math> single nucleotide polymorphisms (SNPs) and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> samples togeter with some quantitative traits.</p>
 <div class="section level2">
 <h2 id="simulate-genotypes">Simulate Genotypes<a class="anchor" aria-label="anchor" href="#simulate-genotypes"></a>
 </h2>
@@ -150,11 +144,11 @@
 <p>The entries in the genotype matrix are:</p>
 <ul>
 <li>
-<span class="math inline">\(0\)</span> if the genotype is homozygous in the reference allele,</li>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math> if the genotype is homozygous in the reference allele,</li>
 <li>
-<span class="math inline">\(1\)</span> if both, the reference allele and the alternative allele are present,</li>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math> if both, the reference allele and the alternative allele are present,</li>
 <li>
-<span class="math inline">\(2\)</span> if the genotype is homozygous in the alternative allele.</li>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math> if the genotype is homozygous in the alternative allele.</li>
 </ul>
 <p>An example genotype matrix could look like this:</p>
 <table class="table">
@@ -210,9 +204,9 @@
 <li>
 <code>d</code>: number of traits</li>
 <li>
-<code>PVE</code>: phenotypic variance explained/broad-sense heritability (<span class="math inline">\(H^2\)</span>)</li>
+<code>PVE</code>: phenotypic variance explained/broad-sense heritability (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>H</mi><mn>2</mn></msup><annotation encoding="application/x-tex">H^2</annotation></semantics></math>)</li>
 <li>
-<code>rho</code>: portion of <span class="math inline">\(H^2\)</span> that is contributed by the marginal (additive) effects</li>
+<code>rho</code>: portion of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>H</mi><mn>2</mn></msup><annotation encoding="application/x-tex">H^2</annotation></semantics></math> that is contributed by the marginal (additive) effects</li>
 <li>Number of SNPs that are causing variation in the trait:
 <ul>
 <li>
@@ -270,36 +264,34 @@
 <h2 id="details-on-simulating-pairwise-epistasis">Details on Simulating Pairwise Epistasis<a class="anchor" aria-label="anchor" href="#details-on-simulating-pairwise-epistasis"></a>
 </h2>
 <p>The general simulation scheme for interactions follows the methods outlined in Crawford et al. (2017). For the data representing the null hypothesis of no epistasis present, 1000 SNPs without rare variants are sampled from the genotype data. The effect sizes of the causal SNPs then are sampled independently from a multivariate normal distribution according to equation .</p>
-<p><span class="math display">\[\begin{equation}\label{eq:null_simulations_beta}
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mstyle mathvariant="bold"><mi>𝐛</mi></mstyle><mi>i</mi></msub><mo>∼</mo><msub><mstyle mathvariant="script"><mi>𝒩</mi></mstyle><mi>d</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo>,</mo><mstyle mathvariant="bold"><mi>𝐔</mi></mstyle><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\begin{equation}\label{eq:null_simulations_beta}
     \mathbf{b}_i \sim \mathcal{N}_{d}\left(0, \mathbf{U}\right)
-\end{equation}\]</span></p>
-<p>As parameter of the simulations, <span class="math inline">\(\mathbf{U}\)</span> describes the covariance between the additive effects of the causal SNPs on the <span class="math inline">\(d\)</span> different traits. The effects of all other SNPs are set to zero.</p>
+\end{equation}</annotation></semantics></math></p>
+<p>As parameter of the simulations, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mstyle mathvariant="bold"><mi>𝐔</mi></mstyle><annotation encoding="application/x-tex">\mathbf{U}</annotation></semantics></math> describes the covariance between the additive effects of the causal SNPs on the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math> different traits. The effects of all other SNPs are set to zero.</p>
 <p>In order to simulate pleiotropy, the number of desired pleiotropic SNPs is sampled from the set of causal SNPs. These SNPs are then included in simulating interactions for every trait. Additionally, trait specific SNPs are sampled independently for each trait from the causal SNPs without the pleiotropic SNPs.</p>
-<p>The interactions are modeled by selecting the number of desired SNPs that have non-zero pairwise interaction effects. These SNPs then are split into two groups. Each SNP from one group is simulated to interact with each SNP of the other group but not with any SNP within the same group that it was assigned to. This results in <span class="math inline">\(n_1 \cdot n_2\)</span> epistatic interactions, with <span class="math inline">\(n_i\)</span> the number of SNPs in group i. For all these interactions, random effects are sampled from the multivariate normal distribution given in .</p>
-<p><span class="math display">\[\begin{equation}\label{eq:simulations_alpha}
+<p>The interactions are modeled by selecting the number of desired SNPs that have non-zero pairwise interaction effects. These SNPs then are split into two groups. Each SNP from one group is simulated to interact with each SNP of the other group but not with any SNP within the same group that it was assigned to. This results in <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mn>1</mn></msub><mo>⋅</mo><msub><mi>n</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">n_1 \cdot n_2</annotation></semantics></math> epistatic interactions, with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>n</mi><mi>i</mi></msub><annotation encoding="application/x-tex">n_i</annotation></semantics></math> the number of SNPs in group i. For all these interactions, random effects are sampled from the multivariate normal distribution given in .</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mstyle mathvariant="bold"><mi>𝐚</mi></mstyle><mi>i</mi></msub><mo>∼</mo><msub><mstyle mathvariant="script"><mi>𝒩</mi></mstyle><mi>d</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo>,</mo><mstyle mathvariant="bold"><mi>𝐕</mi></mstyle><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\begin{equation}\label{eq:simulations_alpha}
     \mathbf{a}_i \sim \mathcal{N}_{d}\left(0, \mathbf{V}\right)
-\end{equation}\]</span></p>
-<p>Analogously, <span class="math inline">\(\mathbf{V}\)</span> is the covariance between the pariwise epistatic effects of the causal SNPs on the <span class="math inline">\(d\)</span> different traits. The portion of the variance <span class="math inline">\(\mathbf{E}\)</span> that is not due to heritable effects is simulated as multivariate normal with no correlation. The effects of the SNPs and interactions are collected in matrices <span class="math inline">\(\mathbf{A}\)</span> and <span class="math inline">\(\mathbf{B}\)</span>. The matrices <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{W}\)</span> contain the genotype data of the causal SNPs and interactions. With these effects, the phenotypes then are simulated according to equation .</p>
-<p><span class="math display">\[\begin{equation}\label{eq:simulation_mapit}
+\end{equation}</annotation></semantics></math></p>
+<p>Analogously, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mstyle mathvariant="bold"><mi>𝐕</mi></mstyle><annotation encoding="application/x-tex">\mathbf{V}</annotation></semantics></math> is the covariance between the pariwise epistatic effects of the causal SNPs on the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math> different traits. The portion of the variance <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mstyle mathvariant="bold"><mi>𝐄</mi></mstyle><annotation encoding="application/x-tex">\mathbf{E}</annotation></semantics></math> that is not due to heritable effects is simulated as multivariate normal with no correlation. The effects of the SNPs and interactions are collected in matrices <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mstyle mathvariant="bold"><mi>𝐀</mi></mstyle><annotation encoding="application/x-tex">\mathbf{A}</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mstyle mathvariant="bold"><mi>𝐁</mi></mstyle><annotation encoding="application/x-tex">\mathbf{B}</annotation></semantics></math>. The matrices <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mstyle mathvariant="bold"><mi>𝐗</mi></mstyle><annotation encoding="application/x-tex">\mathbf{X}</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mstyle mathvariant="bold"><mi>𝐖</mi></mstyle><annotation encoding="application/x-tex">\mathbf{W}</annotation></semantics></math> contain the genotype data of the causal SNPs and interactions. With these effects, the phenotypes then are simulated according to equation .</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mstyle mathvariant="bold"><mi>𝐘</mi></mstyle><mo>=</mo><mstyle mathvariant="bold"><mi>𝐗</mi></mstyle><mstyle mathvariant="bold"><mi>𝐁</mi></mstyle><mo>+</mo><mstyle mathvariant="bold"><mi>𝐖</mi></mstyle><mstyle mathvariant="bold"><mi>𝐀</mi></mstyle><mo>+</mo><mstyle mathvariant="bold"><mi>𝐄</mi></mstyle></mrow><annotation encoding="application/x-tex">\begin{equation}\label{eq:simulation_mapit}
     \mathbf{Y} = \mathbf{X}\mathbf{B} + \mathbf{W}\mathbf{A} + \mathbf{E}
-\end{equation}\]</span></p>
+\end{equation}</annotation></semantics></math></p>
 <p>For each trait independently, the variance components are scaled such that the variance can be partitioned according to equation .</p>
-<p><span class="math display">\[\begin{align}\label{eq:simulation_var_comp}
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right"><mstyle mathvariant="bold"><mi>𝐘</mi></mstyle></mtd><mtd columnalign="left"><mo>=</mo><msub><mstyle mathvariant="bold"><mi>𝐘</mi></mstyle><mi>X</mi></msub><mo>+</mo><msub><mstyle mathvariant="bold"><mi>𝐘</mi></mstyle><mi>W</mi></msub><mo>+</mo><mstyle mathvariant="bold"><mi>𝐄</mi></mstyle></mtd></mtr><mtr><mtd columnalign="right"><mstyle mathvariant="normal"><mi>v</mi><mi>a</mi><mi>r</mi></mstyle><mo stretchy="false" form="prefix">(</mo><mstyle mathvariant="bold"><mi>𝐘</mi></mstyle><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left"><mo>=</mo><mstyle mathvariant="normal"><mi>v</mi><mi>a</mi><mi>r</mi></mstyle><mo stretchy="false" form="prefix">(</mo><msub><mstyle mathvariant="bold"><mi>𝐘</mi></mstyle><mi>X</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mstyle mathvariant="normal"><mi>v</mi><mi>a</mi><mi>r</mi></mstyle><mo stretchy="false" form="prefix">(</mo><msub><mstyle mathvariant="bold"><mi>𝐘</mi></mstyle><mi>W</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mstyle mathvariant="normal"><mi>v</mi><mi>a</mi><mi>r</mi></mstyle><mo stretchy="false" form="prefix">(</mo><mstyle mathvariant="bold"><mi>𝐄</mi></mstyle><mo stretchy="false" form="postfix">)</mo></mtd></mtr><mtr><mtd columnalign="right"></mtd><mtd columnalign="left"><mo>=</mo><mi>ρ</mi><mo>⋅</mo><msup><mi>H</mi><mn>2</mn></msup><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo stretchy="false" form="postfix">)</mo><mo>⋅</mo><msup><mi>H</mi><mn>2</mn></msup><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>H</mi><mn>2</mn></msup><mo stretchy="false" form="postfix">)</mo></mtd></mtr><mtr><mtd columnalign="right"></mtd><mtd columnalign="left"><mo>=</mo><mn>1</mn></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align}\label{eq:simulation_var_comp}
     \mathbf{Y} &amp;= \mathbf{Y}_{X} + \mathbf{Y}_{W} + \mathbf{E} \\
     \mathrm{var}(\mathbf{Y}) &amp;= \mathrm{var}(\mathbf{Y}_{X}) +
                             \mathrm{var}(\mathbf{Y}_{W}) +
                             \mathrm{var}(\mathbf{E}) \\
                          &amp;= \rho \cdot H^2 + (1 - \rho) \cdot H^2 + (1 - H^2) \\
                          &amp;= 1
-\end{align}\]</span></p>
+\end{align}</annotation></semantics></math></p>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -312,16 +304,16 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

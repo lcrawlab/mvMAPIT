@@ -1,72 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/404.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/articles/mvMAPIT.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/articles/study-compare-p-value-combine-methods.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/articles/study-phillips-bnabs.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/articles/study-wtccc-mice.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/articles/tutorial-docker-mvmapit.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/articles/tutorial-lt-mapit.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/articles/tutorial-simulations.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/index.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/reference/binary_to_liability.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/reference/cauchy_combined.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/reference/fishers_combined.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/reference/harmonic_combined.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/reference/mvmapit.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/reference/mvmapit_data.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/reference/phillips_data.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/reference/simulate_traits.html</loc>
-  </url>
-  <url>
-    <loc>https://lcrawlab.github.io/mvMAPIT/reference/simulated_data.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/404.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/LICENSE.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/articles/index.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/articles/mvMAPIT.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/articles/study-compare-p-value-combine-methods.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/articles/study-phillips-bnabs.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/articles/study-wtccc-mice.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/articles/tutorial-docker-mvmapit.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/articles/tutorial-lt-mapit.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/articles/tutorial-simulations.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/authors.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/index.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/news/index.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/reference/binary_to_liability.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/reference/cauchy_combined.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/reference/fishers_combined.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/reference/harmonic_combined.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/reference/index.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/reference/mvmapit.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/reference/mvmapit_data.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/reference/phillips_data.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/reference/simulate_traits.html</loc></url>
+<url><loc>https://lcrawlab.github.io/mvMAPIT/reference/simulated_data.html</loc></url>
 </urlset>
+

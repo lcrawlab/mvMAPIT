@@ -1,5 +1,5 @@
 pandoc: 2.9.2.1
-pkgdown: 2.0.9
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   mvMAPIT: mvMAPIT.html
@@ -9,8 +9,7 @@ articles:
   tutorial-docker-mvmapit: tutorial-docker-mvmapit.html
   tutorial-lt-mapit: tutorial-lt-mapit.html
   tutorial-simulations: tutorial-simulations.html
-last_built: 2024-06-07T08:30Z
+last_built: 2024-10-21T17:56Z
 urls:
   reference: https://lcrawlab.github.io/mvMAPIT/reference
   article: https://lcrawlab.github.io/mvMAPIT/articles
-

@@ -6,12 +6,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Illustrating multivariate MAPIT with Simulated Data • mvMAPIT</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -28,7 +22,7 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -57,7 +51,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -95,7 +89,7 @@
 <li>
   <a href="https://github.com/lcrawlab/mvMAPIT/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -106,7 +100,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><script src="mvMAPIT_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="mvMAPIT_files/kePrint-0.0.1/kePrint.js"></script><link href="mvMAPIT_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
@@ -115,9 +109,9 @@
       <h1 data-toc-skip>Illustrating multivariate MAPIT with Simulated Data</h1>
                         <h4 data-toc-skip class="author">Julian Stamp</h4>
             
-            <h4 data-toc-skip class="date">2024-06-07</h4>
+            <h4 data-toc-skip class="date">2024-10-21</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/lcrawlab/mvMAPIT/blob/HEAD/vignettes/mvMAPIT.Rmd" class="external-link"><code>vignettes/mvMAPIT.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/lcrawlab/mvMAPIT/blob/main/vignettes/mvMAPIT.Rmd" class="external-link"><code>vignettes/mvMAPIT.Rmd</code></a></small>
       <div class="hidden name"><code>mvMAPIT.Rmd</code></div>
 
     </div>
@@ -155,7 +149,7 @@
 </h2>
 <p>The R routine <code>mvmapit</code> can be run in multiple modes. By default it runs in a hybrid mode, performing tests both wtih a normal Z-test as well as the Davies method. The resulting <code>p</code>-values can be combined using functions provided by <code>mvMAPIT</code>, e.g. <code><a href="../reference/fishers_combined.html">fishers_combined()</a></code>, that work on the <code>pvalues</code> tibble that <code>mvmapit</code> returns.</p>
 <blockquote>
-<p><strong>NOTE:</strong> mvMAPIT takes the X matrix as <span class="math inline">\(p \times n\)</span>; <strong>not</strong> as <span class="math inline">\(n \times p\)</span>.</p>
+<p><strong>NOTE:</strong> mvMAPIT takes the X matrix as <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>×</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">p \times n</annotation></semantics></math>; <strong>not</strong> as <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>×</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">n \times p</annotation></semantics></math>.</p>
 </blockquote>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mvmapit_hybrid</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mvmapit.html">mvmapit</a></span><span class="op">(</span></span>
@@ -369,7 +363,7 @@ TRUE
 <div class="section level3">
 <h3 id="visualize-exhaustive-search-results">Visualize Exhaustive Search Results<a class="anchor" aria-label="anchor" href="#visualize-exhaustive-search-results"></a>
 </h3>
-<p>We plot the <span class="math inline">\(-\mathrm{log}_{10}(p)\)</span> of the <code>p</code>-values for the regression coefficients as tile plot to highlight the identified interaction structure.</p>
+<p>We plot the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><msub><mstyle mathvariant="normal"><mi>l</mi><mi>o</mi><mi>g</mi></mstyle><mn>10</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">-\mathrm{log}_{10}(p)</annotation></semantics></math> of the <code>p</code>-values for the regression coefficients as tile plot to highlight the identified interaction structure.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plotable</span> <span class="op">&lt;-</span> <span class="va">pairs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span></span>
@@ -467,9 +461,8 @@ snp_00917
 <span><span class="op">}</span></span>
 <span><span class="va">anti</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html" class="external-link">anti_join</a></span><span class="op">(</span><span class="va">true_pairs</span>, <span class="va">true_interactions</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>effect_size <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span><span class="co"># Joining with `by = join_by(var1, var2)`</span></span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co"># Joining with `by = join_by(var1, var2)`</span></span>
+<span></span>
 <span><span class="va">true_int_plot</span> <span class="op">&lt;-</span> <span class="va">true_interactions</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">anti</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>trait <span class="op">=</span> <span class="st">"Trait 1"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">anti</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>trait <span class="op">=</span> <span class="st">"Trait 2"</span><span class="op">)</span><span class="op">)</span></span>
@@ -482,7 +475,7 @@ snp_00917
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">true_tiles</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mvMAPIT_files/figure-html/simulated_interactions-1.png" width="672"></p>
 <p>While mvMAPIT does not identify the explicit partner, it still implicates more correct SNPs in this example. All true epistatic SNPs are listed in the following table.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">true_interactions</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">.</span>, linesep <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_classic.html" class="external-link">kable_material</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"striped"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -678,9 +671,7 @@ snp_00917
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -693,16 +684,16 @@ snp_00917
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>
