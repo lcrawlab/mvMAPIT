@@ -8,6 +8,8 @@
 
 Find the full package documentation including examples and articles here: [Multivariate MAPIT Documentation](https://lcrawlab.github.io/mvMAPIT/).
 
+For a version that scales to Biobank data, see the [Sparse Marginal Epistasis Test](https://lcrawlab.github.io/sme/)
+
 
 ## The multivariate MArginal ePIstasis Test (mvMAPIT)
 This R package is a generalization of the [MAPIT
