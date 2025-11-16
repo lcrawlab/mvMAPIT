@@ -163,19 +163,33 @@ mvmapit <- function(
         pves <- vc.mod$PVE
         timings <- vc.mod$timings
     }
+    sigma_est <- as.matrix(vc.mod$Est)
+    sigma_se <- if (is.null(vc.mod$SE)) {
+      matrix(NA_real_, nrow = nrow(as.matrix(vc.mod$Est)), ncol = ncol(as.matrix(vc.mod$Est)))
+    } else {
+      as.matrix(vc.mod$SE)
+    }
     timings_mean <- apply(as.matrix(timings[rowSums(timings) != 0, ]), 2, mean)
     log$debug("Calculated mean time of execution. Return list.")
     row.names(pvals) <- rownames(X)
     row.names(pves) <- rownames(X)
+    row.names(sigma_est) <- rownames(X)
+    row.names(sigma_se) <- rownames(X)
     column_names <- mapit_struct_names(Y)
     colnames(pvals) <- column_names
     colnames(pves) <- column_names
+    colnames(sigma_est) <- column_names
+    colnames(sigma_se) <- column_names
     if (!is.null(variantIndex)) {
         log$debug("Set pve to NA if not in varianIndex.")
         pves[!(c(1:nrow(pves)) %in%
             variantIndex)] <- NA
         pvals[!(c(1:nrow(pvals)) %in%
             variantIndex)] <- NA
+        sigma_est[!(c(1:nrow(sigma_est)) %in%
+                  variantIndex)] <- NA
+        sigma_se[!(c(1:nrow(sigma_se)) %in%
+                      variantIndex)] <- NA
     }
     pvals_df <- as.data.frame(pvals)
     pvals <- pvals_df %>%
@@ -187,10 +201,22 @@ mvmapit <- function(
         mutate(id = row.names(pves_df)) %>%
         tidyr::pivot_longer(cols = !.data[["id"]],
                      names_to = "trait", values_to = "PVE")
+    sigma_est_df <- as.data.frame(sigma_est)
+    sigma_est <- sigma_est_df %>%
+      mutate(id = row.names(sigma_est_df)) %>%
+      tidyr::pivot_longer(cols = !id,
+                          names_to = "trait", values_to = "VC")
+    sigma_se_df <- as.data.frame(sigma_se)
+    sigma_se <- sigma_se_df %>%
+      mutate(id = row.names(sigma_se_df)) %>%
+      tidyr::pivot_longer(cols = !id,
+                          names_to = "trait", values_to = "SE")
+    sigma <- sigma_est %>%
+      inner_join(sigma_se, by = c("id", "trait"))
     duration_ms <- timings_mean
     process <- c("cov", "projections", "vectorize", "q", "S", "vc")
     timings_mean <- data.frame(process, duration_ms)
-    return(list(pvalues = pvals, pves = pves, duration = timings_mean))
+    return(list(pvalues = pvals, pves = pves, duration = timings_mean, vc = sigma))
 }
 
 #' Remove variants that don't vary accross the genotype data.
