@@ -204,15 +204,15 @@ In the first two columns, we list SNPs and their genetic location according to t
 
 5: Cynthia L. Smith and Janan T. Eppig. The mammalian phenotype ontology: enabling robust annotation and comparative analysis. Wiley Interdisciplinary Reviews. Systems Biology and Medicine, 1(3):390–399, 2009. ISSN 1939-005X. <https://doi.org/10.1002/wsbm.44>.
 
-6: Mouse Genome Informatics database <http://www.informatics.jax.org>
+6: Mouse Genome Informatics database <https://www.informatics.jax.org/>
 
 7: Karla F. Castro-Ochoa, Idaira M. Guerrero-Fonseca, and Michael Schnoor. Hematopoietic cell specific lyn substrate (HCLS1 or HS1): A versatile actin-binding protein in leukocytes. Journal of Leukocyte Biology, 105(5):881–890, 2019. ISSN 1938-3673. doi: 10.1002/JLB.MR0618-212R.
 
-8: Obtaining and loading phenotype annotations from the international mouse phenotyping consortium (IMPC) database. Mouse Genome Informatics and the International Mouse Phenotyping Consortium, 2014. URL http://www.informatics.jax.org/reference/J:211773.
+8: Obtaining and loading phenotype annotations from the international mouse phenotyping consortium (IMPC) database. Mouse Genome Informatics and the International Mouse Phenotyping Consortium, 2014. URL https://www.informatics.jax.org/reference/J:211773.
 
 9: Marc H. G. P. Raaijmakers, Siddhartha Mukherjee, Shangqin Guo, Siyi Zhang, Tatsuya Kobayashi, Jesse A. Schoonmaker, Benjamin L. Ebert, Fatima Al-Shahrour, Robert P. Hasserjian, Edward O. Scadden, Zinmar Aung, Marc Matza, Matthias Merkenschlager, Charles Lin, Johanna M. Rommens, and David T. Scadden. Bone progenitor dysfunction induces myelodysplasia and secondary leukaemia. Nature, 464(7290):852–857, 2010. ISSN 1476-4687. doi: 10.1038/nature08851. URL https://www.nature.com/articles/nature08851. Number: 7290 Publisher: Nature Publishing Group.
 
-10: Jill M. Norris and Stephen S. Rich. Genetics of glucose homeostasis. Arteriosclerosis, Thrombosis, and Vascular Biology, 32(9):2091–2096, 2012. doi: 10.1161/ATVBAHA.112.255463. URL https://www.ahajournals.org/doi/10.1161/ATVBAHA.112.255463. Publisher: American Heart Association.
+10: Jill M. Norris and Stephen S. Rich. Genetics of glucose homeostasis. Arteriosclerosis, Thrombosis, and Vascular Biology, 32(9):2091–2096, 2012. doi: 10.1161/ATVBAHA.112.255463. URL https://doi.org/10.1161/ATVBAHA.112.255463. Publisher: American Heart Association.
 
 11: Juan Carlos Souto, Laura Almasy, Montserrat Borrell, Francisco Blanco-Vaca, José Mateo, José Manuel Soria, Inma Coll, Rosa Felices, William Stone, Jordi Fontcuberta, and John Blangero. Genetic susceptibility to thrombosis and its relationship to physiological risk factors: The GAIT study. The American Journal of Human Genetics, 67(6):1452–1459, 2000. ISSN 0002-9297. doi: 10.1086/316903. URL https://doi.org/10.1086/316903.
 
@@ -232,7 +232,7 @@ doi: 10.1016/j.bbadis.2019.06.013. URL https://doi.org/10.1016/j.bbadis.2019.06.
 hematopoietic stem cell maintenance. Journal of Experimental Medicine, 208(3):455–467, 2011. ISSN 0022-1007. doi: 10.1084/jem.20101145. URL https://doi.org/10.1084/jem.20101145.
 
 18: Alexander J. Clarke, Ursula Ellinghaus, Andrea Cortini, Amanda Stranks, Anna Katharina Simon, Marina Botto, and Timothy J. Vyse. Autophagy is activated in systemic lupus erythematosus and required for plasmablast development. Annals of the Rheumatic Diseases, 74(5):912–920, 2015.
-ISSN 0003-4967, 1468-2060. doi: 10.1136/annrheumdis-2013-204343. URL https://ard.bmj.com/content/74/5/912. Publisher: BMJ Publishing Group Ltd Section: Basic and translational research.
+ISSN 0003-4967, 1468-2060. doi: 10.1136/annrheumdis-2013-204343. Publisher: BMJ Publishing Group Ltd Section: Basic and translational research.
 
 19: Yanzhong Yang, Kevin M. McBride, Sean Hensley, Yue Lu, Frederic Chedin, and Mark T. Bedford. Arginine methylation facilitates the recruitment of TOP3b to chromatin to prevent r loop accumu
 lation. Molecular Cell, 53(3):484–497, 2014. ISSN 1097-2765. doi: 10.1016/j.molcel.2014.01.011. URL https://doi.org/10.1016/j.molcel.2014.01.011.

@@ -158,7 +158,7 @@ API for multi-platform shared-memory parallel programming in C/C++. This
 is to speed up the computational time of the modeling algorithm.
 Unfortunately, macOS does not currently support OpenMP under the default
 compiler. A work around to use OpenMP in R on macOS can be found
-[here](https://thecoatlessprofessor.com/programming/openmp-in-r-on-os-x/).
+[here](https://blog.thecoatlessprofessor.com/programming/openmp-in-r-on-os-x/index.html).
 mvMAPIT can be compiled without OpenMP, but we recommend using it if
 applicable for scalability.
 
@@ -168,7 +168,7 @@ applicable for scalability.
 - On macOS, you might need to run `brew reinstall z3` to fix `'libz3.4.11.dylib' (no such file)` related errors ([clang issues](https://github.com/Homebrew/discussions/discussions/3920)).
 
 - For tips on how to avoid errors dealing with `-lgfortran` or `-lquadmath`, please visit
-<https://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/>.
+<https://blog.thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/index.html>.
 
 ------------------------------------------------------------------------
 
