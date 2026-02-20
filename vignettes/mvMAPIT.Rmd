@@ -11,6 +11,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+> **Note:** For univariate analyses (single trait), check out the much faster implementation: [Sparse Modeling of Epistasis (SME)](https://lcrawlab.github.io/sme/)
+
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -34,6 +36,11 @@ If you use multivariate MAPIT in published research, please cite:
 >    Genetic Correlation between Traits Improves the Detection of Epistasis in
 >    Genome-wide Association Studies. G3 Genes|Genomes|Genetics 13(8), jkad118; doi:
 >    <https://doi.org/10.1093/g3journal/jkad118>
+>
+> * Stamp J, Pattillo Smith S, Weinreich D, Crawford L (2025). Sparse modeling of
+>   interactions enables fast detection of genome-wide epistasis in biobank-scale studies.
+>   The American Journal of Human Genetics, 112(9), 2198-2212; doi:
+>   <https://doi.org/10.1016/j.ajhg.2025.07.004>
 >
 > * Stamp J, Crawford L (2022). mvMAPIT: Multivariate Genome Wide Marginal
 >   Epistasis Test. <https://github.com/lcrawlab/mvMAPIT>,
