@@ -286,10 +286,10 @@ simulate_traits <- function(
                         names_prefix = "group",
                         values_to = "id"
                         ) %>%
-                     mutate(name = sprintf("snp_%05d", id)) %>%
+                     mutate(name = sprintf("snp_%05d", .data[["id"]])) %>%
                      dplyr::group_by(.data[["trait"]], .data[["id"]], .data[["name"]]) %>%
                      summarise(total_effect = sum(abs(.data[["effect_size"]]))) %>%
-                     mutate(pleiotropic = (id  %in% pleiotropic_set))
+                     mutate(pleiotropic = (.data[["id"]]  %in% pleiotropic_set))
     } else {
         epistatic <- NULL
         interactions <- NULL

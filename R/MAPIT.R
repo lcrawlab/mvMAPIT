@@ -180,12 +180,12 @@ mvmapit <- function(
     pvals_df <- as.data.frame(pvals)
     pvals <- pvals_df %>%
         mutate(id = row.names(pvals_df)) %>%
-        tidyr::pivot_longer(cols = !id,
+        tidyr::pivot_longer(cols = !.data[["id"]],
                      names_to = "trait", values_to = "p")
     pves_df <- as.data.frame(pves)
     pves <- pves_df %>%
         mutate(id = row.names(pves_df)) %>%
-        tidyr::pivot_longer(cols = !id,
+        tidyr::pivot_longer(cols = !.data[["id"]],
                      names_to = "trait", values_to = "PVE")
     duration_ms <- timings_mean
     process <- c("cov", "projections", "vectorize", "q", "S", "vc")
