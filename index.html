@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Multivariate Genome Wide Marginal Epistasis Test">
-<meta property="og:description" content="Epistasis, commonly defined as the interaction between genetic loci, is known to play an important role in the phenotypic variation of complex traits. As a result, many statistical methods have been developed to identify genetic variants that are involved in epistasis, and nearly all of these approaches carry out this task by focusing on analyzing one trait at a time. Previous studies have shown that jointly modeling multiple phenotypes can often dramatically increase statistical power for association mapping. In this package, we present the multivariate MArginal ePIstasis Test (mvMAPIT) – a multi-outcome generalization of a recently proposed epistatic detection method which seeks to detect marginal epistasis or the combined pairwise interaction effects between a given variant and all other variants. By searching for marginal epistatic effects, one can identify genetic variants that are involved in epistasis without the need to identify the exact partners with which the variants interact – thus, potentially alleviating much of the statistical and computational burden associated with conventional explicit search based methods. Our proposed mvMAPIT builds upon this strategy by taking advantage of correlation structure between traits to improve the identification of variants involved in epistasis. We formulate mvMAPIT as a multivariate linear mixed model and develop a multi-trait variance component estimation algorithm for efficient parameter inference and P-value computation. Together with reasonable model approximations, our proposed approach is scalable to moderately sized genome-wide association studies. Crawford et al. (2017) &lt;doi:10.1371/journal.pgen.1006869&gt;. Stamp et al. (2023) &lt;doi:10.1093/g3journal/jkad118&gt;.">
+<meta property="og:description" content="Epistasis, commonly defined as the interaction between genetic loci, is known to play an important role in the phenotypic variation of complex traits. As a result, many statistical methods have been developed to identify genetic variants that are involved in epistasis, and nearly all of these approaches carry out this task by focusing on analyzing one trait at a time. Previous studies have shown that jointly modeling multiple phenotypes can often dramatically increase statistical power for association mapping. In this package, we present the multivariate MArginal ePIstasis Test (mvMAPIT) – a multi-outcome generalization of a recently proposed epistatic detection method which seeks to detect marginal epistasis or the combined pairwise interaction effects between a given variant and all other variants. By searching for marginal epistatic effects, one can identify genetic variants that are involved in epistasis without the need to identify the exact partners with which the variants interact – thus, potentially alleviating much of the statistical and computational burden associated with conventional explicit search based methods. Our proposed mvMAPIT builds upon this strategy by taking advantage of correlation structure between traits to improve the identification of variants involved in epistasis. We formulate mvMAPIT as a multivariate linear mixed model and develop a multi-trait variance component estimation algorithm for efficient parameter inference and P-value computation. Together with reasonable model approximations, our proposed approach is scalable to moderately sized genome-wide association studies. Crawford et al. (2017) &lt;doi:10.1371/journal.pgen.1006869&gt;. Stamp et al. (2023) &lt;doi:10.1093/g3journal/jkad118&gt;. Stamp et al. (2025) &lt;doi:10.1016/j.ajhg.2025.07.004&gt;.">
 <meta property="og:image" content="https://lcrawlab.github.io/mvMAPIT/logo.png">
 <meta name="google-site-verification" content="7EMmOVQ0-Feh--5i1ogdQqVYz7Azip5Je-UeBYXP6fA">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">mvMAPIT</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.4</span>
       </span>
     </div>
 
@@ -107,6 +107,9 @@
 <div class="section level1">
 <div class="page-header"><h1 id="multivariate-mapit-documentation-">Multivariate MAPIT Documentation <img src="reference/figures/logo.png" align="right" alt="" width="120"><a class="anchor" aria-label="anchor" href="#multivariate-mapit-documentation-"></a>
 </h1></div>
+<blockquote>
+<p><strong>Note:</strong> For univariate analyses (single trait), check out the much faster implementation: <a href="https://lcrawlab.github.io/sme/" class="external-link">Sparse Modeling of Epistasis (SME)</a></p>
+</blockquote>
 <p><a href="https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml" class="external-link"><img src="https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml/badge.svg" alt="R CMD check"></a> <a href="https://github.com/lcrawlab/mvMAPIT/actions/workflows/docker-image.yml" class="external-link"><img src="https://github.com/lcrawlab/mvMAPIT/actions/workflows/docker-image.yml/badge.svg" alt="Docker Image CI"></a> <a href="https://cranlogs.r-pkg.org/badges/grand-total/mvMAPIT" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/mvMAPIT" alt="CRAN downloads"></a> <a href="https://cran.r-project.org/package=mvMAPIT" class="external-link"><img src="https://www.r-pkg.org/badges/version/mvMAPIT" alt="CRAN_Status_Badge"></a></p>
 <p>Find the full package documentation including examples and articles here: <a href="https://lcrawlab.github.io/mvMAPIT/">Multivariate MAPIT Documentation</a>.</p>
 <div class="section level2">
@@ -158,23 +161,23 @@
 <li><a href="https://cran.r-project.org/package=tidyr" class="external-link">tidyr</a></li>
 </ul>
 <p>The easiest method to install these packages is with the following example command entered in an R shell:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">install.packages</span>(<span class="kw">c</span>( <span class="st">'checkmate'</span>, </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>                    <span class="st">'CompQuadForm'</span>, </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>                    <span class="st">'dplyr'</span>, </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>                    <span class="st">'foreach'</span>, </span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>                    <span class="st">'harmonicmeanp'</span>, </span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>                    <span class="st">'logging'</span>, </span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>                    <span class="st">'mvtnorm'</span>, </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>                    <span class="st">'Rcpp'</span>, </span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>                    <span class="st">'RcppAlgos'</span>, </span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>                    <span class="st">'RcppArmadillo'</span>, </span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>                    <span class="st">'RcppParallel'</span>, </span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>                    <span class="st">'RcppProgress'</span>, </span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>                    <span class="st">'RcppSpdlog'</span>, </span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>                    <span class="st">'testthat'</span>, </span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a>                    <span class="st">'tidyr'</span>, </span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a>                    <span class="st">'truncnorm'</span>), </span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>                    <span class="dt">dependencies =</span> <span class="ot">TRUE</span>);</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>( <span class="st">'checkmate'</span>, </span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>                    <span class="st">'CompQuadForm'</span>, </span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>                    <span class="st">'dplyr'</span>, </span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>                    <span class="st">'foreach'</span>, </span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>                    <span class="st">'harmonicmeanp'</span>, </span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>                    <span class="st">'logging'</span>, </span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>                    <span class="st">'mvtnorm'</span>, </span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>                    <span class="st">'Rcpp'</span>, </span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>                    <span class="st">'RcppAlgos'</span>, </span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>                    <span class="st">'RcppArmadillo'</span>, </span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>                    <span class="st">'RcppParallel'</span>, </span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>                    <span class="st">'RcppProgress'</span>, </span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>                    <span class="st">'RcppSpdlog'</span>, </span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>                    <span class="st">'testthat'</span>, </span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>                    <span class="st">'tidyr'</span>, </span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>                    <span class="st">'truncnorm'</span>), </span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>                    <span class="at">dependencies =</span> <span class="cn">TRUE</span>);</span></code></pre></div>
 <p>Alternatively, one can also <a href="https://cran.r-project.org/doc/manuals/r-release/R-admin.html#Installing-packages" class="external-link">install R packages from the command-line</a>.</p>
 </div>
 <div class="section level3">
@@ -186,7 +189,7 @@
 <h3 id="c-functions-required-for-mapit">C++ Functions Required for MAPIT<a class="anchor" aria-label="anchor" href="#c-functions-required-for-mapit"></a>
 </h3>
 <p>The code in this repository assumes that basic Fortran and C++ libraries and compilers are already set up on the running personal computer or cluster. If not, the mvMAPIT functions and necessary Rcpp packages will not work properly. A simple option is to use <a href="https://gcc.gnu.org/" class="external-link">gcc</a>. macOS users may use this collection by installing the <a href="https://brew.sh/index.html" class="external-link">Homebrew package manager</a> and then typing the following into the terminal:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="ex">brew</span> install gcc</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="ex">brew</span> install gcc</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="openmp">OpenMP<a class="anchor" aria-label="anchor" href="#openmp"></a>
@@ -211,15 +214,17 @@
 <p>For questions or concerns with the MAPIT functions, please contact <a href="mailto:lcrawford@microsoft.com">Lorin Crawford</a> or <a href="mailto:julian_stamp@brown.edu">Julian Stamp</a>.</p>
 <p>We appreciate any feedback you may have with our repository and instructions.</p>
 </div>
-<div class="section level2"><h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h2></div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 </div>
-<div class="footnotes">
+</div>
+<div class="footnotes footnotes-end-of-document">
 <hr>
 <ol>
 <li id="fn1"><p>L. Crawford, P. Zeng, S. Mukherjee, X. Zhou (2017). Detecting epistasis with the marginal epistasis test in genetic mapping studies of quantitative traits. <em>PLoS Genet</em>. <strong>13</strong>(7): e1006869. <a href="https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869" class="external-link uri">https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1006869</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 <li id="fn2"><p>J. Stamp, A. DenAdel, D. Weinreich, L. Crawford (2023). Leveraging the Genetic Correlation between Traits Improves the Detection of Epistasis in Genome-wide Association Studies. <em>G3 Genes|Genomes|Genetics</em>, <strong>13</strong>(8), jkad118. doi: <a href="https://doi.org/10.1093/g3journal/jkad118" class="external-link uri">https://doi.org/10.1093/g3journal/jkad118</a><a href="#fnref2" class="footnote-back">↩︎</a></p></li>
-<li id="fn3"><p>X. Zhou (2017). A unified framework for variance component estimation with summary statistics in genome-wide association studies. <em>Ann Appl Stat</em>. <strong>11</strong>(4): 2027-2051. <a href="https://projecteuclid.org/journals/annals-of-applied-statistics/volume-11/issue-4/A-unified-framework-for-variance-component-estimation-with-summary-statistics/10.1214/17-AOAS1052.full" class="external-link uri">https://projecteuclid.org/journals/annals-of-applied-statistics/volume-11/issue-4/A-unified-framework-for-variance-component-estimation-with-summary-statistics/10.1214/17-AOAS1052.full</a><a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>J. Stamp, S. Pattillo Smith, D. Weinreich, L. Crawford (2025). Sparse modeling of interactions enables fast detection of genome-wide epistasis in biobank-scale studies. <em>The American Journal of Human Genetics</em>, <strong>112</strong>(9): 2198-2212. doi: <a href="https://doi.org/10.1016/j.ajhg.2025.07.004" class="external-link uri">https://doi.org/10.1016/j.ajhg.2025.07.004</a><a href="#fnref3" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
@@ -253,8 +258,8 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Julian Stamp <br><small class="roles"> Maintainer, author </small> <a href="https://orcid.org/0000-0003-3014-6249" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Lorin Crawford <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-0178-8242" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Julian Stamp <br><small class="roles"> Maintainer, author </small> <a href="https://orcid.org/0000-0003-3014-6249" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Lorin Crawford <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-0178-8242" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 </ul>
 </div>
 
@@ -271,7 +276,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>

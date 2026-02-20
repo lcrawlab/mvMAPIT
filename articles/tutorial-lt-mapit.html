@@ -36,7 +36,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mvMAPIT</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.4</span>
       </span>
     </div>
 
@@ -102,7 +102,7 @@
 
 
 
-      </header><script src="tutorial-lt-mapit_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Liability threshold MAPIT</h1>
@@ -117,19 +117,31 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lcrawlab/mvMAPIT" class="external-link">mvMAPIT</a></span><span class="op">)</span></span></code></pre></div>
-<p>In this tutorial we will illustrate how to use the Liability Threshold MArginal ePIstasis Test (LT-MAPIT) by <a href="https://doi.org/10.1101/374983" class="external-link">Crawford and Zhou (2018)</a><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>1</mn></msup><annotation encoding="application/x-tex">^1</annotation></semantics></math>. For this purpose we will first simulate synthetic data and then analyze it.</p>
-<p>The data are single nucleotide polymorphisms (SNPs) with simulated genotypes. For the simulation we choose the following set of parameters:</p>
+<p>In this tutorial we will illustrate how to use the Liability
+Threshold MArginal ePIstasis Test (LT-MAPIT) by <a href="https://doi.org/10.1101/374983" class="external-link">Crawford and Zhou
+(2018)</a><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>1</mn></msup><annotation encoding="application/x-tex">^1</annotation></semantics></math>.
+For this purpose we will first simulate synthetic data and then analyze
+it.</p>
+<p>The data are single nucleotide polymorphisms (SNPs) with simulated
+genotypes. For the simulation we choose the following set of
+parameters:</p>
 <ol style="list-style-type: decimal">
 <li>
-<strong>population_size</strong> - # of samples in the population</li>
+<strong>population_size</strong> - # of samples in the
+population</li>
 <li>
 <strong>n_snps</strong> - number of SNPs or variants</li>
 <li>
-<strong>PVE</strong> - phenotypic variance explained/broad-sense heritability (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>H</mi><mn>2</mn></msup><annotation encoding="application/x-tex">H^2</annotation></semantics></math>)</li>
+<strong>PVE</strong> - phenotypic variance explained/broad-sense
+heritability
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>H</mi><mn>2</mn></msup><annotation encoding="application/x-tex">H^2</annotation></semantics></math>)</li>
 <li>
-<strong>rho</strong> - measures the portion of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>H</mi><mn>2</mn></msup><annotation encoding="application/x-tex">H^2</annotation></semantics></math> that is contributed by the marignal (additive) effects</li>
+<strong>rho</strong> - measures the portion of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>H</mi><mn>2</mn></msup><annotation encoding="application/x-tex">H^2</annotation></semantics></math>
+that is contributed by the marignal (additive) effects</li>
 <li>
-<strong>disease_prevalence</strong> - assumed disease prevelance in the population</li>
+<strong>disease_prevalence</strong> - assumed disease prevelance in
+the population</li>
 <li>
 <strong>sample_size</strong> - # of samples to analyze</li>
 </ol>
@@ -143,7 +155,8 @@
 <div class="section level3">
 <h3 id="simulate-random-genotypes">Simulate random genotypes<a class="anchor" aria-label="anchor" href="#simulate-random-genotypes"></a>
 </h3>
-<p>Simulate the genotypes such that all variants have minor allele frequency (MAF) &gt; 0.05.</p>
+<p>Simulate the genotypes such that all variants have minor allele
+frequency (MAF) &gt; 0.05.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">maf</span> <span class="op">&lt;-</span> <span class="fl">0.05</span> <span class="op">+</span> <span class="fl">0.45</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n_snps</span><span class="op">)</span></span>
 <span><span class="va">random_genotypes</span>   <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">population_size</span> <span class="op">*</span> <span class="va">n_snps</span><span class="op">)</span> <span class="op">&lt;</span> <span class="va">maf</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">population_size</span> <span class="op">*</span></span>
@@ -153,7 +166,9 @@
 <div class="section level3">
 <h3 id="simulate-liabilities">Simulate liabilities<a class="anchor" aria-label="anchor" href="#simulate-liabilities"></a>
 </h3>
-<p>We can use the mvMAPIT function <code>simulate_traits</code> to simulate the liabilities. See the tutorial on simulations for more details on that.</p>
+<p>We can use the mvMAPIT function <code>simulate_traits</code> to
+simulate the liabilities. See the tutorial on simulations for more
+details on that.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_causal</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
 <span><span class="va">n_epistatic</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
@@ -166,7 +181,9 @@
 <span>    H2 <span class="op">=</span> <span class="va">pve</span>,</span>
 <span>    rho <span class="op">=</span> <span class="va">rho</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Now that we have the liabilities, we can assign case-control labels according to the disease prevelance parameter. We will treat this like the LT-MAPIT paper and take an equal number of cases and controls.</p>
+<p>Now that we have the liabilities, we can assign case-control labels
+according to the disease prevelance parameter. We will treat this like
+the LT-MAPIT paper and take an equal number of cases and controls.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">liabilities</span> <span class="op">&lt;-</span> <span class="va">simulated_data</span><span class="op">$</span><span class="va">trait</span></span>
 <span><span class="va">threshold</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">disease_prevalence</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -182,7 +199,11 @@
 <div class="section level3">
 <h3 id="run-mapit-with-case-control-trait">Run MAPIT with Case-Control trait<a class="anchor" aria-label="anchor" href="#run-mapit-with-case-control-trait"></a>
 </h3>
-<p>To run MAPIT with case-control traits, we need to convert the traits back to liabilities. The function <code>binary_to_liability</code> provides this conversion. <strong>NOTE:</strong> The <code>binary_to_liability</code> function is an approximation that is only suited for low prevalence in the disease trait.</p>
+<p>To run MAPIT with case-control traits, we need to convert the traits
+back to liabilities. The function <code>binary_to_liability</code>
+provides this conversion. <strong>NOTE:</strong> The
+<code>binary_to_liability</code> function is an approximation that is
+only suited for low prevalence in the disease trait.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">y_liabilities</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binary_to_liability.html">binary_to_liability</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">disease_prevalence</span><span class="op">)</span></span>
 <span></span>
@@ -195,7 +216,8 @@
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<p>1: Lorin Crawford, Xiang Zhou (2018) Genome-wide Marginal Epistatic Association Mapping in Case-Control Studies bioRxiv 374983; <a href="https://doi.org/10.1101/374983" class="external-link uri">https://doi.org/10.1101/374983</a></p>
+<p>1: Lorin Crawford, Xiang Zhou (2018) Genome-wide Marginal Epistatic
+Association Mapping in Case-Control Studies bioRxiv 374983; <a href="https://doi.org/10.1101/374983" class="external-link uri">https://doi.org/10.1101/374983</a></p>
 </div>
   </div>
 
@@ -214,7 +236,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>

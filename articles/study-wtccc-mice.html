@@ -36,7 +36,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mvMAPIT</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.4</span>
       </span>
     </div>
 
@@ -102,10 +102,11 @@
 
 
 
-      </header><script src="study-wtccc-mice_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Joint modeling of hematology traits yields epistatic signal in stock of mice</h1>
+      <h1 data-toc-skip>Joint modeling of hematology traits yields
+epistatic signal in stock of mice</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/lcrawlab/mvMAPIT/blob/main/vignettes/study-wtccc-mice.Rmd" class="external-link"><code>vignettes/study-wtccc-mice.Rmd</code></a></small>
@@ -120,33 +121,96 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
 <blockquote>
-<p><strong>NOTE:</strong> Due to the size of the data, this vignette does not contain the output of the code.</p>
+<p><strong>NOTE:</strong> Due to the size of the data, this vignette
+does not contain the output of the code.</p>
 </blockquote>
 <div class="section level2">
 <h2 id="preprocessing-of-the-heterogenous-stock-of-mice-dataset">Preprocessing of the heterogenous stock of mice dataset<a class="anchor" aria-label="anchor" href="#preprocessing-of-the-heterogenous-stock-of-mice-dataset"></a>
 </h2>
-<p>This example study makes use of GWA data from the Wellcome Trust Centre for Human Genetics<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mrow><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn></mrow></msup><annotation encoding="application/x-tex">^{1,2,3}</annotation></semantics></math> (<a href="http://mtweb.cs.ucl.ac.uk/mus/www/mouse/index.shtml" class="external-link uri">http://mtweb.cs.ucl.ac.uk/mus/www/mouse/index.shtml</a>). The genotypes from this study were downloaded directly using the <code>BGLR-R</code> package. This study contains <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo></mrow><annotation encoding="application/x-tex">N =</annotation></semantics></math> 1,814 heterogenous stock of mice from 85 families (all descending from eight inbred progenitor strains)<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mrow><mn>1</mn><mo>,</mo><mn>2</mn></mrow></msup><annotation encoding="application/x-tex">^{1,2}</annotation></semantics></math>, and 131 quantitative traits that are classified into 6 broad categories including behavior, diabetes, asthma, immunology, haematology, and biochemistry. Phenotypic measurements for these mice can be found freely available online to download (details can be found at <a href="http://mtweb.cs.ucl.ac.uk/mus/www/mouse/HS/index.shtml" class="external-link uri">http://mtweb.cs.ucl.ac.uk/mus/www/mouse/HS/index.shtml</a>). In the main text, we focused on 15 hematological phenotypes including: atypical lymphocytes (ALY; <code>Haem.ALYabs</code>), basophils (BAS; <code>Haem.BASabs</code>), hematocrit (HCT; <code>Haem.HCT</code>), hemoglobin (HGB; <code>Haem.HGB</code>), large immature cells (LIC; <code>Haem.LICabs</code>), lymphocytes (LYM; <code>Haem.LYMabs</code>), mean corpuscular hemoglobin (MCH; <code>Haem.MCH</code>), mean corpuscular volume (MCV; <code>Haem.MCV</code>), monocytes (MON; <code>Haem.MONabs</code>), mean platelet volume (MPV; <code>Haem.MPV</code>), neutrophils (NEU; <code>Haem.NEUabs</code>), plateletcrit (PCT; <code>Haem.PCT</code>), platelets (PLT; <code>Haem.PLT</code>), red blood cell count (RBC; <code>Haem.RBC</code>), red cell distribution width (RDW; <code>Haem.RDW</code>), and white blood cell count (WBC; <code>Haem.WBC</code>). All phenotypes were previously corrected for sex, age, body weight, season, year, and cage effects <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mrow><mn>1</mn><mo>,</mo><mn>2</mn></mrow></msup><annotation encoding="application/x-tex">^{1,2}</annotation></semantics></math>. For individuals with missing genotypes, we imputed values by the mean genotype of that SNP in their corresponding family. Only polymorphic SNPs with minor allele frequency above 5% were kept for the analyses. This left a total of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mo>=</mo></mrow><annotation encoding="application/x-tex">J =</annotation></semantics></math> 10,227 autosomal SNPs that were available for all mice.</p>
+<p>This example study makes use of GWA data from the Wellcome Trust
+Centre for Human
+Genetics<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mrow><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn></mrow></msup><annotation encoding="application/x-tex">^{1,2,3}</annotation></semantics></math>
+(<a href="http://mtweb.cs.ucl.ac.uk/mus/www/mouse/index.shtml" class="external-link uri">http://mtweb.cs.ucl.ac.uk/mus/www/mouse/index.shtml</a>).
+The genotypes from this study were downloaded directly using the
+<code>BGLR-R</code> package. This study contains
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo></mrow><annotation encoding="application/x-tex">N =</annotation></semantics></math>
+1,814 heterogenous stock of mice from 85 families (all descending from
+eight inbred progenitor
+strains)<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mrow><mn>1</mn><mo>,</mo><mn>2</mn></mrow></msup><annotation encoding="application/x-tex">^{1,2}</annotation></semantics></math>,
+and 131 quantitative traits that are classified into 6 broad categories
+including behavior, diabetes, asthma, immunology, haematology, and
+biochemistry. Phenotypic measurements for these mice can be found freely
+available online to download (details can be found at <a href="http://mtweb.cs.ucl.ac.uk/mus/www/mouse/HS/index.shtml" class="external-link uri">http://mtweb.cs.ucl.ac.uk/mus/www/mouse/HS/index.shtml</a>).
+In the main text, we focused on 15 hematological phenotypes including:
+atypical lymphocytes (ALY; <code>Haem.ALYabs</code>), basophils (BAS;
+<code>Haem.BASabs</code>), hematocrit (HCT; <code>Haem.HCT</code>),
+hemoglobin (HGB; <code>Haem.HGB</code>), large immature cells (LIC;
+<code>Haem.LICabs</code>), lymphocytes (LYM; <code>Haem.LYMabs</code>),
+mean corpuscular hemoglobin (MCH; <code>Haem.MCH</code>), mean
+corpuscular volume (MCV; <code>Haem.MCV</code>), monocytes (MON;
+<code>Haem.MONabs</code>), mean platelet volume (MPV;
+<code>Haem.MPV</code>), neutrophils (NEU; <code>Haem.NEUabs</code>),
+plateletcrit (PCT; <code>Haem.PCT</code>), platelets (PLT;
+<code>Haem.PLT</code>), red blood cell count (RBC;
+<code>Haem.RBC</code>), red cell distribution width (RDW;
+<code>Haem.RDW</code>), and white blood cell count (WBC;
+<code>Haem.WBC</code>). All phenotypes were previously corrected for
+sex, age, body weight, season, year, and cage effects
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mrow><mn>1</mn><mo>,</mo><mn>2</mn></mrow></msup><annotation encoding="application/x-tex">^{1,2}</annotation></semantics></math>.
+For individuals with missing genotypes, we imputed values by the mean
+genotype of that SNP in their corresponding family. Only polymorphic
+SNPs with minor allele frequency above 5% were kept for the analyses.
+This left a total of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mo>=</mo></mrow><annotation encoding="application/x-tex">J =</annotation></semantics></math>
+10,227 autosomal SNPs that were available for all mice.</p>
 </div>
 <div class="section level2">
 <h2 id="analyze-hematology-traits-in-mice">Analyze hematology traits in mice<a class="anchor" aria-label="anchor" href="#analyze-hematology-traits-in-mice"></a>
 </h2>
-<p>In this section, we apply mvMAPIT to individual-level genotypes and 15 hematology traits in a heterogeneous stock of mice dataset from the Wellcome Trust Centre for Human Genetics<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mrow><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn></mrow></msup><annotation encoding="application/x-tex">^{1,2,3}</annotation></semantics></math>. This collection of data contains approximately <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo></mrow><annotation encoding="application/x-tex">N =</annotation></semantics></math> 2,000 individuals depending on the phenotype, and each mouse has been genotyped at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mo>=</mo></mrow><annotation encoding="application/x-tex">J =</annotation></semantics></math> 10,346 SNPs. Specifically, this stock of mice are known to be genetically related with population structure and the genetic architectures of these particular traits have been shown to have different levels of broad-sense heritability with varying contributions from non-additive genetic effects.</p>
+<p>In this section, we apply mvMAPIT to individual-level genotypes and
+15 hematology traits in a heterogeneous stock of mice dataset from the
+Wellcome Trust Centre for Human
+Genetics<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mrow><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn></mrow></msup><annotation encoding="application/x-tex">^{1,2,3}</annotation></semantics></math>.
+This collection of data contains approximately
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo></mrow><annotation encoding="application/x-tex">N =</annotation></semantics></math>
+2,000 individuals depending on the phenotype, and each mouse has been
+genotyped at
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mo>=</mo></mrow><annotation encoding="application/x-tex">J =</annotation></semantics></math>
+10,346 SNPs. Specifically, this stock of mice are known to be
+genetically related with population structure and the genetic
+architectures of these particular traits have been shown to have
+different levels of broad-sense heritability with varying contributions
+from non-additive genetic effects.</p>
 <div class="section level3">
 <h3 id="apply-mvmapit">Apply mvMAPIT<a class="anchor" aria-label="anchor" href="#apply-mvmapit"></a>
 </h3>
-<p>The number of complete samples in the data varies for different traits and trait pairs. For this study we created separate data sets for each trait and trait pair containing the genotype data in a genotype matrix encoded as <code>{0, 1, 2}</code> (minor allele count) and the trait or trait pair in a phenotype matrix. Apply <code><a href="../reference/mvmapit.html">mvmapit()</a></code> to each data set by running the following.</p>
+<p>The number of complete samples in the data varies for different
+traits and trait pairs. For this study we created separate data sets for
+each trait and trait pair containing the genotype data in a genotype
+matrix encoded as <code>{0, 1, 2}</code> (minor allele count) and the
+trait or trait pair in a phenotype matrix. Apply <code><a href="../reference/mvmapit.html">mvmapit()</a></code>
+to each data set by running the following.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mvmapit_TRAIT</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mvmapit.html">mvmapit</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">TRAIT</span><span class="op">$</span><span class="va">genotype</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">TRAIT</span><span class="op">$</span><span class="va">phenotype</span><span class="op">)</span>,</span>
 <span>  test <span class="op">=</span> <span class="st">"hybrid"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>As a result, we get redundant <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>-values for some of the univariate variance components. The statistical detection of epistasis is sensitive to sample size. Therefore, we coalesce the redundant data by keeping the analysis results of the largest data set used in the analysis and impute missing data from the next smaller data set that has no missing data.</p>
+<p>As a result, we get redundant
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>-values
+for some of the univariate variance components. The statistical
+detection of epistasis is sensitive to sample size. Therefore, we
+coalesce the redundant data by keeping the analysis results of the
+largest data set used in the analysis and impute missing data from the
+next smaller data set that has no missing data.</p>
 </div>
 <div class="section level3">
 <h3 id="analysis-data-availability">Analysis Data Availability<a class="anchor" aria-label="anchor" href="#analysis-data-availability"></a>
 </h3>
-<p>The results of the paper data are published on Harvard Dataverse. Find the files for Download <a href="https://doi.org/10.7910/DVN/WPFIGU" class="external-link">here</a><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>23</mn></msup><annotation encoding="application/x-tex">^{23}</annotation></semantics></math>. For running the code snippets in this vignette, download the two files</p>
+<p>The results of the paper data are published on Harvard Dataverse.
+Find the files for Download <a href="https://doi.org/10.7910/DVN/WPFIGU" class="external-link">here</a><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>23</mn></msup><annotation encoding="application/x-tex">^{23}</annotation></semantics></math>.
+For running the code snippets in this vignette, download the two
+files</p>
 <ul>
 <li>mice_HCTHGB_MCVMCH.rds</li>
 <li>mice_SI_paper.rds</li>
@@ -159,11 +223,22 @@
 <div class="section level3">
 <h3 id="all-traits-overview">All Traits Overview<a class="anchor" aria-label="anchor" href="#all-traits-overview"></a>
 </h3>
-<p>We also include results corresponding to the univariate MAPIT model and the covariance test for comparison. Overall, the single-trait marginal epistatic test does only identifies significant variants for the large immature cells (LIC) after Bonferroni correction (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mn>4.83</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow><annotation encoding="application/x-tex">P = 4.83\times 10^{-6}</annotation></semantics></math>). A complete picture of this can be seen in the following figure, which depicts Manhattan plots of our genome-wide interaction study for all combinations of trait pairs. Here, we can see that most of the signal in the combined <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>-values from mvMAPIT likely stems from the covariance component portion of the model.</p>
+<p>We also include results corresponding to the univariate MAPIT model
+and the covariance test for comparison. Overall, the single-trait
+marginal epistatic test does only identifies significant variants for
+the large immature cells (LIC) after Bonferroni correction
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mn>4.83</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow><annotation encoding="application/x-tex">P = 4.83\times 10^{-6}</annotation></semantics></math>).
+A complete picture of this can be seen in the following figure, which
+depicts Manhattan plots of our genome-wide interaction study for all
+combinations of trait pairs. Here, we can see that most of the signal in
+the combined
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>-values
+from mvMAPIT likely stems from the covariance component portion of the
+model.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">for_ticks_chr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">position</span> <span class="op">~</span> <span class="va">chr</span>, <span class="va">mice_data</span><span class="op">$</span><span class="va">fisher</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>first <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, last <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>tick <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor</a></span><span class="op">(</span><span class="op">(</span><span class="va">position</span><span class="op">[</span>,<span class="st">"first"</span><span class="op">]</span> <span class="op">+</span> <span class="va">position</span><span class="op">[</span>,<span class="st">"last"</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>chr2 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="va">chr</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fl">5</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">chr</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>chr2 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="va">chr</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fl">5</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">chr</span><span class="op">)</span>,</span>
 <span>                          <span class="va">chr</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">chr</span><span class="op">)</span>,</span>
 <span>                          <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">for_facetgrid_row</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/as_labeller.html" class="external-link">as_labeller</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`1` <span class="op">=</span> <span class="st">"Trait #1"</span>, `2` <span class="op">=</span> <span class="st">"Trait #2"</span>, `3` <span class="op">=</span> <span class="st">"Covariance"</span>, `4` <span class="op">=</span> <span class="st">"Combined"</span><span class="op">)</span><span class="op">)</span></span>
@@ -206,7 +281,13 @@
 <div class="section level3">
 <h3 id="two-trait-pairs-hct-hgb-as-well-as-mcv-mch">Two trait pairs HCT &amp; HGB as well as MCV &amp; MCH<a class="anchor" aria-label="anchor" href="#two-trait-pairs-hct-hgb-as-well-as-mcv-mch"></a>
 </h3>
-<p>The hypothesis that most of the signal in the combined <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>-values from mvMAPIT likely stems from the covariance component portion of the model holds true for the joint pairwise analysis of hematocrit (HCT) and hemoglobin (HGB) and mean corpuscular hemoglobin (MCH) and mean corpuscular volume (MCV) (e.g., see the third and fourth rows of the following figure).</p>
+<p>The hypothesis that most of the signal in the combined
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>-values
+from mvMAPIT likely stems from the covariance component portion of the
+model holds true for the joint pairwise analysis of hematocrit (HCT) and
+hemoglobin (HGB) and mean corpuscular hemoglobin (MCH) and mean
+corpuscular volume (MCV) (e.g., see the third and fourth rows of the
+following figure).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gg</span> <span class="op">&lt;-</span> <span class="va">mice_HCTHGB_MCVMCH</span><span class="op">$</span><span class="va">fisher</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
 <span>      x <span class="op">=</span> <span class="va">position</span>,</span>
@@ -243,12 +324,67 @@
 <span>                         labels <span class="op">=</span> <span class="va">for_ticks_chr</span><span class="op">$</span><span class="va">chr2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_linetype_manual</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">""</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'dashed'</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">show</span><span class="op">(</span><span class="va">gg</span><span class="op">)</span></span></code></pre></div>
-<p>One explanation for observing more signal in the covariance components over the univariate test could be derived from the traits having low heritability but high correlation between epistatic interaction effects. In our simulation studies (see publication) we showed that the sensitivity of the covariance statistic increased for these cases. Notably, the non-additive signal identified by the covariance test is not totally dependent on the empirical correlation between traits. Instead, as previously shown in our simulation study, the power of mvMAPIT over the univariate approach occurs when there is correlation between the effects of epistatic interactions shared between two traits. Importantly, many of the candidate SNPs selected by the mvMAPIT framework have been previously discovered by past publications as having some functional nonlinear relationship with the traits of interest. For example, the multivariate analysis with traits MCH and MCV show a significant SNP rs4173870 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mn>4.89</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>10</mn></mrow></msup></mrow><annotation encoding="application/x-tex">P = 4.89\times 10^{-10}</annotation></semantics></math>) in the gene hematopoietic cell-specific Lyn substrate 1 (Hcls1) on chromosome 16 which has been shown to play a role in differentiation of erythrocytes<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>7</mn></msup><annotation encoding="application/x-tex">^7</annotation></semantics></math>. Similarly, the joint analysis of HGB and HCT shows hits in multiple coding regions. One example here are the SNPs rs3692165 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mn>1.82</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow><annotation encoding="application/x-tex">P = 1.82\times 10^{-6}</annotation></semantics></math>) and rs13482117 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mn>8.94</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>7</mn></mrow></msup></mrow><annotation encoding="application/x-tex">P = 8.94\times 10^{-7}</annotation></semantics></math>) in the gene calcium voltage-gated channel auxiliary subunit alpha2delta 3 (Cacna2d3) on chromosome 14, which has been associated with decreased circulating glucose levels<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>8</mn></msup><annotation encoding="application/x-tex">^8</annotation></semantics></math>, and SNP rs3724260 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mn>4.58</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow><annotation encoding="application/x-tex">P = 4.58\times 10^{-6}</annotation></semantics></math>) in the gene Dicer1 on chromosome 12 which has been annotated for anemia both in humans and mice<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>9</mn></msup><annotation encoding="application/x-tex">^9</annotation></semantics></math>.</p>
+<p>One explanation for observing more signal in the covariance
+components over the univariate test could be derived from the traits
+having low heritability but high correlation between epistatic
+interaction effects. In our simulation studies (see publication) we
+showed that the sensitivity of the covariance statistic increased for
+these cases. Notably, the non-additive signal identified by the
+covariance test is not totally dependent on the empirical correlation
+between traits. Instead, as previously shown in our simulation study,
+the power of mvMAPIT over the univariate approach occurs when there is
+correlation between the effects of epistatic interactions shared between
+two traits. Importantly, many of the candidate SNPs selected by the
+mvMAPIT framework have been previously discovered by past publications
+as having some functional nonlinear relationship with the traits of
+interest. For example, the multivariate analysis with traits MCH and MCV
+show a significant SNP rs4173870
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mn>4.89</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>10</mn></mrow></msup></mrow><annotation encoding="application/x-tex">P = 4.89\times 10^{-10}</annotation></semantics></math>)
+in the gene hematopoietic cell-specific Lyn substrate 1 (Hcls1) on
+chromosome 16 which has been shown to play a role in differentiation of
+erythrocytes<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>7</mn></msup><annotation encoding="application/x-tex">^7</annotation></semantics></math>.
+Similarly, the joint analysis of HGB and HCT shows hits in multiple
+coding regions. One example here are the SNPs rs3692165
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mn>1.82</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow><annotation encoding="application/x-tex">P = 1.82\times 10^{-6}</annotation></semantics></math>)
+and rs13482117
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mn>8.94</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>7</mn></mrow></msup></mrow><annotation encoding="application/x-tex">P = 8.94\times 10^{-7}</annotation></semantics></math>)
+in the gene calcium voltage-gated channel auxiliary subunit alpha2delta
+3 (Cacna2d3) on chromosome 14, which has been associated with decreased
+circulating glucose
+levels<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>8</mn></msup><annotation encoding="application/x-tex">^8</annotation></semantics></math>,
+and SNP rs3724260
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mn>4.58</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow><annotation encoding="application/x-tex">P = 4.58\times 10^{-6}</annotation></semantics></math>)
+in the gene Dicer1 on chromosome 12 which has been annotated for anemia
+both in humans and
+mice<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>9</mn></msup><annotation encoding="application/x-tex">^9</annotation></semantics></math>.</p>
 </div>
 <div class="section level3">
-<h3 id="notable-snps-with-marginal-epistatic-effects-after-applying-the-mvmapit-framework-to-15-hematology-traits">Notable SNPs with marginal epistatic effects after applying the mvMAPIT framework to 15 hematology traits<a class="anchor" aria-label="anchor" href="#notable-snps-with-marginal-epistatic-effects-after-applying-the-mvmapit-framework-to-15-hematology-traits"></a>
+<h3 id="notable-snps-with-marginal-epistatic-effects-after-applying-the-mvmapit-framework-to-15-hematology-traits">Notable SNPs with marginal epistatic effects after applying the
+mvMAPIT framework to 15 hematology traits<a class="anchor" aria-label="anchor" href="#notable-snps-with-marginal-epistatic-effects-after-applying-the-mvmapit-framework-to-15-hematology-traits"></a>
 </h3>
-<p>For full analysis, we provide a summary table which lists the combined <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>-values after running mvMAPIT with Fisher’s method. The following table lists a select subset of SNPs in coding regions of genes that have been associated with phenotypes related to the hematopoietic system, immune system, or homeostasis and metabolism. Each of these are significant (after correction for multiple hypothesis testing) in the mvMAPIT analysis of related hematology traits. Some of these phenotypes have been reported as having large broad-sense heritability, which improves the ability of mvMAPIT to detect the signal. For example, the genes Arf2 and Cacna2d3 are associated with phenotypes related to glucose homeostasis, which has been reported to have a large heritable component (estimated <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>H</mi><mn>2</mn></msup><mo>=</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">H^2 = 0.3</annotation></semantics></math> for insulin sensitivity<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>10</mn></msup><annotation encoding="application/x-tex">^{10}</annotation></semantics></math>). Similarly, the genes App and Pex1 are associated with thrombosis where (an estimated) more than half of phenotypic variation has been attributed to genetic effects (estimated <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>H</mi><mn>2</mn></msup><mo>≥</mo><mn>0.6</mn></mrow><annotation encoding="application/x-tex">H^2 \ge 0.6</annotation></semantics></math> for susceptibility to common thrombosis<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>11</mn></msup><annotation encoding="application/x-tex">^{11}</annotation></semantics></math>).</p>
+<p>For full analysis, we provide a summary table which lists the
+combined
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>-values
+after running mvMAPIT with Fisher’s method. The following table lists a
+select subset of SNPs in coding regions of genes that have been
+associated with phenotypes related to the hematopoietic system, immune
+system, or homeostasis and metabolism. Each of these are significant
+(after correction for multiple hypothesis testing) in the mvMAPIT
+analysis of related hematology traits. Some of these phenotypes have
+been reported as having large broad-sense heritability, which improves
+the ability of mvMAPIT to detect the signal. For example, the genes Arf2
+and Cacna2d3 are associated with phenotypes related to glucose
+homeostasis, which has been reported to have a large heritable component
+(estimated
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>H</mi><mn>2</mn></msup><mo>=</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">H^2 = 0.3</annotation></semantics></math>
+for insulin
+sensitivity<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>10</mn></msup><annotation encoding="application/x-tex">^{10}</annotation></semantics></math>).
+Similarly, the genes App and Pex1 are associated with thrombosis where
+(an estimated) more than half of phenotypic variation has been
+attributed to genetic effects (estimated
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>H</mi><mn>2</mn></msup><mo>≥</mo><mn>0.6</mn></mrow><annotation encoding="application/x-tex">H^2 \ge 0.6</annotation></semantics></math>
+for susceptibility to common
+thrombosis<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>11</mn></msup><annotation encoding="application/x-tex">^{11}</annotation></semantics></math>).</p>
 <table class="table">
 <colgroup>
 <col width="9%">
@@ -268,10 +404,14 @@
 <th><strong>Location</strong></th>
 <th><strong>Trait 1</strong></th>
 <th><strong>Trait 2</strong></th>
-<th><strong>Trait 1 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math></strong></th>
-<th><strong>Trait 2 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math></strong></th>
-<th><strong>Cov. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math></strong></th>
-<th><strong>Comb. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math></strong></th>
+<th><strong>Trait 1
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math></strong></th>
+<th><strong>Trait 2
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math></strong></th>
+<th><strong>Cov.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math></strong></th>
+<th><strong>Comb.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math></strong></th>
 <th><strong>Gene</strong></th>
 <th><strong>Genomic Annotation</strong></th>
 <th><strong>Reference</strong></th>
@@ -367,7 +507,8 @@
 <td>Atg7</td>
 <td>decreased bone marrow cell count</td>
 <td>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>17</mn></msup><annotation encoding="application/x-tex">^{17}</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>18</mn></msup><annotation encoding="application/x-tex">^{18}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>17</mn></msup><annotation encoding="application/x-tex">^{17}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>18</mn></msup><annotation encoding="application/x-tex">^{18}</annotation></semantics></math>
 </td>
 </tr>
 <tr class="even">
@@ -554,35 +695,144 @@
 </tr>
 </tbody>
 </table>
-<p>In the first two columns, we list SNPs and their genetic location according to the mouse assembly NCBI build 34 (accessed from <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>21</mn></msup><annotation encoding="application/x-tex">^{21}</annotation></semantics></math>) in the format <code>Chromosome:Basepair</code>. Next, we give the results stemming from univariate analyses on traits 1 and 2, respectively, the covariance (cov) test, and the overall <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>-value derived by mvMAPIT using Fisher’s method. The last columns detail the closest neighboring genes found using the Mouse Genome Informatics database<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>4</mn></msup><annotation encoding="application/x-tex">^4</annotation></semantics></math><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>5</mn></msup><annotation encoding="application/x-tex">^5</annotation></semantics></math><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>6</mn></msup><annotation encoding="application/x-tex">^6</annotation></semantics></math>, a short summary of the suggested annotated function for those genes, and the reference to the source of the annotation.</p>
+<p>In the first two columns, we list SNPs and their genetic location
+according to the mouse assembly NCBI build 34 (accessed from
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>21</mn></msup><annotation encoding="application/x-tex">^{21}</annotation></semantics></math>)
+in the format <code>Chromosome:Basepair</code>. Next, we give the
+results stemming from univariate analyses on traits 1 and 2,
+respectively, the covariance (cov) test, and the overall
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>-value
+derived by mvMAPIT using Fisher’s method. The last columns detail the
+closest neighboring genes found using the Mouse Genome Informatics
+database<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>4</mn></msup><annotation encoding="application/x-tex">^4</annotation></semantics></math><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>5</mn></msup><annotation encoding="application/x-tex">^5</annotation></semantics></math><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi></mi><mn>6</mn></msup><annotation encoding="application/x-tex">^6</annotation></semantics></math>,
+a short summary of the suggested annotated function for those genes, and
+the reference to the source of the annotation.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<p>1: William Valdar, Jonathan Flint, and Richard Mott. Simulating the collaborative cross: power of quantitative trait loci detection and mapping resolution in large sets of recombinant inbred strains of mice. Genetics, 172(3):1783–1797, 2006. ISSN 0016-6731. <a href="https://doi.org/10.1534/genetics.104.039313" class="external-link uri">https://doi.org/10.1534/genetics.104.039313</a>.</p>
-<p>2: William Valdar, Leah C. Solberg, Dominique Gauguier, Stephanie Burnett, Paul Klenerman, William O. Cookson, Martin S. Taylor, J. Nicholas P. Rawlins, Richard Mott, and Jonathan Flint. Genome-wide genetic association of complex traits in heterogeneous stock mice. Nature Genetics, 38(8):879–887, 2006. ISSN 1546-1718. <a href="https://doi.org/10.1038/ng1840" class="external-link uri">https://doi.org/10.1038/ng1840</a>.</p>
+<p>1: William Valdar, Jonathan Flint, and Richard Mott. Simulating the
+collaborative cross: power of quantitative trait loci detection and
+mapping resolution in large sets of recombinant inbred strains of mice.
+Genetics, 172(3):1783–1797, 2006. ISSN 0016-6731. <a href="https://doi.org/10.1534/genetics.104.039313" class="external-link uri">https://doi.org/10.1534/genetics.104.039313</a>.</p>
+<p>2: William Valdar, Leah C. Solberg, Dominique Gauguier, Stephanie
+Burnett, Paul Klenerman, William O. Cookson, Martin S. Taylor, J.
+Nicholas P. Rawlins, Richard Mott, and Jonathan Flint. Genome-wide
+genetic association of complex traits in heterogeneous stock mice.
+Nature Genetics, 38(8):879–887, 2006. ISSN 1546-1718. <a href="https://doi.org/10.1038/ng1840" class="external-link uri">https://doi.org/10.1038/ng1840</a>.</p>
 <p>3: Wellcome trust centre for human genetics - mouse resources. URL <a href="http://mtweb.cs.ucl.ac.uk/mus/www/mouse/index.shtml" class="external-link uri">http://mtweb.cs.ucl.ac.uk/mus/www/mouse/index.shtml</a>.</p>
-<p>4: Judith A Blake, Richard Baldarelli, James A Kadin, Joel E Richardson, Cynthia L Smith, and Carol J Bult. Mouse genome database (MGD): Knowledgebase for mouse–human comparative biology. Nucleic Acids Research, 49:D981–D987, 2020. ISSN 0305-1048. <a href="https://doi.org/10.1093/nar/gkaa1083" class="external-link uri">https://doi.org/10.1093/nar/gkaa1083</a>.</p>
-<p>5: Cynthia L. Smith and Janan T. Eppig. The mammalian phenotype ontology: enabling robust annotation and comparative analysis. Wiley Interdisciplinary Reviews. Systems Biology and Medicine, 1(3):390–399, 2009. ISSN 1939-005X. <a href="https://doi.org/10.1002/wsbm.44" class="external-link uri">https://doi.org/10.1002/wsbm.44</a>.</p>
+<p>4: Judith A Blake, Richard Baldarelli, James A Kadin, Joel E
+Richardson, Cynthia L Smith, and Carol J Bult. Mouse genome database
+(MGD): Knowledgebase for mouse–human comparative biology. Nucleic Acids
+Research, 49:D981–D987, 2020. ISSN 0305-1048. <a href="https://doi.org/10.1093/nar/gkaa1083" class="external-link uri">https://doi.org/10.1093/nar/gkaa1083</a>.</p>
+<p>5: Cynthia L. Smith and Janan T. Eppig. The mammalian phenotype
+ontology: enabling robust annotation and comparative analysis. Wiley
+Interdisciplinary Reviews. Systems Biology and Medicine, 1(3):390–399,
+2009. ISSN 1939-005X. <a href="https://doi.org/10.1002/wsbm.44" class="external-link uri">https://doi.org/10.1002/wsbm.44</a>.</p>
 <p>6: Mouse Genome Informatics database <a href="http://www.informatics.jax.org" class="external-link uri">http://www.informatics.jax.org</a></p>
-<p>7: Karla F. Castro-Ochoa, Idaira M. Guerrero-Fonseca, and Michael Schnoor. Hematopoietic cell specific lyn substrate (HCLS1 or HS1): A versatile actin-binding protein in leukocytes. Journal of Leukocyte Biology, 105(5):881–890, 2019. ISSN 1938-3673. doi: 10.1002/JLB.MR0618-212R.</p>
-<p>8: Obtaining and loading phenotype annotations from the international mouse phenotyping consortium (IMPC) database. Mouse Genome Informatics and the International Mouse Phenotyping Consortium, 2014. URL <a href="http://www.informatics.jax.org/reference/J:211773" class="external-link uri">http://www.informatics.jax.org/reference/J:211773</a>.</p>
-<p>9: Marc H. G. P. Raaijmakers, Siddhartha Mukherjee, Shangqin Guo, Siyi Zhang, Tatsuya Kobayashi, Jesse A. Schoonmaker, Benjamin L. Ebert, Fatima Al-Shahrour, Robert P. Hasserjian, Edward O. Scadden, Zinmar Aung, Marc Matza, Matthias Merkenschlager, Charles Lin, Johanna M. Rommens, and David T. Scadden. Bone progenitor dysfunction induces myelodysplasia and secondary leukaemia. Nature, 464(7290):852–857, 2010. ISSN 1476-4687. doi: 10.1038/nature08851. URL <a href="https://www.nature.com/articles/nature08851" class="external-link uri">https://www.nature.com/articles/nature08851</a>. Number: 7290 Publisher: Nature Publishing Group.</p>
-<p>10: Jill M. Norris and Stephen S. Rich. Genetics of glucose homeostasis. Arteriosclerosis, Thrombosis, and Vascular Biology, 32(9):2091–2096, 2012. doi: 10.1161/ATVBAHA.112.255463. URL <a href="https://www.ahajournals.org/doi/10.1161/ATVBAHA.112.255463" class="external-link uri">https://www.ahajournals.org/doi/10.1161/ATVBAHA.112.255463</a>. Publisher: American Heart Association.</p>
-<p>11: Juan Carlos Souto, Laura Almasy, Montserrat Borrell, Francisco Blanco-Vaca, José Mateo, José Manuel Soria, Inma Coll, Rosa Felices, William Stone, Jordi Fontcuberta, and John Blangero. Genetic susceptibility to thrombosis and its relationship to physiological risk factors: The GAIT study. The American Journal of Human Genetics, 67(6):1452–1459, 2000. ISSN 0002-9297. doi: 10.1086/316903. URL <a href="https://www.sciencedirect.com/science/article/pii/S0002929707632145" class="external-link uri">https://www.sciencedirect.com/science/article/pii/S0002929707632145</a>.</p>
-<p>12: Joachim Weischenfeldt, Inge Damgaard, David Bryder, Kim Theilgaard-Mönch, Lina A. Thoren, Finn Cilius Nielsen, Sten Eirik W. Jacobsen, Claus Nerlov, and Bo Torben Porse. NMD is essential for hematopoietic stem and progenitor cells and for eliminating by-products of programmed DNA rearrangements. Genes &amp; Development, 22(10):1381–1396, 2008. ISSN 0890-9369, 1549-5477. doi: 10.1101/gad.468808. URL <a href="https://genesdev.cshlp.org/content/22/10/1381" class="external-link uri">https://genesdev.cshlp.org/content/22/10/1381</a>. Company: Cold Spring Harbor Laboratory Press Distributor: Cold Spring Harbor Laboratory Press Institution: Cold Spring Harbor Laboratory Press Label: Cold Spring Harbor Laboratory Press Publisher: Cold Spring Harbor Lab.</p>
-<p>13: Kevin Berendse, Maxim Boek, Marion Gijbels, Nicole N. Van der Wel, Femke C. Klouwer, Marius A. van den Bergh-Weerman, Abhijit Babaji Shinde, Rob Ofman, Bwee Tien Poll-The, Sander M. Houten, Myriam Baes, Ronald J. A. Wanders, and Hans R. Waterham. Liver disease predominates in a mouse model for mild human zellweger spectrum disorder. Biochimica et Biophysica Acta (BBA) - Molecular Basis of Disease, 1865(10):2774–2787, 2019. ISSN 0925-4439. doi: 10.1016/j.bbadis.2019.06.013. URL <a href="https://www.sciencedirect.com/science/article/pii/S0925443919302121" class="external-link uri">https://www.sciencedirect.com/science/article/pii/S0925443919302121</a>.</p>
-<p>14: Patricia Isnard, Nathalie Coré, Philippe Naquet, and Malek Djabali. Altered lymphoid development in mice deficient for the mAF4 proto-oncogene. Blood, 96(2):705–710, 2000. ISSN 0006-4971. doi: 10.1182/blood.V96.2.705. URL <a href="https://doi.org/10.1182/blood.V96.2.705" class="external-link uri">https://doi.org/10.1182/blood.V96.2.705</a>.</p>
-<p>15: Xiaoming Feng, Gregory C. Ippolito, Lifeng Tian, Karla Wiehagen, Soyoung Oh, Arivazhagan Sambandam, Jessica Willen, Ralph M. Bunte, Shanna D. Maika, June V. Harriss, Andrew J. Caton, Avinash Bhandoola, Philip W. Tucker, and Hui Hu. Foxp1 is an essential transcriptional regulator for the generation of quiescent naive t cells during thymocyte development. Blood, 115(3):510–518, 2010. ISSN 0006-4971. doi: 10.1182/blood-2009-07-232694. URL <a href="https://doi.org/10.1182/blood-2009-07-232694" class="external-link uri">https://doi.org/10.1182/blood-2009-07-232694</a>.</p>
-<p>16: 1451 Hui Hu, Bin Wang, Madhuri Borde, Julie Nardone, Shan Maika, Laura Allred, Philip W. Tucker, and Anjana Rao. Foxp1 is an essential transcriptional regulator of b cell development. Nature Immunology, 7(8):819–826, 2006. ISSN 1529-2916. doi: 10.1038/ni1358. URL <a href="https://www.nature.com/articles/ni1358" class="external-link uri">https://www.nature.com/articles/ni1358</a>. Number: 8 Publisher: Nature Publishing Group.</p>
-<p>17: Monika Mortensen, Elizabeth J. Soilleux, Gordana Djordjevic, Rebecca Tripp, Michael Lutteropp, Elham Sadighi-Akha, Amanda J. Stranks, Julie Glanville, Samantha Knight, Sten-Eirik W. Jacobsen, Kamil R. Kranc, and Anna Katharina Simon. The autophagy protein atg7 is essential for hematopoietic stem cell maintenance. Journal of Experimental Medicine, 208(3):455–467, 2011. ISSN 0022-1007. doi: 10.1084/jem.20101145. URL <a href="https://doi.org/10.1084/jem.20101145" class="external-link uri">https://doi.org/10.1084/jem.20101145</a>.</p>
-<p>18: Alexander J. Clarke, Ursula Ellinghaus, Andrea Cortini, Amanda Stranks, Anna Katharina Simon, Marina Botto, and Timothy J. Vyse. Autophagy is activated in systemic lupus erythematosus and required for plasmablast development. Annals of the Rheumatic Diseases, 74(5):912–920, 2015. ISSN 0003-4967, 1468-2060. doi: 10.1136/annrheumdis-2013-204343. URL <a href="https://ard.bmj.com/content/74/5/912" class="external-link uri">https://ard.bmj.com/content/74/5/912</a>. Publisher: BMJ Publishing Group Ltd Section: Basic and translational research.</p>
-<p>19: Yanzhong Yang, Kevin M. McBride, Sean Hensley, Yue Lu, Frederic Chedin, and Mark T. Bedford. Arginine methylation facilitates the recruitment of TOP3b to chromatin to prevent r loop accumu lation. Molecular Cell, 53(3):484–497, 2014. ISSN 1097-2765. doi: 10.1016/j.molcel.2014.01.011. URL <a href="https://www.sciencedirect.com/science/article/pii/S1097276514000434" class="external-link uri">https://www.sciencedirect.com/science/article/pii/S1097276514000434</a>.</p>
-<p>20: Feng Xu, Judianne Davis, Michael Hoos, andWilliam E. Van Nostrand. Mutation of the kunitz-typeproteinase inhibitor domain in the amyloid-protein precursor abolishes its anti-thrombotic properties in vivo. Thrombosis Research, 155:58–64, 2017. ISSN 0049-3848. doi: 10.1016/j.thromres.2017.05.003. URL <a href="https://www.sciencedirect.com/science/article/pii/S0049384817303110" class="external-link uri">https://www.sciencedirect.com/science/article/pii/S0049384817303110</a>.</p>
-<p>21: Keiko Nakayama, Shigetsugu Hatakeyama, Shun-ichiro Maruyama, Akira Kikuchi, Kazunori Onoé, Robert A. Good, and Keiichi I. Nakayama. Impaired degradation of inhibitory subunit of NF-b (IkappaB) and -catenin as a result of targeted disruption of the -TrCP1 gene. Proceedings of the National Academy of Sciences, 100(15):8752–8757, 2003. doi: 10.1073/pnas.1133216100. URL <a href="https://www.pnas.org/doi/full/10.1073/pnas.1133216100" class="external-link uri">https://www.pnas.org/doi/full/10.1073/pnas.1133216100</a>. Publisher: Proceedings of the National Academy of Sciences.</p>
-<p>22: Sagiv Shifman, 1480 Jordana Tzenova Bell, Richard R. Copley, Martin S. Taylor, Robert W. Williams, Richard Mott, and Jonathan Flint. A high-resolution single nucleotide polymorphism genetic map of the mouse genome. PLOS Biology, 4(12):e395, 2006. ISSN 1545-7885. doi: 10.1371/journal. pbio.0040395. URL <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.0040395" class="external-link uri">https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.0040395</a>. Publisher: Public Library of Science.</p>
-<p>23: Stamp, Julian, 2022, “Leveraging the Genetic Correlation between Traits Improves the Detection of Epistasis in Genome-wide Association Studies”, <a href="https://doi.org/10.7910/DVN/WPFIGU" class="external-link uri">https://doi.org/10.7910/DVN/WPFIGU</a>, Harvard Dataverse, V1</p>
+<p>7: Karla F. Castro-Ochoa, Idaira M. Guerrero-Fonseca, and Michael
+Schnoor. Hematopoietic cell specific lyn substrate (HCLS1 or HS1): A
+versatile actin-binding protein in leukocytes. Journal of Leukocyte
+Biology, 105(5):881–890, 2019. ISSN 1938-3673. doi:
+10.1002/JLB.MR0618-212R.</p>
+<p>8: Obtaining and loading phenotype annotations from the international
+mouse phenotyping consortium (IMPC) database. Mouse Genome Informatics
+and the International Mouse Phenotyping Consortium, 2014. URL <a href="http://www.informatics.jax.org/reference/J:211773" class="external-link uri">http://www.informatics.jax.org/reference/J:211773</a>.</p>
+<p>9: Marc H. G. P. Raaijmakers, Siddhartha Mukherjee, Shangqin Guo,
+Siyi Zhang, Tatsuya Kobayashi, Jesse A. Schoonmaker, Benjamin L. Ebert,
+Fatima Al-Shahrour, Robert P. Hasserjian, Edward O. Scadden, Zinmar
+Aung, Marc Matza, Matthias Merkenschlager, Charles Lin, Johanna M.
+Rommens, and David T. Scadden. Bone progenitor dysfunction induces
+myelodysplasia and secondary leukaemia. Nature, 464(7290):852–857, 2010.
+ISSN 1476-4687. doi: 10.1038/nature08851. URL <a href="https://www.nature.com/articles/nature08851" class="external-link uri">https://www.nature.com/articles/nature08851</a>. Number:
+7290 Publisher: Nature Publishing Group.</p>
+<p>10: Jill M. Norris and Stephen S. Rich. Genetics of glucose
+homeostasis. Arteriosclerosis, Thrombosis, and Vascular Biology,
+32(9):2091–2096, 2012. doi: 10.1161/ATVBAHA.112.255463. URL <a href="https://www.ahajournals.org/doi/10.1161/ATVBAHA.112.255463" class="external-link uri">https://www.ahajournals.org/doi/10.1161/ATVBAHA.112.255463</a>.
+Publisher: American Heart Association.</p>
+<p>11: Juan Carlos Souto, Laura Almasy, Montserrat Borrell, Francisco
+Blanco-Vaca, José Mateo, José Manuel Soria, Inma Coll, Rosa Felices,
+William Stone, Jordi Fontcuberta, and John Blangero. Genetic
+susceptibility to thrombosis and its relationship to physiological risk
+factors: The GAIT study. The American Journal of Human Genetics,
+67(6):1452–1459, 2000. ISSN 0002-9297. doi: 10.1086/316903. URL <a href="https://www.sciencedirect.com/science/article/pii/S0002929707632145" class="external-link uri">https://www.sciencedirect.com/science/article/pii/S0002929707632145</a>.</p>
+<p>12: Joachim Weischenfeldt, Inge Damgaard, David Bryder, Kim
+Theilgaard-Mönch, Lina A. Thoren, Finn Cilius Nielsen, Sten Eirik W.
+Jacobsen, Claus Nerlov, and Bo Torben Porse. NMD is essential for
+hematopoietic stem and progenitor cells and for eliminating by-products
+of programmed DNA rearrangements. Genes &amp; Development,
+22(10):1381–1396, 2008. ISSN 0890-9369, 1549-5477. doi:
+10.1101/gad.468808. URL <a href="https://genesdev.cshlp.org/content/22/10/1381" class="external-link uri">https://genesdev.cshlp.org/content/22/10/1381</a>. Company:
+Cold Spring Harbor Laboratory Press Distributor: Cold Spring Harbor
+Laboratory Press Institution: Cold Spring Harbor Laboratory Press Label:
+Cold Spring Harbor Laboratory Press Publisher: Cold Spring Harbor
+Lab.</p>
+<p>13: Kevin Berendse, Maxim Boek, Marion Gijbels, Nicole N. Van der
+Wel, Femke C. Klouwer, Marius A. van den Bergh-Weerman, Abhijit Babaji
+Shinde, Rob Ofman, Bwee Tien Poll-The, Sander M. Houten, Myriam Baes,
+Ronald J. A. Wanders, and Hans R. Waterham. Liver disease predominates
+in a mouse model for mild human zellweger spectrum disorder. Biochimica
+et Biophysica Acta (BBA) - Molecular Basis of Disease,
+1865(10):2774–2787, 2019. ISSN 0925-4439. doi:
+10.1016/j.bbadis.2019.06.013. URL <a href="https://www.sciencedirect.com/science/article/pii/S0925443919302121" class="external-link uri">https://www.sciencedirect.com/science/article/pii/S0925443919302121</a>.</p>
+<p>14: Patricia Isnard, Nathalie Coré, Philippe Naquet, and Malek
+Djabali. Altered lymphoid development in mice deficient for the mAF4
+proto-oncogene. Blood, 96(2):705–710, 2000. ISSN 0006-4971. doi:
+10.1182/blood.V96.2.705. URL <a href="https://doi.org/10.1182/blood.V96.2.705" class="external-link uri">https://doi.org/10.1182/blood.V96.2.705</a>.</p>
+<p>15: Xiaoming Feng, Gregory C. Ippolito, Lifeng Tian, Karla Wiehagen,
+Soyoung Oh, Arivazhagan Sambandam, Jessica Willen, Ralph M. Bunte,
+Shanna D. Maika, June V. Harriss, Andrew J. Caton, Avinash Bhandoola,
+Philip W. Tucker, and Hui Hu. Foxp1 is an essential transcriptional
+regulator for the generation of quiescent naive t cells during thymocyte
+development. Blood, 115(3):510–518, 2010. ISSN 0006-4971. doi:
+10.1182/blood-2009-07-232694. URL <a href="https://doi.org/10.1182/blood-2009-07-232694" class="external-link uri">https://doi.org/10.1182/blood-2009-07-232694</a>.</p>
+<p>16: 1451 Hui Hu, Bin Wang, Madhuri Borde, Julie Nardone, Shan Maika,
+Laura Allred, Philip W. Tucker, and Anjana Rao. Foxp1 is an essential
+transcriptional regulator of b cell development. Nature Immunology,
+7(8):819–826, 2006. ISSN 1529-2916. doi: 10.1038/ni1358. URL <a href="https://www.nature.com/articles/ni1358" class="external-link uri">https://www.nature.com/articles/ni1358</a>. Number: 8
+Publisher: Nature Publishing Group.</p>
+<p>17: Monika Mortensen, Elizabeth J. Soilleux, Gordana Djordjevic,
+Rebecca Tripp, Michael Lutteropp, Elham Sadighi-Akha, Amanda J. Stranks,
+Julie Glanville, Samantha Knight, Sten-Eirik W. Jacobsen, Kamil R.
+Kranc, and Anna Katharina Simon. The autophagy protein atg7 is essential
+for hematopoietic stem cell maintenance. Journal of Experimental
+Medicine, 208(3):455–467, 2011. ISSN 0022-1007. doi:
+10.1084/jem.20101145. URL <a href="https://doi.org/10.1084/jem.20101145" class="external-link uri">https://doi.org/10.1084/jem.20101145</a>.</p>
+<p>18: Alexander J. Clarke, Ursula Ellinghaus, Andrea Cortini, Amanda
+Stranks, Anna Katharina Simon, Marina Botto, and Timothy J. Vyse.
+Autophagy is activated in systemic lupus erythematosus and required for
+plasmablast development. Annals of the Rheumatic Diseases,
+74(5):912–920, 2015. ISSN 0003-4967, 1468-2060. doi:
+10.1136/annrheumdis-2013-204343. URL <a href="https://ard.bmj.com/content/74/5/912" class="external-link uri">https://ard.bmj.com/content/74/5/912</a>. Publisher: BMJ
+Publishing Group Ltd Section: Basic and translational research.</p>
+<p>19: Yanzhong Yang, Kevin M. McBride, Sean Hensley, Yue Lu, Frederic
+Chedin, and Mark T. Bedford. Arginine methylation facilitates the
+recruitment of TOP3b to chromatin to prevent r loop accumu lation.
+Molecular Cell, 53(3):484–497, 2014. ISSN 1097-2765. doi:
+10.1016/j.molcel.2014.01.011. URL <a href="https://www.sciencedirect.com/science/article/pii/S1097276514000434" class="external-link uri">https://www.sciencedirect.com/science/article/pii/S1097276514000434</a>.</p>
+<p>20: Feng Xu, Judianne Davis, Michael Hoos, andWilliam E. Van
+Nostrand. Mutation of the kunitz-typeproteinase inhibitor domain in the
+amyloid-protein precursor abolishes its anti-thrombotic properties in
+vivo. Thrombosis Research, 155:58–64, 2017. ISSN 0049-3848. doi:
+10.1016/j.thromres.2017.05.003. URL <a href="https://www.sciencedirect.com/science/article/pii/S0049384817303110" class="external-link uri">https://www.sciencedirect.com/science/article/pii/S0049384817303110</a>.</p>
+<p>21: Keiko Nakayama, Shigetsugu Hatakeyama, Shun-ichiro Maruyama,
+Akira Kikuchi, Kazunori Onoé, Robert A. Good, and Keiichi I. Nakayama.
+Impaired degradation of inhibitory subunit of NF-b (IkappaB) and
+-catenin as a result of targeted disruption of the -TrCP1 gene.
+Proceedings of the National Academy of Sciences, 100(15):8752–8757,
+2003. doi: 10.1073/pnas.1133216100. URL <a href="https://www.pnas.org/doi/full/10.1073/pnas.1133216100" class="external-link uri">https://www.pnas.org/doi/full/10.1073/pnas.1133216100</a>.
+Publisher: Proceedings of the National Academy of Sciences.</p>
+<p>22: Sagiv Shifman, 1480 Jordana Tzenova Bell, Richard R. Copley,
+Martin S. Taylor, Robert W. Williams, Richard Mott, and Jonathan Flint.
+A high-resolution single nucleotide polymorphism genetic map of the
+mouse genome. PLOS Biology, 4(12):e395, 2006. ISSN 1545-7885. doi:
+10.1371/journal. pbio.0040395. URL <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.0040395" class="external-link uri">https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.0040395</a>.
+Publisher: Public Library of Science.</p>
+<p>23: Stamp, Julian, 2022, “Leveraging the Genetic Correlation between
+Traits Improves the Detection of Epistasis in Genome-wide Association
+Studies”, <a href="https://doi.org/10.7910/DVN/WPFIGU" class="external-link uri">https://doi.org/10.7910/DVN/WPFIGU</a>, Harvard Dataverse,
+V1</p>
 </div>
   </div>
 
@@ -601,7 +851,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>

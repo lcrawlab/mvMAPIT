@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mvMAPIT</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.4</span>
       </span>
     </div>
 
@@ -81,12 +81,23 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="mvmapit-development-version">mvMAPIT (development version)<a class="anchor" aria-label="anchor" href="#mvmapit-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="2.0.4" id="mvmapit-204-release">mvMAPIT 2.0.4 release<a class="anchor" aria-label="anchor" href="#mvmapit-204-release"></a></h2>
 <ul><li>Fix Bonferroni correction in the <code>mvMAPIT.Rmd</code> vignette.</li>
 <li>New function <code>binary_to_liability</code> for LT-MAPIT support and corresponding vignette</li>
+<li>Fix CRAN Notes - dependency compatibility.</li>
+<li>Performance improvements in C++ implementation:
+<ul><li>Eliminated redundant matrix inverse computation in projection operations</li>
+<li>Optimized triple matrix products in Q matrix computation</li>
+<li>Added benchmark suite for tracking performance improvements</li>
+<li>Typical speedup: 3-8% depending on problem size and test method</li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0.3" id="mvmapit-203-release">mvMAPIT 2.0.3 release<small>2023-09-26</small><a class="anchor" aria-label="anchor" href="#mvmapit-203-release"></a></h2>
-<ul><li>Fix LTO issues again. The R dev automation generates RcppExport.cpp files that cause LTO issues in this package on CRAN.</li></ul></div>
+<ul><li>Fix LTO issues again. The R dev automation generates RcppExport.cpp files that cause LTO issues in this package on CRAN.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0.2" id="mvmapit-202-release">mvMAPIT 2.0.2 release<small>2023-09-22</small><a class="anchor" aria-label="anchor" href="#mvmapit-202-release"></a></h2>
 <ul><li>Added Cauchy combination test <code>cauchy_combined</code> including vignette that compares combination methods</li>
@@ -99,10 +110,12 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0.1" id="mvmapit-201-release">mvMAPIT 2.0.1 release<small>2023-02-09</small><a class="anchor" aria-label="anchor" href="#mvmapit-201-release"></a></h2>
-<ul><li>Fix LTO issues when submitting to CRAN. The testthat issue <a href="https://github.com/r-lib/testthat/issues/1230" class="external-link uri">https://github.com/r-lib/testthat/issues/1230</a> describes the solution chosen. Created this GitHub gist to reproduce LTO errors: <a href="https://gist.github.com/jdstamp/056475683110aacdb1e6761872ab1e05" class="external-link uri">https://gist.github.com/jdstamp/056475683110aacdb1e6761872ab1e05</a>.</li></ul></div>
+<ul><li>Fix LTO issues when submitting to CRAN. The testthat issue <a href="https://github.com/r-lib/testthat/issues/1230" class="external-link uri">https://github.com/r-lib/testthat/issues/1230</a> describes the solution chosen. Created this GitHub gist to reproduce LTO errors: <a href="https://gist.github.com/jdstamp/056475683110aacdb1e6761872ab1e05" class="external-link uri">https://gist.github.com/jdstamp/056475683110aacdb1e6761872ab1e05</a>.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0.0.1" id="mvmapit-2001-pre-release">mvMAPIT 2.0.0.1 pre-release<a class="anchor" aria-label="anchor" href="#mvmapit-2001-pre-release"></a></h2>
-<ul><li>CRAN issue does not show up in <code>R CMD check</code>. Version upgrade for resubmission.</li></ul></div>
+<ul><li>CRAN issue does not show up in <code>R CMD check</code>. Version upgrade for resubmission.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0.0" id="mvmapit-200-release">mvMAPIT 2.0.0 release<small>2022-12-05</small><a class="anchor" aria-label="anchor" href="#mvmapit-200-release"></a></h2>
 <ul><li>
@@ -116,7 +129,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.1.1" id="mvmapit-111-alpha-prerelease">mvMAPIT 1.1.1-alpha prerelease<a class="anchor" aria-label="anchor" href="#mvmapit-111-alpha-prerelease"></a></h2>
-<ul><li>Version that publication data was produced with. No official release.</li></ul></div>
+<ul><li>Version that publication data was produced with. No official release.</li>
+</ul></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -131,7 +145,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>
