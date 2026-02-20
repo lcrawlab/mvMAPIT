@@ -1,6 +1,8 @@
 
 # Multivariate MAPIT Documentation <img src="man/figures/logo.png" align="right" alt="" width="120"/>
 
+> **Note:** For univariate analyses (single trait), check out the much faster implementation: [Sparse Modeling of Epistasis (SME)](https://lcrawlab.github.io/sme/)
+
 [![R CMD check](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/check-standard.yaml)
 [![Docker Image CI](https://github.com/lcrawlab/mvMAPIT/actions/workflows/docker-image.yml/badge.svg)](https://github.com/lcrawlab/mvMAPIT/actions/workflows/docker-image.yml)
 [![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/mvMAPIT)](https://cranlogs.r-pkg.org/badges/grand-total/mvMAPIT)
@@ -191,6 +193,11 @@ We appreciate any feedback you may have with our repository and instructions.
     Genome-wide Association Studies. *G3 Genes|Genomes|Genetics*, **13**(8), jkad118. doi:
     <https://doi.org/10.1093/g3journal/jkad118>
 
-[^3]: X. Zhou (2017). A unified framework for variance component estimation with summary statistics
+[^3]: J. Stamp, S. Pattillo Smith, D. Weinreich, L. Crawford (2025). Sparse modeling of
+    interactions enables fast detection of genome-wide epistasis in biobank-scale studies.
+    *The American Journal of Human Genetics*, **112**(9): 2198-2212. doi:
+    <https://doi.org/10.1016/j.ajhg.2025.07.004>
+
+[^4]: X. Zhou (2017). A unified framework for variance component estimation with summary statistics
   in genome-wide association studies. *Ann Appl Stat*. **11**(4): 2027-2051.
   <https://projecteuclid.org/journals/annals-of-applied-statistics/volume-11/issue-4/A-unified-framework-for-variance-component-estimation-with-summary-statistics/10.1214/17-AOAS1052.full>

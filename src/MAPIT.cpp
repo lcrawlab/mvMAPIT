@@ -171,12 +171,15 @@ Rcpp::List MAPITCpp(
       }
       b.col(z + 1) = arma::trans(x_k);
 
-      M = compute_projection_matrix(n, b);
-      K = project_matrix(K, b);
-      G = project_matrix(G, b);
+      // Compute btb_inv once and reuse it for all projections
+      arma::mat btb_inv = arma::inv(b.t() * b);
+      arma::mat identity = arma::eye<arma::mat>(n, n);
+      M = identity - b * btb_inv * b.t();
+      K = project_matrix_with_btb_inv(K, b, btb_inv);
+      G = project_matrix_with_btb_inv(G, b, btb_inv);
 
       if (C.isNotNull()) {
-        Cc = project_matrix(Cc, b);
+        Cc = project_matrix_with_btb_inv(Cc, b, btb_inv);
       }
       b.reset();
 

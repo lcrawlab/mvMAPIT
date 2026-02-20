@@ -56,7 +56,9 @@ arma::vec compute_q_vector(const arma::vec &y1, const arma::vec &y2,
   arma::vec q = arma::zeros(num_variance_components);
 
   for (int i = 0; i < num_variance_components; i++) {
-    q(i) = arma::as_scalar(y1.t() * matrices[i] * y2);
+    // Optimize: compute matrix-vector product first, then dot product
+    arma::vec temp = matrices[i] * y2;
+    q(i) = arma::dot(y1, temp);
 #ifdef WITH_LOGGER
     logger->info("q({}) = {}", i, q(i));
     if (q(i) < 0) {
@@ -142,7 +144,8 @@ double compute_mqs_var_approximation(const arma::vec &yc, const arma::mat &H,
   logger->info("Computing variance of variance component. One phenotype.");
 #endif
   arma::mat Hy = H * yc;
-  return arma::as_scalar(2 * Hy.t() * V * Hy);
+  arma::vec VHy = V * Hy;
+  return 2 * arma::dot(Hy, VHy);
 }
 
 // TODO(jdstamp): Can we use arma::cov(y1, y2) instead of using V matrix?
@@ -151,7 +154,11 @@ double compute_mqs_var_approximation(const arma::vec &yc, const arma::mat &H,
 double compute_var_bilinear_approx(const arma::vec &y1, const arma::vec &y2,
                                    const arma::mat &H, const arma::mat &V11,
                                    const arma::mat &V12) {
-  return arma::as_scalar(y2.t() * H.t() * (V12 * H * y1 + V11 * H * y2));
+  // Optimize: compute matrix-vector products efficiently
+  arma::vec Hy1 = H * y1;
+  arma::vec Hy2 = H * y2;
+  arma::vec result = V12 * Hy1 + V11 * Hy2;
+  return arma::dot(y2, H.t() * result);
 }
 
 arma::vec compute_variance_delta(const std::vector<arma::vec> &Y,
