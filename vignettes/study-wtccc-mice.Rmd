@@ -214,13 +214,13 @@ In the first two columns, we list SNPs and their genetic location according to t
 
 10: Jill M. Norris and Stephen S. Rich. Genetics of glucose homeostasis. Arteriosclerosis, Thrombosis, and Vascular Biology, 32(9):2091–2096, 2012. doi: 10.1161/ATVBAHA.112.255463. URL https://www.ahajournals.org/doi/10.1161/ATVBAHA.112.255463. Publisher: American Heart Association.
 
-11: Juan Carlos Souto, Laura Almasy, Montserrat Borrell, Francisco Blanco-Vaca, José Mateo, José Manuel Soria, Inma Coll, Rosa Felices, William Stone, Jordi Fontcuberta, and John Blangero. Genetic susceptibility to thrombosis and its relationship to physiological risk factors: The GAIT study. The American Journal of Human Genetics, 67(6):1452–1459, 2000. ISSN 0002-9297. doi: 10.1086/316903. URL https://www.sciencedirect.com/science/article/pii/S0002929707632145.
+11: Juan Carlos Souto, Laura Almasy, Montserrat Borrell, Francisco Blanco-Vaca, José Mateo, José Manuel Soria, Inma Coll, Rosa Felices, William Stone, Jordi Fontcuberta, and John Blangero. Genetic susceptibility to thrombosis and its relationship to physiological risk factors: The GAIT study. The American Journal of Human Genetics, 67(6):1452–1459, 2000. ISSN 0002-9297. doi: 10.1086/316903. URL https://doi.org/10.1086/316903.
 
 12: Joachim Weischenfeldt, Inge Damgaard, David Bryder, Kim Theilgaard-Mönch, Lina A. Thoren, Finn Cilius Nielsen, Sten Eirik W. Jacobsen, Claus Nerlov, and Bo Torben Porse. NMD is essential for hematopoietic stem and progenitor cells and for eliminating by-products of programmed DNA rearrangements. Genes & Development, 22(10):1381–1396, 2008. ISSN 0890-9369, 1549-5477. doi: 10.1101/gad.468808. URL https://genesdev.cshlp.org/content/22/10/1381. Company: Cold Spring Harbor Laboratory Press Distributor: Cold Spring Harbor Laboratory Press Institution: Cold Spring Harbor Laboratory Press Label: Cold Spring Harbor Laboratory Press Publisher: Cold Spring Harbor Lab.
 
 13: Kevin Berendse, Maxim Boek, Marion Gijbels, Nicole N. Van der Wel, Femke C. Klouwer, Marius A. van den Bergh-Weerman, Abhijit Babaji Shinde, Rob Ofman, Bwee Tien Poll-The, Sander M.
 Houten, Myriam Baes, Ronald J. A. Wanders, and Hans R. Waterham. Liver disease predominates in a mouse model for mild human zellweger spectrum disorder. Biochimica et Biophysica Acta (BBA) - Molecular Basis of Disease, 1865(10):2774–2787, 2019. ISSN 0925-4439.
-doi: 10.1016/j.bbadis.2019.06.013. URL https://www.sciencedirect.com/science/article/pii/S0925443919302121.
+doi: 10.1016/j.bbadis.2019.06.013. URL https://doi.org/10.1016/j.bbadis.2019.06.013.
 
 14: Patricia Isnard, Nathalie Coré, Philippe Naquet, and Malek Djabali. Altered lymphoid development in mice deficient for the mAF4 proto-oncogene. Blood, 96(2):705–710, 2000. ISSN 0006-4971. doi: 10.1182/blood.V96.2.705. URL https://doi.org/10.1182/blood.V96.2.705.
 
@@ -235,9 +235,9 @@ hematopoietic stem cell maintenance. Journal of Experimental Medicine, 208(3):45
 ISSN 0003-4967, 1468-2060. doi: 10.1136/annrheumdis-2013-204343. URL https://ard.bmj.com/content/74/5/912. Publisher: BMJ Publishing Group Ltd Section: Basic and translational research.
 
 19: Yanzhong Yang, Kevin M. McBride, Sean Hensley, Yue Lu, Frederic Chedin, and Mark T. Bedford. Arginine methylation facilitates the recruitment of TOP3b to chromatin to prevent r loop accumu
-lation. Molecular Cell, 53(3):484–497, 2014. ISSN 1097-2765. doi: 10.1016/j.molcel.2014.01.011. URL https://www.sciencedirect.com/science/article/pii/S1097276514000434.
+lation. Molecular Cell, 53(3):484–497, 2014. ISSN 1097-2765. doi: 10.1016/j.molcel.2014.01.011. URL https://doi.org/10.1016/j.molcel.2014.01.011.
 
-20: Feng Xu, Judianne Davis, Michael Hoos, andWilliam E. Van Nostrand. Mutation of the kunitz-typeproteinase inhibitor domain in the amyloid-protein precursor abolishes its anti-thrombotic properties in vivo. Thrombosis Research, 155:58–64, 2017. ISSN 0049-3848. doi: 10.1016/j.thromres.2017.05.003. URL https://www.sciencedirect.com/science/article/pii/S0049384817303110.
+20: Feng Xu, Judianne Davis, Michael Hoos, andWilliam E. Van Nostrand. Mutation of the kunitz-typeproteinase inhibitor domain in the amyloid-protein precursor abolishes its anti-thrombotic properties in vivo. Thrombosis Research, 155:58–64, 2017. ISSN 0049-3848. doi: 10.1016/j.thromres.2017.05.003. URL https://doi.org/10.1016/j.thromres.2017.05.003.
 
 21: Keiko Nakayama, Shigetsugu Hatakeyama, Shun-ichiro Maruyama, Akira Kikuchi, Kazunori Onoé, Robert A. Good, and Keiichi I. Nakayama. Impaired degradation of inhibitory subunit of NF-b (IkappaB) and -catenin as a result of targeted disruption of the -TrCP1 gene. Proceedings of the National Academy of Sciences, 100(15):8752–8757, 2003. doi: 10.1073/pnas.1133216100. URL https://www.pnas.org/doi/full/10.1073/pnas.1133216100. Publisher: Proceedings of the National Academy of Sciences.
 
