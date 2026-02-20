@@ -4,7 +4,7 @@ Title: Multivariate Genome Wide Marginal Epistasis Test
 Version: 2.0.4
 URL: https://github.com/lcrawlab/mvMAPIT, https://lcrawlab.github.io/mvMAPIT/
 Authors@R: c(
-    person("Julian", "Stamp", email = "julian_stamp@brown.edu",
+    person("Julian", "Stamp", email = "julian.d.stamp@gmail.com",
     role = c("cre", "aut"), comment = c(ORCID = "0000-0003-3014-6249")),
     person("Lorin", "Crawford", email = "lorin_crawford@brown.edu",
     role = "aut", comment = c(ORCID = "0000-0003-0178-8242")))
