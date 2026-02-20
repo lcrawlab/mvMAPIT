@@ -167,9 +167,6 @@ applicable for scalability.
 
 - On macOS, you might need to run `brew reinstall z3` to fix `'libz3.4.11.dylib' (no such file)` related errors ([clang issues](https://github.com/Homebrew/discussions/discussions/3920)).
 
-- For extra tips on how to run C++ on macOS, please visit
-<https://seananderson.ca/2013/11/18/rcpp-mavericks.html>.
-
 - For tips on how to avoid errors dealing with `-lgfortran` or `-lquadmath`, please visit
 <https://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/>.
 
