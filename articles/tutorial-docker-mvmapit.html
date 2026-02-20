@@ -156,14 +156,14 @@ the R console via the following code.</p>
 <span><span class="fu"><a href="../reference/mvmapit.html">mvmapit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">simulated_data</span><span class="op">$</span><span class="va">genotype</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">simulated_data</span><span class="op">$</span><span class="va">trait</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>,<span class="op">]</span><span class="op">)</span>,</span>
 <span>        cores <span class="op">=</span> <span class="fl">2</span>, logLevel <span class="op">=</span> <span class="st">"DEBUG"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #0087AF;">2026-02-20 20:57:53.716957 DEBUG:mvmapit:Running in normal test mode.</span></span></span>
-<span><span class="co">## <span style="color: #0087AF;">2026-02-20 20:57:53.724279 DEBUG:mvmapit:Genotype matrix: 10 x 100</span></span></span>
-<span><span class="co">## <span style="color: #0087AF;">2026-02-20 20:57:53.735439 DEBUG:mvmapit:Phenotype matrix: 2 x 100</span></span></span>
-<span><span class="co">## <span style="color: #0087AF;">2026-02-20 20:57:53.736283 DEBUG:mvmapit:Number of zero variance variants: 0</span></span></span>
-<span><span class="co">## <span style="color: #0087AF;">2026-02-20 20:57:53.737019 DEBUG:mvmapit:Genotype matrix after removing zero variance variants: 10 x 100</span></span></span>
-<span><span class="co">## <span style="color: #0087AF;">2026-02-20 20:57:53.737539 DEBUG:mvmapit:Scale X matrix appropriately.</span></span></span>
-<span><span class="co">## 2026-02-20 20:57:53.738597 INFO:mvmapit:Running normal C++ routine.</span></span>
-<span><span class="co">## <span style="color: #0087AF;">2026-02-20 20:57:53.756718 DEBUG:mvmapit:Calculated mean time of execution. Return list.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #0087AF;">2026-02-20 23:37:16.331661 DEBUG:mvmapit:Running in normal test mode.</span></span></span>
+<span><span class="co">## <span style="color: #0087AF;">2026-02-20 23:37:16.339361 DEBUG:mvmapit:Genotype matrix: 10 x 100</span></span></span>
+<span><span class="co">## <span style="color: #0087AF;">2026-02-20 23:37:16.350801 DEBUG:mvmapit:Phenotype matrix: 2 x 100</span></span></span>
+<span><span class="co">## <span style="color: #0087AF;">2026-02-20 23:37:16.351612 DEBUG:mvmapit:Number of zero variance variants: 0</span></span></span>
+<span><span class="co">## <span style="color: #0087AF;">2026-02-20 23:37:16.352348 DEBUG:mvmapit:Genotype matrix after removing zero variance variants: 10 x 100</span></span></span>
+<span><span class="co">## <span style="color: #0087AF;">2026-02-20 23:37:16.352865 DEBUG:mvmapit:Scale X matrix appropriately.</span></span></span>
+<span><span class="co">## 2026-02-20 23:37:16.353961 INFO:mvmapit:Running normal C++ routine.</span></span>
+<span><span class="co">## <span style="color: #0087AF;">2026-02-20 23:37:16.359654 DEBUG:mvmapit:Calculated mean time of execution. Return list.</span></span></span></code></pre>
 <pre><code><span><span class="co">## $pvalues</span></span>
 <span><span class="co">## <span style="color: #949494;"># A tibble: 30 × 3</span></span></span>
 <span><span class="co">##    id        trait         p</span></span>
@@ -198,12 +198,12 @@ the R console via the following code.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## $duration</span></span>
 <span><span class="co">##       process duration_ms</span></span>
-<span><span class="co">## 1         cov           0</span></span>
-<span><span class="co">## 2 projections           0</span></span>
-<span><span class="co">## 3   vectorize           0</span></span>
-<span><span class="co">## 4           q           0</span></span>
-<span><span class="co">## 5           S           0</span></span>
-<span><span class="co">## 6          vc           2</span></span>
+<span><span class="co">## 1         cov   0.1666667</span></span>
+<span><span class="co">## 2 projections   0.1666667</span></span>
+<span><span class="co">## 3   vectorize   0.1666667</span></span>
+<span><span class="co">## 4           q   0.1666667</span></span>
+<span><span class="co">## 5           S   0.1666667</span></span>
+<span><span class="co">## 6          vc   0.1666667</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $vc</span></span>
 <span><span class="co">## <span style="color: #949494;"># A tibble: 30 × 4</span></span></span>

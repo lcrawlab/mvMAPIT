@@ -194,7 +194,7 @@
 <div class="section level3">
 <h3 id="openmp">OpenMP<a class="anchor" aria-label="anchor" href="#openmp"></a>
 </h3>
-<p>Note that mvMAPIT takes advantage of <a href="https://www.openmp.org/" class="external-link">OpenMP</a>, an API for multi-platform shared-memory parallel programming in C/C++. This is to speed up the computational time of the modeling algorithm. Unfortunately, macOS does not currently support OpenMP under the default compiler. A work around to use OpenMP in R on macOS can be found <a href="https://thecoatlessprofessor.com/programming/openmp-in-r-on-os-x/" class="external-link">here</a>. mvMAPIT can be compiled without OpenMP, but we recommend using it if applicable for scalability.</p>
+<p>Note that mvMAPIT takes advantage of <a href="https://www.openmp.org/" class="external-link">OpenMP</a>, an API for multi-platform shared-memory parallel programming in C/C++. This is to speed up the computational time of the modeling algorithm. Unfortunately, macOS does not currently support OpenMP under the default compiler. A work around to use OpenMP in R on macOS can be found <a href="https://blog.thecoatlessprofessor.com/programming/openmp-in-r-on-os-x/index.html" class="external-link">here</a>. mvMAPIT can be compiled without OpenMP, but we recommend using it if applicable for scalability.</p>
 </div>
 <div class="section level3">
 <h3 id="known-issues">Known Issues<a class="anchor" aria-label="anchor" href="#known-issues"></a>
@@ -202,7 +202,7 @@
 <ul>
 <li><p>When your compiler changes, some R package dependencies might need to be recompiled. This is likely the case if the compilation error explicitly names an R package in the local library.</p></li>
 <li><p>On macOS, you might need to run <code>brew reinstall z3</code> to fix <code>'libz3.4.11.dylib' (no such file)</code> related errors (<a href="https://github.com/Homebrew/discussions/discussions/3920" class="external-link">clang issues</a>).</p></li>
-<li><p>For tips on how to avoid errors dealing with <code>-lgfortran</code> or <code>-lquadmath</code>, please visit <a href="https://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/" class="external-link uri">https://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/</a>.</p></li>
+<li><p>For tips on how to avoid errors dealing with <code>-lgfortran</code> or <code>-lquadmath</code>, please visit <a href="https://blog.thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/index.html" class="external-link uri">https://blog.thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/index.html</a>.</p></li>
 </ul>
 <hr>
 </div>
