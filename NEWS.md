@@ -2,9 +2,14 @@
 
 # mvMAPIT 2.0.4 release
 
-* Fix Bonferroni correction in the `mvMAPIT.Rmd` vignette. 
+* Fix Bonferroni correction in the `mvMAPIT.Rmd` vignette.
 * New function `binary_to_liability` for LT-MAPIT support and corresponding vignette
 * Fix CRAN Notes - dependency compatibility.
+* Performance improvements in C++ implementation:
+  - Eliminated redundant matrix inverse computation in projection operations
+  - Optimized triple matrix products in Q matrix computation
+  - Added benchmark suite for tracking performance improvements
+  - Typical speedup: 3-8% depending on problem size and test method
 
 # mvMAPIT 2.0.3 release
 

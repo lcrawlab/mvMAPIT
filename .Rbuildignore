@@ -16,4 +16,7 @@ _pkgdown.yml
 compare-to-original-mapit\.R
 original_MAPIT\.rds
 quick-run\.R
+benchmark\.R
+benchmark-baseline\.rds
+benchmark-results\.rds
 dev/
